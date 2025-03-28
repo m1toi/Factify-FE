@@ -1,18 +1,28 @@
 <div class="login-wrapper">
   <h1 class="title">Login</h1>
 
-  <div class="login-card">
-    <input pInputText [(ngModel)]="username" placeholder="Enter your email" />
+  <form
+    [formGroup]="loginForm"
+    class="login-card"
+    [ngClass]="{ 'shake': invalidAttempt }"
+    (ngSubmit)="onLogin()">
 
-    <input pInputText [(ngModel)]="password" type="password" placeholder="Enter your password" />
+    <input pInputText formControlName="username" placeholder="Enter your email or username" />
+    <small *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+      Username is required
+    </small>
 
-    <button pButton class="login-button" (click)="onLogin()">
+    <input pInputText formControlName="password" type="password" placeholder="Enter your password" />
+    <small *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+      Password is required
+    </small>
+
+    <button pButton class="login-button" type="submit">
       <span pButtonLabel>Log In</span>
     </button>
-
 
     <div class="create-account">
       <span>Don't have an account? <a [routerLink]="['/register']">Create Account</a></span>
     </div>
-  </div>
+  </form>
 </div>

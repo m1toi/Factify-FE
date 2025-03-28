@@ -1,17 +1,52 @@
 <div class="register-wrapper">
   <h1 class="title">Register</h1>
 
-  <div class="register-card">
-    <input pInputText [(ngModel)]="email" placeholder="Enter your email" />
-    <input pInputText [(ngModel)]="username" placeholder="Choose a username" />
-    <input pInputText [(ngModel)]="password" type="password" placeholder="Create a password" />
+  <form
+    [formGroup]="registerForm"
+    class="register-card"
+    [ngClass]="{ 'shake': invalidAttempt }"
+    (ngSubmit)="onRegister()"
+  >
+    <input
+      pInputText
+      formControlName="email"
+      placeholder="Enter your email"
+    />
+    <small
+      *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+    >
+      Valid email is required
+    </small>
 
-    <button pButton class="register-button" (click)="onRegister()">
+    <input
+      pInputText
+      formControlName="username"
+      placeholder="Choose a username"
+    />
+    <small
+      *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+    >
+      Username is required
+    </small>
+
+    <input
+      pInputText
+      formControlName="password"
+      type="password"
+      placeholder="Create a password"
+    />
+    <small
+      *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+    >
+      Password must be at least 6 characters
+    </small>
+
+    <button pButton class="register-button" type="submit">
       <span pButtonLabel>Sign Up</span>
     </button>
 
     <div class="login-link">
       <span>Already have an account? <a [routerLink]="['/login']">Log In</a></span>
     </div>
-  </div>
+  </form>
 </div>

@@ -1,3 +1,9 @@
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-10px); }
+  40%, 80% { transform: translateX(10px); }
+}
+
 .register-wrapper {
   background-color: #000;
   height: 100vh;
@@ -15,15 +21,18 @@
     font-weight: bold;
   }
 
-  .register-card {
+  form.register-card {
     background-color: #1c1c1e;
     padding: 2rem;
     border-radius: 15px;
-    box-shadow: none;
     width: 350px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    &.shake {
+      animation: shake 0.4s ease;
+    }
 
     input {
       background-color: #2c2c2e;
@@ -31,10 +40,22 @@
       border: none;
       padding: 0.75rem;
       border-radius: 8px;
+
+      &::placeholder {
+        color: #aaa;
+      }
+
+      &.ng-invalid.ng-touched {
+        border: 1px solid #f87171;
+      }
     }
 
-    input::placeholder {
-      color: #aaa;
+    small {
+      color: #f87171;
+      font-size: 0.8rem;
+      margin-top: -0.5rem;
+      margin-bottom: -0.25rem;
+      text-align: left;
     }
 
     .register-button {
@@ -44,10 +65,10 @@
       padding: 0.75rem;
       border-radius: 8px;
       font-weight: bold;
-    }
 
-    .register-button:hover {
-      background-color: #007cd1;
+      &:hover {
+        background-color: #007cd1;
+      }
     }
 
     .login-link {
@@ -58,10 +79,10 @@
       a {
         color: #3797f0;
         text-decoration: none;
-      }
 
-      a:hover {
-        text-decoration: underline;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }
