@@ -1,0 +1,17 @@
+<div class="register-wrapper">
+  <h1 class="title">Register</h1>
+
+  <div class="register-card">
+    <input pInputText [(ngModel)]="email" placeholder="Enter your email" />
+    <input pInputText [(ngModel)]="username" placeholder="Choose a username" />
+    <input pInputText [(ngModel)]="password" type="password" placeholder="Create a password" />
+
+    <button pButton class="register-button" (click)="onRegister()">
+      <span pButtonLabel>Sign Up</span>
+    </button>
+
+    <div class="login-link">
+      <span>Already have an account? <a [routerLink]="['/login']">Log In</a></span>
+    </div>
+  </div>
+</div>

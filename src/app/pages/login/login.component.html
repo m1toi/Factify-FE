@@ -1,0 +1,18 @@
+<div class="login-wrapper">
+  <h1 class="title">Login</h1>
+
+  <div class="login-card">
+    <input pInputText [(ngModel)]="username" placeholder="Enter your email" />
+
+    <input pInputText [(ngModel)]="password" type="password" placeholder="Enter your password" />
+
+    <button pButton class="login-button" (click)="onLogin()">
+      <span pButtonLabel>Log In</span>
+    </button>
+
+
+    <div class="create-account">
+      <span>Don't have an account? <a [routerLink]="['/register']">Create Account</a></span>
+    </div>
+  </div>
+</div>
