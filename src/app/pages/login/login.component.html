@@ -7,9 +7,9 @@
     [ngClass]="{ 'shake': invalidAttempt }"
     (ngSubmit)="onLogin()">
 
-    <input pInputText formControlName="username" placeholder="Enter your email or username" />
-    <small *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
-      Username is required
+    <input pInputText formControlName="email" placeholder="Enter your email" />
+    <small *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+      Email is required
     </small>
 
     <input pInputText formControlName="password" type="password" placeholder="Enter your password" />
