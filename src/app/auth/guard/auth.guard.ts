@@ -4,7 +4,7 @@ import {
   Router,
   UrlTree,
 } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Injectable({
   providedIn: 'root',
