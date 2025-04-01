@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 interface LoginRequest {
   email: string;
@@ -18,16 +19,16 @@ interface RegisterRequest {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'https://localhost:7091';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private router: Router) {}
 
   login(data: LoginRequest): Observable<string> {
-    return this.http.post(`${this.apiUrl}/login`, data, { responseType: 'text' });
+    return this.http.post(`${this.apiUrl}/Users/login`, data, { responseType: 'text' });
   }
 
   register(data: RegisterRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/Users/register`, data);
+    return this.http.post(`${this.apiUrl}/Users/register`, data);
   }
 
   saveToken(token: string) {
