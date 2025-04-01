@@ -1,24 +1,68 @@
-.category-picker {
+.category-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #000;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.category-card {
+  background-color: #1e1e1e;
   padding: 2rem;
-  color: white;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  width: 600px;
+  max-width: 90%;
   text-align: center;
 
-  .category-list {
-    margin: 2rem auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: fit-content;
+  h2 {
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.category-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2c2c2c;
+  padding: 0.6rem;               // smaller padding
+  border-radius: 0.5rem;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.95rem;           // slightly smaller text
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+  min-height: 60px;             // reduced height
+
+  &.selected {
+    background-color: #0099ff !important;
+    color: white;
   }
 
-  .category-item {
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  &:hover:not(.selected) {
+    background-color: #3a3a3a;
   }
+}
 
-  button {
-    margin-top: 1rem;
-  }
+.continue-button {
+  margin-top: 1.5rem;
+  background-color: #0099ff !important;
+  color: white !important;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
 }

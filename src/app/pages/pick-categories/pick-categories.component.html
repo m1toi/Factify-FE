@@ -1,22 +1,23 @@
-<div class="category-picker">
-  <h2>Select your interests</h2>
+<div class="category-wrapper">
+  <div class="category-card">
+    <h2>Select your interests</h2>
 
-  <div class="category-list">
-    <div *ngFor="let category of categories" class="category-item">
-      <p-checkbox
-        [value]="category.categoryId"
-        [(ngModel)]="selectedCategoryIds"
-        inputId="cat-{{ category.categoryId }}"
-      ></p-checkbox>
-
-      <label [for]="'cat-' + category.categoryId">{{ category.name }}</label>
+    <div class="category-grid">
+      <div
+        *ngFor="let category of categories"
+        class="category-item"
+        [ngClass]="{ selected: selectedCategoryIds.includes(category.categoryId) }"
+        (click)="toggleCategory(category.categoryId)">
+        {{ category.name }}
+      </div>
     </div>
   </div>
 
   <button
+    class="continue-button"
     pButton
     label="Continue"
     (click)="submitPreferences()"
-    [disabled]="selectedCategoryIds.length === 0"
-  ></button>
+    [disabled]="selectedCategoryIds.length === 0">
+  </button>
 </div>

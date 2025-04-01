@@ -31,6 +31,15 @@ export class PickCategoriesComponent implements OnInit {
     });
   }
 
+  toggleCategory(id: number) {
+    const index = this.selectedCategoryIds.indexOf(id);
+    if (index === -1) {
+      this.selectedCategoryIds.push(id);
+    } else {
+      this.selectedCategoryIds.splice(index, 1);
+    }
+  }
+
   submitPreferences(): void {
     if (this.selectedCategoryIds.length === 0) return;
     console.log('Sending categoryIds:', this.selectedCategoryIds);

@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { preferenceGuard } from './preference.guard';
+import { PreferenceGuard } from './preference.guard';
 
 describe('preferenceGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => preferenceGuard(...guardParameters));
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+      TestBed.runInInjectionContext(() => PreferenceGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
