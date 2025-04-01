@@ -12,8 +12,11 @@ export class UserPreferenceService {
   constructor(private http: HttpClient) {}
 
   submitPreferences(categoryIds: number[]): Observable<any> {
-    return this.http.post(this.apiUrl, { categoryIds });
+    return this.http.post(`${this.apiUrl}`, {
+      categoryIds: categoryIds
+    });
   }
+
 
   hasPreferences(): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/has-preferences`);

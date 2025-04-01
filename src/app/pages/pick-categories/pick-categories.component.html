@@ -1,1 +1,22 @@
-<p>pick-categories works!</p>
+<div class="category-picker">
+  <h2>Select your interests</h2>
+
+  <div class="category-list">
+    <div *ngFor="let category of categories" class="category-item">
+      <p-checkbox
+        [value]="category.categoryId"
+        [(ngModel)]="selectedCategoryIds"
+        inputId="cat-{{ category.categoryId }}"
+      ></p-checkbox>
+
+      <label [for]="'cat-' + category.categoryId">{{ category.name }}</label>
+    </div>
+  </div>
+
+  <button
+    pButton
+    label="Continue"
+    (click)="submitPreferences()"
+    [disabled]="selectedCategoryIds.length === 0"
+  ></button>
+</div>
