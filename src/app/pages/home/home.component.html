@@ -1,3 +1,18 @@
-<h2 style="color: white;">Welcome to the Home Page!</h2>
-<button (click)="logout()">Logout</button>
-<button (click)="getUsers()">Get Users</button>
+<div class="feed-wrapper">
+  <h2>For You</h2>
+
+  <div *ngIf="isLoading" class="loading">Loading feed...</div>
+
+  <div *ngFor="let post of posts" class="post-card">
+    <h3>{{ post.question }}</h3>
+    <p class="answer">{{ post.answer }}</p>
+    <div class="post-meta">
+      <span>By: {{ post.userName }}</span>
+      <span>• {{ post.categoryName }}</span>
+    </div>
+    <div class="actions">
+      <button (click)="onLike(post)">👍 Like</button>
+      <button (click)="onShare(post)">📤 Share</button>
+    </div>
+  </div>
+</div>

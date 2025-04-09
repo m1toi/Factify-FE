@@ -1,37 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FeedService } from '../../services/feed.service';
+import { Post } from '../../models/post.model';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { jwtDecode } from 'jwt-decode';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-home',
-  standalone: true,
-  imports: [],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  standalone: true,
+  imports:[CommonModule,FormsModule],
 })
-export class HomeComponent {
-  constructor(
-    public authService: AuthService,
-    public router: Router,
-    private http: HttpClient
-  ) { }
+export class HomeComponent implements OnInit {
+  posts: Post[] = [];
+  userId!: number;
+  isLoading = true;
 
-  logout() {
-    this.authService.logout();
+  constructor(private feedService: FeedService, private authService: AuthService) {}
+
+  ngOnInit() {
+    const token = this.authService.getToken();
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      this.userId = parseInt(decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']);
+      this.loadFeed();
+    }
   }
 
-  // This method calls the protected endpoint to fetch users
-  getUsers() {
-    this.http.get('https://localhost:7091/api/Users').subscribe({
+  loadFeed() {
+    this.isLoading = true;
+    this.feedService.getPersonalizedFeed(this.userId).subscribe({
       next: (data) => {
-        console.log('Users:', data);
-        alert('Users data logged in console');
+        this.posts = data;
+        this.isLoading = false;
       },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-        alert('Error fetching users. Check console for details.');
+      error: (err) => {
+        console.error('Failed to load feed:', err);
+        this.isLoading = false;
       }
     });
+  }
+
+  onLike(post: Post) {
+    // later we’ll wire this up to the interaction endpoint
+    console.log('Liked:', post.postId);
+  }
+
+  onShare(post: Post) {
+    console.log('Shared:', post.postId);
   }
 }
