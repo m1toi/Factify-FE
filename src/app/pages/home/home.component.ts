@@ -11,11 +11,12 @@ import { RouterModule } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Post } from '../../models/post.model';
 import { ButtonModule } from 'primeng/button';
+import {SidebarComponent} from '../sidebar/sidebar.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule],
+  imports: [CommonModule, RouterModule, ButtonModule, SidebarComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
