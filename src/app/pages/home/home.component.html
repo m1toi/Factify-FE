@@ -1,21 +1,30 @@
 <div class="feed-scroll-container" #scrollContainer>
   <div
     class="feed-post"
-    *ngFor="let post of posts"
+    *ngFor="let post of posts; let i = index"
   >
-    <div class="question-text">
-      {{ post.question }}
+    <div
+      class="flip-card"
+      [class.flipped]="flipped[i]"
+      (click)="toggleFlip(i)"
+    >
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <div class="question-text">{{ post.question }}</div>
+        </div>
+        <div class="flip-card-back">
+          <div class="answer-text">{{ post.answer }}</div>
+        </div>
+      </div>
     </div>
 
     <div class="interaction-buttons">
       <button pButton class="p-button-rounded p-button-text">
         <i class="pi pi-heart"></i>
       </button>
-
       <button pButton class="p-button-rounded p-button-text">
         <i class="pi pi-send"></i>
       </button>
-
     </div>
   </div>
 </div>

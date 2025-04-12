@@ -22,6 +22,7 @@ import { ButtonModule } from 'primeng/button';
 export class HomeComponent implements OnInit {
   posts: Post[] = [];
   currentPostIndex = 0;
+  flipped: boolean[] = [];
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -43,6 +44,7 @@ export class HomeComponent implements OnInit {
       this.feedService.getPersonalizedFeed(userId).subscribe({
         next: (data) => {
           this.posts = data;
+          this.flipped = new Array(data.length).fill(false);
         },
         error: (err) => {
           console.error('Failed to load feed:', err);
@@ -71,5 +73,9 @@ export class HomeComponent implements OnInit {
       this.currentPostIndex--;
       this.scrollToPost(this.currentPostIndex);
     }
+  }
+
+  toggleFlip(index: number): void {
+    this.flipped[index] = !this.flipped[index];
   }
 }
