@@ -1,19 +1,27 @@
-<div class="feed-container" *ngIf="posts.length > 0">
-  <div class="question-text">
-    {{ posts[currentPostIndex]?.question }}
-  </div>
+<div class="feed-scroll-container" #scrollContainer>
+  <div
+    class="feed-post"
+    *ngFor="let post of posts"
+  >
+    <div class="question-text">
+      {{ post.question }}
+    </div>
 
-  <div class="interaction-buttons">
-    <button pButton icon="pi pi-heart"></button>
-    <button pButton icon="pi pi-share-alt"></button>
+    <div class="interaction-buttons">
+      <button pButton class="p-button-rounded p-button-text">
+        <i class="pi pi-heart"></i>
+      </button>
+
+      <button pButton class="p-button-rounded p-button-text">
+        <i class="pi pi-send"></i>
+      </button>
+
+    </div>
   </div>
 </div>
 
-<div class="scroll-buttons">
-  <button (click)="previousPost()">
-    <i class="pi pi-chevron-up"></i>
-  </button>
-  <button (click)="nextPost()">
-    <i class="pi pi-chevron-down"></i>
-  </button>
+<!-- Navigation Arrows -->
+<div class="navigation-arrows">
+  <button (click)="previousPost()"><i class="pi pi-chevron-up"></i></button>
+  <button (click)="nextPost()"><i class="pi pi-chevron-down"></i></button>
 </div>

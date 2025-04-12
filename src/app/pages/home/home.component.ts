@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeedService } from '../../services/feed.service';
 import { AuthService } from '../../services/auth.service';
@@ -17,6 +22,8 @@ import { ButtonModule } from 'primeng/button';
 export class HomeComponent implements OnInit {
   posts: Post[] = [];
   currentPostIndex = 0;
+
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
   constructor(
     private feedService: FeedService,
@@ -44,15 +51,25 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  scrollToPost(index: number): void {
+    const container = this.scrollContainer.nativeElement;
+    const postElements = container.children;
+    if (postElements[index]) {
+      postElements[index].scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   nextPost(): void {
     if (this.currentPostIndex < this.posts.length - 1) {
       this.currentPostIndex++;
+      this.scrollToPost(this.currentPostIndex);
     }
   }
 
   previousPost(): void {
     if (this.currentPostIndex > 0) {
       this.currentPostIndex--;
+      this.scrollToPost(this.currentPostIndex);
     }
   }
 }
