@@ -1,1 +1,34 @@
-<p>create-post works!</p>
+<div class="create-post-container">
+  <h2>Create New Post</h2>
+
+  <form [formGroup]="postForm" (ngSubmit)="submitPost()">
+    <input
+      pInputText
+      type="text"
+      placeholder="Question"
+      formControlName="question"
+    />
+
+    <textarea
+      pInputText
+      rows="5"
+      placeholder="Answer"
+      formControlName="answer"
+    ></textarea>
+
+    <p-dropdown
+      [options]="categories"
+      optionLabel="name"
+      optionValue="categoryId"
+      formControlName="categoryId"
+      placeholder="Select Category"
+    ></p-dropdown>
+
+    <button
+      pButton
+      type="submit"
+      label="Submit"
+      [disabled]="postForm.invalid"
+    ></button>
+  </form>
+</div>
