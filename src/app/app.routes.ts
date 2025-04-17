@@ -17,7 +17,12 @@ export const routes: Routes = [
       import('./pages/pick-categories/pick-categories.component').then(m => m.PickCategoriesComponent),
     canActivate: [AuthGuard, SkipIfHasPreferencesGuard]
   },
-
+  {
+    path: 'create-post',
+    loadComponent: () =>
+      import('./pages/create-post/create-post.component').then(m => m.CreatePostComponent),
+    canActivate: [AuthGuard]
+  },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard, PreferenceGuard] },
 
   { path: '**', redirectTo: 'login' }

@@ -19,4 +19,7 @@ export class SidebarComponent {
     });
   }
 
+  goToCreatePost(){
+    this.router.navigate(['/create-post']);
+  }
 }
