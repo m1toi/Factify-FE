@@ -6,11 +6,24 @@
   overflow: hidden;
 }
 
+.home-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+app-sidebar {
+  flex: 0 0 55px; // Sidebar width
+  height: 100%;
+}
+
 .feed-scroll-container {
+  flex: 1;
   height: 100vh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   -webkit-overflow-scrolling: touch;
+
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -25,7 +38,7 @@
   align-items: center;
   height: 100vh;
   scroll-snap-align: start;
-  padding: 2rem;
+  padding: 1rem;
   box-sizing: border-box;
 }
 

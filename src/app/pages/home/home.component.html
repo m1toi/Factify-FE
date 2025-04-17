@@ -1,37 +1,33 @@
-<app-sidebar></app-sidebar>
-<div class="feed-scroll-container" #scrollContainer>
-  <div
-    class="feed-post"
-    *ngFor="let post of posts; let i = index"
-  >
-    <div
-      class="flip-card"
-      [class.flipped]="flipped[i]"
-      (click)="toggleFlip(i)"
-    >
-      <div class="flip-card-inner">
-        <div class="flip-card-front">
-          <div class="question-text">{{ post.question }}</div>
-        </div>
-        <div class="flip-card-back">
-          <div class="answer-text">{{ post.answer }}</div>
+<div class="home-layout">
+  <app-sidebar></app-sidebar>
+
+  <div class="feed-scroll-container" #scrollContainer>
+    <div class="feed-post" *ngFor="let post of posts; let i = index">
+      <div class="flip-card" [class.flipped]="flipped[i]" (click)="toggleFlip(i)">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="question-text">{{ post.question }}</div>
+          </div>
+          <div class="flip-card-back">
+            <div class="answer-text">{{ post.answer }}</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="interaction-buttons">
-      <button pButton class="p-button-rounded p-button-text">
-        <i class="pi pi-heart"></i>
-      </button>
-      <button pButton class="p-button-rounded p-button-text">
-        <i class="pi pi-send"></i>
-      </button>
+      <div class="interaction-buttons">
+        <button pButton class="p-button-rounded p-button-text">
+          <i class="pi pi-heart"></i>
+        </button>
+        <button pButton class="p-button-rounded p-button-text">
+          <i class="pi pi-send"></i>
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Navigation Arrows -->
-<div class="navigation-arrows">
-  <button (click)="previousPost()"><i class="pi pi-chevron-up"></i></button>
-  <button (click)="nextPost()"><i class="pi pi-chevron-down"></i></button>
+  <!-- Navigation Arrows -->
+  <div class="navigation-arrows">
+    <button (click)="previousPost()"><i class="pi pi-chevron-up"></i></button>
+    <button (click)="nextPost()"><i class="pi pi-chevron-down"></i></button>
+  </div>
 </div>
