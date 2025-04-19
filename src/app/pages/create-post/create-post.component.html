@@ -1,28 +1,33 @@
 <div class="create-post-container">
-  <h2>Create New Post</h2>
+  <h2>Create new post</h2>
 
   <form [formGroup]="postForm" (ngSubmit)="submitPost()">
+    <label for="question">Question</label>
     <input
+      id="question"
       pInputText
       type="text"
-      placeholder="Question"
       formControlName="question"
     />
 
+    <label for="answer">Answer</label>
     <textarea
+      id="answer"
       pInputText
       rows="5"
-      placeholder="Answer"
       formControlName="answer"
     ></textarea>
 
     <p-dropdown
+      aria-label="Category"
       [options]="categories"
       optionLabel="name"
       optionValue="categoryId"
       formControlName="categoryId"
       placeholder="Select Category"
     ></p-dropdown>
+
+
 
     <button
       pButton
