@@ -4,7 +4,7 @@ import { providePrimeNG } from 'primeng/config';
 import Nora from "@primeng/themes/nora";
 import { definePreset } from "@primeng/themes";
 
-const MyPreset = definePreset(Nora, {
+export const MyPreset = definePreset(Nora, {
     primitive: {
         borderRadius: {
             none: "0",
@@ -5195,14 +5195,3 @@ const MyPreset = definePreset(Nora, {
         }
     }
 });
-
-export const appConfig: ApplicationConfig = {
-    providers: [
-        provideAnimationsAsync(),
-        providePrimeNG({
-            theme: {
-               preset: MyPreset,
-            }
-        })
-    ]
-};
