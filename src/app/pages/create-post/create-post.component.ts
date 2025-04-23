@@ -9,6 +9,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
+import {Select} from 'primeng/select';
 
 @Component({
   selector: 'app-create-post',
@@ -21,7 +22,8 @@ import { FormsModule } from '@angular/forms';
     InputTextModule,
     DropdownModule,
     ButtonModule,
-    FormsModule
+    FormsModule,
+    Select
   ]
 })
 export class CreatePostComponent implements OnInit {

@@ -18,14 +18,18 @@
       formControlName="answer"
     ></textarea>
 
-    <p-dropdown
-      aria-label="Category"
-      [options]="categories"
-      optionLabel="name"
-      optionValue="categoryId"
-      formControlName="categoryId"
-      placeholder="Select Category"
-    ></p-dropdown>
+    <!-- create-post.component.html -->
+    <p-select
+      class="category-select"
+    aria-label="Category"
+    [filter]="true"
+    [options]="categories"
+    optionLabel="name"
+    optionValue="categoryId"
+    formControlName="categoryId"
+    placeholder="Select Category"
+    panelStyleClass="category-panel">
+    </p-select>
 
 
 

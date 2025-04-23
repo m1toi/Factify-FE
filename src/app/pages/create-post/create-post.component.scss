@@ -70,4 +70,81 @@ button[type="submit"] {
     box-shadow: 0 4px 0 #007acc, 0 3px 6px rgba(0, 0, 0, 0.3); // Pressed-in look
   }
 }
+/* create-post.component.scss */
 
+/* …all your previous rules stay … */
+
+/* ──────────────────────────────────────────── */
+/* CLOSED CONTROL (matches the inputs’ look)   */
+:host ::ng-deep .category-select {
+  width: 100%;                 // same width as inputs/textarea
+  margin-bottom: 1.5rem;       // more room before the button
+  background-color: #2a2a2a !important;
+  border: none !important;
+  border-radius: 0.5rem;       // rounded corners
+  color: #fff;
+}
+
+:host ::ng-deep .category-select .p-select-label,
+:host ::ng-deep .category-select .p-select-dropdown-icon {
+  color: #fff;                 // text + chevron
+}
+
+/* hover / focus state so it doesn’t flash white */
+:host ::ng-deep .category-select:hover,
+:host ::ng-deep .category-select.p-focus {
+  background-color: #3a3a3a !important;
+}
+
+/* ──────────────────────────────────────────── */
+/* OVERLAY (we already had most of this)       */
+:host ::ng-deep .category-panel {          // whole dropdown box
+  min-width: 100%;                         // keeps overlay as wide
+  background-color: #2a2a2a;
+}
+
+:host ::ng-deep .category-panel .p-select-header,
+:host ::ng-deep .category-panel .p-select-filter {
+  background-color: #2a2a2a;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+:host ::ng-deep .category-panel .p-select-filter-icon {
+  color: #fff;
+}
+
+:host ::ng-deep .category-panel .p-select-option,
+:host ::ng-deep .category-panel .p-select-option-label {
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+:host ::ng-deep .category-panel .p-select-option:hover,
+:host ::ng-deep .category-panel .p-select-option.p-focus {
+  background-color: #3a3a3a;
+}
+
+:host ::ng-deep .category-panel .p-select-option.p-highlight {
+  background-color: #005fbb;
+  color: #fff;
+}
+
+/* ─── OPTION ITEMS ─────────────────────────── */
+/* 1) give every option its own rounded box */
+:host ::ng-deep .category-panel .p-select-option {
+  border-radius: 0.5rem;     /* same curve as inputs */
+  margin: 2px 4px;           /* light gap all around */
+  overflow: hidden;          /* keeps highlight inside radius */
+}
+
+/* 2) keep the hover / focus / selected colours the same */
+:host ::ng-deep .category-panel .p-select-option:hover,
+:host ::ng-deep .category-panel .p-select-option.p-focus {
+  background-color: #3a3a3a;
+}
+
+:host ::ng-deep .category-panel .p-select-option.p-highlight {
+  background-color: #005fbb;
+  color: #fff;
+}
