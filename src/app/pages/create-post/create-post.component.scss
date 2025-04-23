@@ -70,12 +70,7 @@ button[type="submit"] {
     box-shadow: 0 4px 0 #007acc, 0 3px 6px rgba(0, 0, 0, 0.3); // Pressed-in look
   }
 }
-/* create-post.component.scss */
 
-/* …all your previous rules stay … */
-
-/* ──────────────────────────────────────────── */
-/* CLOSED CONTROL (matches the inputs’ look)   */
 :host ::ng-deep .category-select {
   width: 100%;                 // same width as inputs/textarea
   margin-bottom: 1.5rem;       // more room before the button
@@ -130,21 +125,21 @@ button[type="submit"] {
   color: #fff;
 }
 
-/* ─── OPTION ITEMS ─────────────────────────── */
-/* 1) give every option its own rounded box */
-:host ::ng-deep .category-panel .p-select-option {
-  border-radius: 0.5rem;     /* same curve as inputs */
-  margin: 2px 4px;           /* light gap all around */
-  overflow: hidden;          /* keeps highlight inside radius */
+/* ──────────────────────────────────────────── */
+/* OVERLAY (whole dropdown box)                */
+:host ::ng-deep .category-panel {
+  min-width: 100%;
+  background-color: #2a2a2a;
+
+  /* NEW ↓↓↓ — round it and kill the white edge */
+  border: none;
+  border-radius: 0.5rem;   /* same curve as the control */
+  overflow: hidden;        /* keeps header & items inside the curve */
 }
 
-/* 2) keep the hover / focus / selected colours the same */
-:host ::ng-deep .category-panel .p-select-option:hover,
-:host ::ng-deep .category-panel .p-select-option.p-focus {
-  background-color: #3a3a3a;
-}
-
-:host ::ng-deep .category-panel .p-select-option.p-highlight {
-  background-color: #005fbb;
-  color: #fff;
+/* optional – round just the header too (not strictly needed because
+   overflow:hidden already masks it)                                   */
+:host ::ng-deep .category-panel .p-select-header {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
