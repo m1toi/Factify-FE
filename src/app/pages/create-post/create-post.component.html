@@ -21,9 +21,10 @@
     <!-- create-post.component.html -->
 
 
-    <label for="category">Category</label>
+    <label id="category-label">Category</label>
     <p-select
-      id="category"
+      aria-labelledby="category-label"
+      inputId="category-select"
       class="category-select"
       panelStyleClass="category-panel"
       [filter]="true"
@@ -33,6 +34,7 @@
       formControlName="categoryId"
       placeholder="Select Category">
     </p-select>
+
 
 
     <button
