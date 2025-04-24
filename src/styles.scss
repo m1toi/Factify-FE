@@ -16,3 +16,112 @@ html, body {
 *{
   font-family: 'Roboto', sans-serif;
 }
+
+
+
+
+/* ===================================================================== */
+/*  PRIME  DROPDOWN  FLAT GRAY + WHITE TEXT                              */
+/* ===================================================================== */
+
+/* Closed control */
+.category-select {
+  margin-bottom: 1.5rem;
+  background: #2a2a2a !important;
+  border: none !important;
+  border-radius: .5rem;
+  color: #fff;
+
+  .p-select-label,
+  .p-select-dropdown-icon { color: #fff !important; }
+
+  .p-select-label.p-placeholder {
+    color: #fff !important;
+    opacity: 1;
+  }
+
+  &:hover,
+  &.p-focus {
+    background: #2a2a2a !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Overlay wrapper */
+.p-connected-overlay {
+  border-radius: .5rem !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Dropdown panel */
+.category-panel {
+  background: #2a2a2a !important;
+  border: none !important;
+  border-radius: .5rem !important;
+  box-shadow: none !important;
+  overflow: hidden;
+
+  /* Search bar */
+  .p-select-header,
+  .p-select-filter {
+    background: #2a2a2a !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: .5rem !important;
+    box-shadow: none !important;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .p-select-filter:focus {
+    background: #2a2a2a !important;
+    outline: none !important;
+  }
+
+  .p-select-filter-icon {
+    color: #fff !important; /* 👈 search icon is white */
+  }
+
+  /* List options */
+  .p-select-option,
+  .p-select-option-label {
+    background: #2a2a2a !important;
+    color: #fff !important;
+    border: none !important;
+  }
+
+  .p-select-option:hover,
+  .p-select-option.p-focus,
+  .p-select-option.p-highlight {
+    background: #2a2a2a !important;
+    color: #fff !important;
+  }
+
+  .p-select-option:first-child {
+    border-top-left-radius: .5rem;
+    border-top-right-radius: .5rem;
+  }
+
+  .p-select-option:last-child {
+    border-bottom-left-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+  }
+
+  /* No Results Found */
+  .p-select-empty-message {
+    color: #fff !important;         /* 👈 no results text is white */
+    background: #2a2a2a !important;
+    padding: 0.75rem;
+  }
+}
+
+/* Arrow / outline */
+.category-panel::before,
+.category-panel::after {
+  display: none !important;
+}
+
+.category-panel .p-select-filter-container .p-icon {
+  color: #fff !important; /* ← this targets the SVG search icon */
+  fill: #fff !important;
+}

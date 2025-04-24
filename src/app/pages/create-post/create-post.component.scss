@@ -1,21 +1,24 @@
+/* ======== NO MORE ::ng-deep HERE ======== */
+
 :host {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #000;
+  background: #000;
   font-family: 'Segoe UI', sans-serif;
 }
 
 .create-post-container {
-  background-color: #1e1e1e;
+  background: #1e1e1e;
   padding: 2rem;
   border-radius: 1rem;
   width: 100%;
   max-width: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .5);
 }
 
+/* -- headings & labels --------------------------------------------------- */
 h2 {
   text-align: center;
   margin-bottom: 1.5rem;
@@ -26,19 +29,21 @@ h2 {
 label {
   color: #fff;
   font-weight: 500;
-  margin-bottom: 0.5rem;
+  margin-bottom: .5rem;
   display: block;
 }
 
+/* -- inputs -------------------------------------------------------------- */
 input,
 textarea,
-p-dropdown {
+p-dropdown,
+.category-select {          /* root <p-select> element */
   width: 100%;
-  padding: 0.75rem;
+  padding: .75rem;
   margin-bottom: 1rem;
-  border: none;
-  border-radius: 0.5rem;
-  background-color: #2a2a2a;
+  border: 0;
+  border-radius: .5rem;
+  background: #2a2a2a;
   color: #fff;
   font-size: 1rem;
 }
@@ -48,92 +53,24 @@ textarea {
   min-height: 100px;
 }
 
-button[type="submit"] {
+/* -- submit button ------------------------------------------------------- */
+button[type='submit'] {
   width: 100%;
-  padding: 0.75rem;
-  background-color: #0099ff;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
+  padding: .75rem;
+  background: #0099ff;
+  color: #fff;
+  border: 0;
+  border-radius: .5rem;
   font-weight: bold;
   cursor: pointer;
   font-size: 1rem;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 6px 0 #007acc, 0 6px 12px rgba(0, 0, 0, 0.4);
+  transition: all .2s ease-in-out;
+  box-shadow: 0 6px 0 #007acc, 0 6px 12px rgba(0, 0, 0, .4);
 
-  &:hover {
-    background-color: #008ae6;
-  }
+  &:hover { background: #008ae6; }
 
   &:active {
     transform: translateY(2px);
-    box-shadow: 0 4px 0 #007acc, 0 3px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 0 #007acc, 0 3px 6px rgba(0, 0, 0, .3);
   }
-}
-
-:host ::ng-deep .category-select {
-  width: 100%;
-  margin-bottom: 1.5rem;
-  background-color: #2a2a2a !important;
-  border: none !important;
-  border-radius: 0.5rem;
-  color: #fff;
-}
-
-:host ::ng-deep .category-select .p-select-label,
-:host ::ng-deep .category-select .p-select-dropdown-icon {
-  color: #fff;
-}
-
-:host ::ng-deep .category-select:hover,
-:host ::ng-deep .category-select.p-focus {
-  background-color: #3a3a3a !important;
-}
-
-
-:host ::ng-deep .category-panel {
-  min-width: 100%;
-  background-color: #2a2a2a;
-}
-
-:host ::ng-deep .category-panel .p-select-header,
-:host ::ng-deep .category-panel .p-select-filter {
-  background-color: #2a2a2a;
-  color: #fff;
-  border: 1px solid #555;
-}
-
-:host ::ng-deep .category-panel .p-select-filter-icon {
-  color: #fff;
-}
-
-:host ::ng-deep .category-panel .p-select-option,
-:host ::ng-deep .category-panel .p-select-option-label {
-  background-color: #2a2a2a;
-  color: #fff;
-}
-
-:host ::ng-deep .category-panel .p-select-option:hover,
-:host ::ng-deep .category-panel .p-select-option.p-focus {
-  background-color: #3a3a3a;
-}
-
-:host ::ng-deep .category-panel .p-select-option.p-highlight {
-  background-color: #005fbb;
-  color: #fff;
-}
-
-
-:host ::ng-deep .category-panel {
-  min-width: 100%;
-  background-color: #2a2a2a;
-
-  border: none;
-  border-radius: 0.5rem;
-  overflow: hidden;
-}
-
-:host ::ng-deep .category-panel .p-select-header {
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
 }

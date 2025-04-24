@@ -20,18 +20,19 @@
 
     <!-- create-post.component.html -->
 
-    <p-select
-      class="category-select"
-    aria-label="Category"
-    [filter]="true"
-    [options]="categories"
-    optionLabel="name"
-    optionValue="categoryId"
-    formControlName="categoryId"
-    placeholder="Select Category"
-    panelStyleClass="category-panel">
-    </p-select>
 
+    <label for="category">Category</label>
+    <p-select
+      id="category"
+      class="category-select"
+      panelStyleClass="category-panel"
+      [filter]="true"
+      [options]="categories"
+      optionLabel="name"
+      optionValue="categoryId"
+      formControlName="categoryId"
+      placeholder="Select Category">
+    </p-select>
 
 
     <button
