@@ -2,7 +2,7 @@ import {
   Component,
   OnInit,
   ViewChild,
-  ElementRef
+  ElementRef, AfterViewInit
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeedService } from '../../services/feed.service';
@@ -12,6 +12,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Post } from '../../models/post.model';
 import { ButtonModule } from 'primeng/button';
 import {SidebarComponent} from '../sidebar/sidebar.component';
+import {InteractionService} from '../../services/interaction.service';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,7 @@ import {SidebarComponent} from '../sidebar/sidebar.component';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   posts: Post[] = [];
   currentPostIndex = 0;
   flipped: boolean[] = [];
@@ -29,7 +30,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private feedService: FeedService,
-    private authService: AuthService
+    private authService: AuthService,
+    private interactionService: InteractionService,
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +48,11 @@ export class HomeComponent implements OnInit {
         next: (data) => {
           this.posts = data;
           this.flipped = new Array(data.length).fill(false);
+
+          if (this.posts.length > 0) {
+            const firstPostId = this.posts[0].postId;
+            this.interactionService.markAsSeen(firstPostId).subscribe();
+          }
         },
         error: (err) => {
           console.error('Failed to load feed:', err);
@@ -54,11 +61,42 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit(): void {
+    const container = this.scrollContainer.nativeElement;
+
+    container.addEventListener('scroll', () => {
+      this.detectCurrentPost();
+    });
+  }
+
+  detectCurrentPost(): void {
+    const container = this.scrollContainer.nativeElement;
+    const postElements = Array.from(container.children) as HTMLElement[];
+
+    for (let i = 0; i < postElements.length; i++) {
+      const rect = postElements[i].getBoundingClientRect();
+      const inView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+
+      if (inView && i !== this.currentPostIndex) {
+        this.currentPostIndex = i;
+        this.interactionService.markAsSeen(this.posts[i].postId).subscribe();
+        break;
+      }
+    }
+  }
+
+
   scrollToPost(index: number): void {
     const container = this.scrollContainer.nativeElement;
     const postElements = container.children;
     if (postElements[index]) {
       postElements[index].scrollIntoView({ behavior: 'smooth' });
+    }
+    const seenPost = this.posts[index];
+    if (seenPost) {
+      this.interactionService.markAsSeen(seenPost.postId).subscribe({
+        error: err => console.error('Failed to mark post as seen', err)
+      });
     }
   }
 
