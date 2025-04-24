@@ -14,4 +14,10 @@ export class InteractionService {
   markAsSeen(postId: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${postId}/interaction/seen`, {});
   }
+  likePost(postId: number, isLiked: boolean): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${postId}/interaction/like`, { liked: isLiked });
+  }
+  sharePost(postId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${postId}/interaction/share`, {});
+  }
 }

@@ -15,10 +15,22 @@
       </div>
 
       <div class="interaction-buttons">
-        <button pButton class="p-button-rounded p-button-text">
-          <i class="pi pi-heart"></i>
+        <!-- Like Button -->
+        <button
+          pButton
+          class="p-button-rounded p-button-text"
+          (click)="toggleLike(i)"
+          [ngClass]="{ 'liked': likedPosts[i] }"
+        >
+          <i class="pi" [ngClass]="likedPosts[i] ? 'pi-heart-fill' : 'pi-heart'"></i>
         </button>
-        <button pButton class="p-button-rounded p-button-text">
+
+        <!-- Share Button -->
+        <button
+          pButton
+          class="p-button-rounded p-button-text"
+          (click)="sharePost(i)"
+        >
           <i class="pi pi-send"></i>
         </button>
       </div>

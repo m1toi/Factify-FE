@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   posts: Post[] = [];
   currentPostIndex = 0;
   flipped: boolean[] = [];
+  likedPosts: boolean[] = [];
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -48,6 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         next: (data) => {
           this.posts = data;
           this.flipped = new Array(data.length).fill(false);
+          this.likedPosts = new Array(data.length).fill(false);
 
           if (this.posts.length > 0) {
             const firstPostId = this.posts[0].postId;
@@ -83,6 +85,30 @@ export class HomeComponent implements OnInit, AfterViewInit {
         break;
       }
     }
+  }
+
+  toggleLike(index: number): void {
+    const post = this.posts[index];
+    const isCurrentlyLiked = this.likedPosts[index];
+    const newLikeStatus = !isCurrentlyLiked;
+
+    this.interactionService.likePost(post.postId, newLikeStatus).subscribe({
+      next: () => {
+        this.likedPosts[index] = newLikeStatus;
+      },
+      error: err => console.error('Failed to like/unlike post:', err)
+    });
+  }
+
+  sharePost(index: number): void {
+    const post = this.posts[index];
+    this.interactionService.sharePost(post.postId).subscribe({
+      next: () => {
+
+        console.log('Post shared successfully');
+      },
+      error: err => console.error('Failed to share post:', err)
+    });
   }
 
 
