@@ -2,7 +2,9 @@ import {
   Component,
   OnInit,
   ViewChild,
-  ElementRef, AfterViewInit
+  ElementRef,
+  AfterViewInit,
+  HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeedService } from '../../services/feed.service';
@@ -11,8 +13,8 @@ import { RouterModule } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Post } from '../../models/post.model';
 import { ButtonModule } from 'primeng/button';
-import {SidebarComponent} from '../sidebar/sidebar.component';
-import {InteractionService} from '../../services/interaction.service';
+import { SidebarComponent } from '../sidebar/sidebar.component';
+import { InteractionService } from '../../services/interaction.service';
 
 @Component({
   selector: 'app-home',
@@ -26,8 +28,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentPostIndex = 0;
   flipped: boolean[] = [];
   likedPosts: boolean[] = [];
+  loadingMore = false;   // 🔥 NEW: to avoid double loading
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
+  private userId!: number; // 🔥 NEW: Store userId so we don't decode token every time
 
   constructor(
     private feedService: FeedService,
@@ -39,28 +43,30 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const token = this.authService.getToken();
     if (token) {
       const decoded: any = jwtDecode(token);
-      const userId = parseInt(
-        decoded[
-          'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
-          ]
-      );
+      this.userId = parseInt(decoded[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+        ]);
 
-      this.feedService.getPersonalizedFeed(userId).subscribe({
-        next: (data) => {
-          this.posts = data;
-          this.flipped = new Array(data.length).fill(false);
-          this.likedPosts = new Array(data.length).fill(false);
-
-          if (this.posts.length > 0) {
-            const firstPostId = this.posts[0].postId;
-            this.interactionService.markAsSeen(firstPostId).subscribe();
-          }
-        },
-        error: (err) => {
-          console.error('Failed to load feed:', err);
-        },
-      });
+      this.loadInitialPosts();
     }
+  }
+
+  loadInitialPosts(): void {
+    this.feedService.getPersonalizedFeed(this.userId).subscribe({
+      next: (data) => {
+        this.posts = data;
+        this.flipped = new Array(data.length).fill(false);
+        this.likedPosts = new Array(data.length).fill(false);
+
+        if (this.posts.length > 0) {
+          const firstPostId = this.posts[0].postId;
+          this.interactionService.markAsSeen(firstPostId).subscribe();
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load feed:', err);
+      },
+    });
   }
 
   ngAfterViewInit(): void {
@@ -82,9 +88,33 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (inView && i !== this.currentPostIndex) {
         this.currentPostIndex = i;
         this.interactionService.markAsSeen(this.posts[i].postId).subscribe();
+
+        // 🔥 Load more posts if we are close to the bottom (2 posts before the end)
+        if (i >= this.posts.length - 3 && !this.loadingMore) {
+          this.loadMorePosts();
+        }
         break;
       }
     }
+  }
+
+  loadMorePosts(): void {
+    this.loadingMore = true;
+    this.feedService.getPersonalizedFeed(this.userId).subscribe({
+      next: (newPosts) => {
+        console.log('Received new posts:', newPosts);//to delete
+        const freshPosts = newPosts.filter(p => !this.posts.some(existing => existing.postId === p.postId));
+        console.log('Fresh posts after filtering:', freshPosts);//to delete
+        this.posts = [...this.posts, ...freshPosts];
+        this.flipped.push(...new Array(freshPosts.length).fill(false));
+        this.likedPosts.push(...new Array(freshPosts.length).fill(false));
+        this.loadingMore = false;
+      },
+      error: (err) => {
+        console.error('Failed to load more posts:', err);
+        this.loadingMore = false;
+      }
+    });
   }
 
   toggleLike(index: number): void {
@@ -104,13 +134,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const post = this.posts[index];
     this.interactionService.sharePost(post.postId).subscribe({
       next: () => {
-
         console.log('Post shared successfully');
       },
       error: err => console.error('Failed to share post:', err)
     });
   }
-
 
   scrollToPost(index: number): void {
     const container = this.scrollContainer.nativeElement;
@@ -130,8 +158,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.currentPostIndex < this.posts.length - 1) {
       this.currentPostIndex++;
       this.scrollToPost(this.currentPostIndex);
+    } else {
+      console.log('Reached the last post, trying to load more...'); // 👈 Add this!
+      this.loadMorePosts();
     }
   }
+
 
   previousPost(): void {
     if (this.currentPostIndex > 0) {
