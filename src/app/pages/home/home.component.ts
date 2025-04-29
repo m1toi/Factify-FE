@@ -98,17 +98,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  loadMorePosts(): void {
+  loadMorePosts(callback?: () => void): void {
     this.loadingMore = true;
     this.feedService.getPersonalizedFeed(this.userId).subscribe({
       next: (newPosts) => {
-        console.log('Received new posts:', newPosts);//to delete
         const freshPosts = newPosts.filter(p => !this.posts.some(existing => existing.postId === p.postId));
-        console.log('Fresh posts after filtering:', freshPosts);//to delete
         this.posts = [...this.posts, ...freshPosts];
         this.flipped.push(...new Array(freshPosts.length).fill(false));
         this.likedPosts.push(...new Array(freshPosts.length).fill(false));
         this.loadingMore = false;
+
+        if (callback) {
+          callback();  // 🔥 Scroll to newly loaded post after DOM updates
+        }
       },
       error: (err) => {
         console.error('Failed to load more posts:', err);
@@ -116,6 +118,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
 
   toggleLike(index: number): void {
     const post = this.posts[index];
@@ -159,10 +162,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentPostIndex++;
       this.scrollToPost(this.currentPostIndex);
     } else {
-      console.log('Reached the last post, trying to load more...'); // 👈 Add this!
-      this.loadMorePosts();
+      console.log('Reached the last post, trying to load more...');
+      this.loadMorePosts(() => {
+        this.currentPostIndex++;
+        setTimeout(() => this.scrollToPost(this.currentPostIndex), 0);
+      });
     }
   }
+
 
 
   previousPost(): void {
