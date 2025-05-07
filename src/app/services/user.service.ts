@@ -11,6 +11,11 @@ export interface UserResponse {
   profilePicture?: string;     // e.g. "avatar2.png"
 }
 
+export interface UpdateUserDto {
+  name: string;
+  profilePicture?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private apiUrl = `${environment.apiUrl}/Users`;
@@ -23,5 +28,9 @@ export class UserService {
 
   getById(id: number): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${this.apiUrl}/${id}`);
+  }
+
+  update(id: number, dto: UpdateUserDto): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}`, dto);
   }
 }

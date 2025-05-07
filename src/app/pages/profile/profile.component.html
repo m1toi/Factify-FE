@@ -1,35 +1,154 @@
-<div class="profile-layout">
-  <div class="sidebar-col">
+<!-- PROFILE LAYOUT -->
+<div class="profile-layout flex h-screen bg-black">
+  <!-- Sidebar -->
+  <div class="sidebar-col w-14 flex-shrink-0">
     <app-sidebar></app-sidebar>
   </div>
 
-  <div class="profile-content">
+  <!-- CONTENT -->
+  <div class="profile-content flex-1 p-8 text-white overflow-auto">
     <ng-container *ngIf="user as u; else loading">
-      <div class="profile-header">
+      <div class="profile-header flex items-center gap-6 mb-8">
+        <!-- Avatar -->
         <img
-          class="profile-avatar"
+          class="w-32 h-32 rounded-full object-cover"
           [src]="
-      u.profilePicture
-        ? '/assets/avatars/' + u.profilePicture
-        : defaultAvatar
-    "
+            u.profilePicture
+              ? '/assets/avatars/' + u.profilePicture
+              : defaultAvatar
+          "
           alt="Avatar"
         />
-
-        <div class="profile-info">
-          <!-- Username -->
-          <h2 class="profile-name">{{ u.name }}</h2>
-          <!-- Button now under the name -->
-          <button *ngIf="isOwnProfile" pButton class="edit-avatar-btn">
+        <!-- Name + Edit button -->
+        <div class="profile-info flex flex-col gap-2">
+          <h2 class="text-4xl font-semibold">{{ u.name }}</h2>
+          <button
+            *ngIf="isOwnProfile"
+            pButton
+            type="button"
+            class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-medium text-sm w-fit"
+            (click)="openEdit()"
+          >
             Edit profile
           </button>
         </div>
       </div>
 
+      <!-- placeholder for posts -->
+      <div class="text-center py-10 border-t border-gray-700">
+        <p class="text-gray-400">User’s posts will appear here.</p>
+      </div>
     </ng-container>
 
     <ng-template #loading>
-      <div style="color:white; padding:2rem">Loading profile…</div>
+      <div class="text-white p-8">Loading profile…</div>
     </ng-template>
   </div>
 </div>
+
+<!-- EDIT PROFILE DIALOG – only render once `user` is defined -->
+<p-dialog
+  *ngIf="user"
+  [(visible)]="showEditDialog"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [style]="{ width: '450px' }"
+  styleClass="!bg-zinc-800 !rounded-lg !shadow-xl !border-none !p-0"
+  (onHide)="closeEdit()"
+>
+  <!-- HEADER -->
+  <ng-template pTemplate="header">
+    <div
+      class="flex items-center justify-between w-full pt-4 px-6 pb-3 border-b border-zinc-700 bg-zinc-800"
+    >
+      <h2 class="text-xl font-semibold text-white">Edit profile</h2>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-times"
+        class="p-button-rounded p-button-text p-button-plain text-gray-400 hover:text-white hover:bg-zinc-700"
+        (click)="closeEdit()"
+      ></button>
+    </div>
+  </ng-template>
+
+  <!-- CONTENT -->
+  <div class="text-white p-6 bg-zinc-800 space-y-6">
+    <!-- Profile photo chooser -->
+    <div class="flex flex-col items-center gap-3">
+      <span class="text-sm font-medium self-start text-gray-300">
+        Profile photo
+      </span>
+      <div class="relative">
+        <img
+          [src]="
+            selectedFilePreview
+              || (user?.profilePicture
+                   ? '/assets/avatars/'+user.profilePicture
+                   : defaultAvatar)
+          "
+          alt="Profile preview"
+          class="w-24 h-24 rounded-full object-cover cursor-pointer"
+          (click)="fileInput.click()"
+        />
+        <label
+          for="avatarFile"
+          class="absolute bottom-0 right-0 bg-gray-600 hover:bg-gray-500 p-1.5 rounded-full cursor-pointer border-2 border-zinc-800"
+          title="Change photo"
+        >
+          <!-- replace broken SVG with PrimeIcon -->
+          <i class="pi pi-pencil text-white text-lg"></i>
+        </label>
+      </div>
+      <input
+        #fileInput
+        id="avatarFile"
+        type="file"
+        accept="image/*"
+        class="hidden"
+        (change)="onFileSelected($event)"
+      />
+    </div>
+
+    <!-- Username input -->
+    <div class="flex flex-col gap-2">
+      <span class="text-sm font-medium text-gray-300">Username</span>
+      <input
+        id="username"
+        type="text"
+        pInputText
+        [(ngModel)]="editableUser.name"
+        class="bg-zinc-700 border border-zinc-600 text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
+        placeholder="Enter your username"
+      />
+      <p class="text-xs text-gray-400 mt-1">
+        Usernames can only contain letters, numbers, underscores, and periods.
+      </p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <ng-template pTemplate="footer">
+    <div
+      class="flex justify-end gap-3 bg-zinc-800 px-6 pb-4 pt-3 border-t border-zinc-700"
+    >
+      <button
+        pButton
+        type="button"
+        class="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded font-medium text-sm"
+        (click)="closeEdit()"
+      >
+        Cancel
+      </button>
+      <button
+        pButton
+        type="button"
+        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-medium text-sm"
+        (click)="saveProfile()"
+      >
+        Save
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>
