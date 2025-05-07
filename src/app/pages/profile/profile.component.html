@@ -1,0 +1,35 @@
+<div class="profile-layout">
+  <div class="sidebar-col">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <div class="profile-content">
+    <ng-container *ngIf="user as u; else loading">
+      <div class="profile-header">
+        <img
+          class="profile-avatar"
+          [src]="
+      u.profilePicture
+        ? '/assets/avatars/' + u.profilePicture
+        : defaultAvatar
+    "
+          alt="Avatar"
+        />
+
+        <div class="profile-info">
+          <!-- Username -->
+          <h2 class="profile-name">{{ u.name }}</h2>
+          <!-- Button now under the name -->
+          <button *ngIf="isOwnProfile" pButton class="edit-avatar-btn">
+            Edit profile
+          </button>
+        </div>
+      </div>
+
+    </ng-container>
+
+    <ng-template #loading>
+      <div style="color:white; padding:2rem">Loading profile…</div>
+    </ng-template>
+  </div>
+</div>

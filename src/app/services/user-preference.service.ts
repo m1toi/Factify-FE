@@ -17,7 +17,6 @@ export class UserPreferenceService {
     });
   }
 
-
   hasPreferences(): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/has-preferences`);
   }

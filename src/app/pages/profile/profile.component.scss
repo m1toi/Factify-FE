@@ -1,0 +1,51 @@
+/* profile.component.scss */
+
+.profile-content {
+  flex: 1;
+  /* pulled in from the left more tightly */
+  padding: 2rem 2rem 2rem 17rem;
+  color: #fff;
+  min-width: 0;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.profile-avatar {
+  width: 15rem;
+  height: 15rem;
+  border-radius: 50%;
+  object-fit: cover;
+  /* no border */
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;  /* stack name + button vertically */
+  gap: 0.5rem;             /* small gap between them */
+}
+
+.profile-name {
+  font-size: 2rem;
+  margin: 0;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.edit-avatar-btn {
+  /* blue TikTok‐style button under the name */
+  padding: 0.5rem 1.2rem;
+  background-color: #006aff !important;  /* bright blue */
+  color: white !important;
+  border: none !important;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+
+  /* no extra margins needed */
+}

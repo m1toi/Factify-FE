@@ -1,6 +1,10 @@
 <div class="home-layout">
   <app-sidebar></app-sidebar>
-
+  <div class="profile-card">
+    <button class="profile-bubble" (click)="goToProfile()">
+      <img [src]="defaultAvatar" />
+    </button>
+  </div>
   <div class="feed-scroll-container" #scrollContainer>
     <div class="feed-post" *ngFor="let post of posts; let i = index">
       <div class="flip-card" [class.flipped]="flipped[i]" (click)="toggleFlip(i)">

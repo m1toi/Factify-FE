@@ -142,3 +142,44 @@ app-sidebar {
   color: white;
 }
 
+.profile-card {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+
+  /* darker, almost-black gray */
+  background-color: #222;
+
+  /* very slim vertical padding, moderate horizontal */
+  padding: 0.15rem 0.6rem;
+
+  /* pill shape */
+  border-radius: 1.5rem;
+
+  /* subtle shadow */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+
+  /* center the bubble inside */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 200;
+}
+
+.profile-card .profile-bubble {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+
+  transition: background-color 0.2s;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}

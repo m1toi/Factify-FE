@@ -9,7 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FeedService } from '../../services/feed.service';
 import { AuthService } from '../../services/auth.service';
-import { RouterModule } from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Post } from '../../models/post.model';
 import { ButtonModule } from 'primeng/button';
@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   flipped: boolean[] = [];
   likedPosts: boolean[] = [];
   loadingMore = false;   // 🔥 NEW: to avoid double loading
+  public defaultAvatar = 'assets/avatars/placeholder1.png';
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   private userId!: number; // 🔥 NEW: Store userId so we don't decode token every time
@@ -37,6 +38,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private feedService: FeedService,
     private authService: AuthService,
     private interactionService: InteractionService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -182,4 +184,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   toggleFlip(index: number): void {
     this.flipped[index] = !this.flipped[index];
   }
+
+  goToProfile() {
+    this.router.navigate(['/profile']);
+  }
+
 }
