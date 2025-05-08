@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { DialogModule }      from 'primeng/dialog';
 import { ButtonModule }      from 'primeng/button';
 import { InputTextModule }   from 'primeng/inputtext';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule }   from 'primeng/confirmdialog';
 
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import {UserService, UserResponse, UpdateUserDto} from '../../services/user.service';
@@ -18,10 +20,12 @@ import {UserService, UserResponse, UpdateUserDto} from '../../services/user.serv
     DialogModule,
     ButtonModule,
     InputTextModule,
-    SidebarComponent
+    SidebarComponent,
+    ConfirmDialogModule
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
+  providers: [ConfirmationService]
 })
 export class ProfileComponent implements OnInit {
   user?: UserResponse;
@@ -37,7 +41,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private confirmation: ConfirmationService
   ) {}
 
   ngOnInit() {
@@ -63,35 +68,49 @@ export class ProfileComponent implements OnInit {
     this.showEditDialog = false;
   }
 
-  onFileSelected(evt: Event) {
-    const file = (evt.target as HTMLInputElement).files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => this.selectedFilePreview = reader.result as string;
-      reader.readAsDataURL(file);
-      // TODO: upload the file or store it in editableUser.profilePicture
-    }
-  }
-
   selectAvatar(filename: string) {
     this.editableUser.profilePicture = filename;
     // clear any old “upload preview”
     this.selectedFilePreview = undefined;
   }
 
+  get hasChanges(): boolean {
+    // if there's no user yet, no changes possible
+    if (!this.user) return false;
+    // name changed?
+    const nameChanged = this.editableUser.name !== this.user.name;
+    // avatar changed?
+    const picChanged = this.editableUser.profilePicture !== this.user.profilePicture;
+    return nameChanged || picChanged;
+  }
+
   saveProfile() {
-    const payload: UpdateUserDto = {
+    // fire the confirmation dialog
+    this.showEditDialog = false;
+    this.confirmation.confirm({
+      message: 'Are you sure you want to save these changes?',
+      accept: () => this.actuallySave(),    // if they click “Yes”
+      reject: () =>
+      {this.showEditDialog=true},                     // do nothing on “No”
+    });
+  }
+
+  private actuallySave() {
+    if (!this.user) return;
+
+    const dto: UpdateUserDto = {
       name: this.editableUser.name!,
-      profilePicture: this.selectedFilePreview || this.editableUser.profilePicture
+      profilePicture: this.editableUser.profilePicture!
     };
 
-    this.userService.update(this.user!.id, payload)
+    this.userService
+      .updateProfile(dto)         // ← use updateProfile instead of update(...)
       .subscribe(() => {
-        // locally merge so UI reflects change immediately:
-        Object.assign(this.user!, payload);
-        this.selectedFilePreview = undefined;
+        Object.assign(this.user!, dto);
         this.closeEdit();
       });
   }
+
+
 
 }

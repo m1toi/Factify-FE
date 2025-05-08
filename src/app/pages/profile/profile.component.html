@@ -1,4 +1,14 @@
 <!-- PROFILE LAYOUT -->
+<!-- for confirmations -->
+<p-confirmDialog header="Please Confirm"
+                 icon="pi pi-exclamation-triangle !text-red-500"
+                 [acceptLabel]="'Continue'"
+                 [rejectLabel]="'Cancel'"
+                 [style]="{width: '450px'}"
+                 styleClass="!bg-zinc-900 !text-white !rounded-lg !shadow-xl">
+
+</p-confirmDialog>
+
 <div class="profile-layout flex h-screen bg-black">
   <!-- Sidebar -->
   <div class="sidebar-col w-14 flex-shrink-0">
@@ -90,10 +100,12 @@
             <img
               [src]="'/assets/avatars/' + av"
               (click)="selectAvatar(av)"
-              class="w-24 h-24 flex-shrink-0 rounded-full object-cover
-                     cursor-pointer border-4 border-transparent
-                     hover:border-blue-500 transition snap-center"
-              [class.border-blue-400]="editableUser.profilePicture === av"
+              [class]="
+      'w-24 h-24 flex-shrink-0 rounded-full object-cover cursor-pointer snap-center border-4 ' +
+      (editableUser.profilePicture === av
+        ? 'border-blue-400'
+        : 'border-transparent hover:border-blue-500')
+      "
               alt="avatar option"
             />
           </ng-container>
@@ -132,15 +144,20 @@
       >
         Cancel
       </button>
+      <!-- … inside pTemplate="footer" … -->
       <button
         pButton
         type="button"
-        class="px-4 py-2 !bg-red-600 hover:bg-red-700 text-white rounded font-medium text-sm"
+        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-medium text-sm
+         disabled:opacity-50 disabled:cursor-not-allowed"
         (click)="saveProfile()"
+        [disabled]="!hasChanges"
       >
         Save
       </button>
+
     </div>
   </ng-template>
 
 </p-dialog>
+

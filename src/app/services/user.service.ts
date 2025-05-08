@@ -30,7 +30,11 @@ export class UserService {
     return this.http.get<UserResponse>(`${this.apiUrl}/${id}`);
   }
 
-  update(id: number, dto: UpdateUserDto): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}`, dto);
+  update(id: number, payload: UpdateUserDto): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}`, payload);
+  }
+
+  updateProfile(payload: UpdateUserDto): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/profile`, payload);
   }
 }
