@@ -51,64 +51,54 @@
   *ngIf="user"
   [(visible)]="showEditDialog"
   [modal]="true"
-  [closable]="true"
+  [closable]="false"
   [draggable]="false"
   [style]="{ width: '450px' }"
-  styleClass="!bg-zinc-800 !rounded-lg !shadow-xl !border-none !p-0"
+  styleClass="!bg-zinc-900 !rounded-lg !shadow-xl !border-none !p-0"
   (onHide)="closeEdit()"
 >
   <!-- HEADER -->
   <ng-template pTemplate="header">
     <div
-      class="flex items-center justify-between w-full pt-4 px-6 pb-3 border-b border-zinc-700 bg-zinc-800"
+      class="flex items-center justify-between w-full pt-4 px-1 pb-3 border-b border-zinc-700 bg-zinc-900"
     >
       <h2 class="text-xl font-semibold text-white">Edit profile</h2>
       <button
         pButton
         type="button"
         icon="pi pi-times"
-        class="p-button-rounded p-button-text p-button-plain text-gray-400 hover:text-white hover:bg-zinc-700"
+        class="p-button-rounded p-button-text p-button-plain !text-white  !bg-transparent
+    "
         (click)="closeEdit()"
       ></button>
     </div>
   </ng-template>
 
   <!-- CONTENT -->
-  <div class="text-white p-6 bg-zinc-800 space-y-6">
+  <div class="text-white p-6 bg-zinc-900 space-y-6">
     <!-- Profile photo chooser -->
-    <div class="flex flex-col items-center gap-3">
-      <span class="text-sm font-medium self-start text-gray-300">
-        Profile photo
-      </span>
-      <div class="relative">
-        <img
-          [src]="
-            selectedFilePreview
-              || (user?.profilePicture
-                   ? '/assets/avatars/'+user.profilePicture
-                   : defaultAvatar)
-          "
-          alt="Profile preview"
-          class="w-24 h-24 rounded-full object-cover cursor-pointer"
-          (click)="fileInput.click()"
-        />
-        <label
-          for="avatarFile"
-          class="absolute bottom-0 right-0 bg-gray-600 hover:bg-gray-500 p-1.5 rounded-full cursor-pointer border-2 border-zinc-800"
-          title="Change photo"
-        >
-          <!-- replace broken SVG with PrimeIcon -->
-          <i class="pi pi-pencil text-white text-lg"></i>
-        </label>
+    <div class="flex flex-col w-full">
+      <span class="text-sm font-medium text-gray-300 mb-2">Profile photo</span>
+
+      <!-- SCROLLABLE AVATAR ROW -->
+      <div
+        class="overflow-x-auto snap-x snap-mandatory avatar-scroll mt-4"
+        style="scroll-padding: 0 1rem;"
+      >
+        <div class="flex space-x-4 px-4 pb-3">
+          <ng-container *ngFor="let av of avatarOptions">
+            <img
+              [src]="'/assets/avatars/' + av"
+              (click)="selectAvatar(av)"
+              class="w-24 h-24 flex-shrink-0 rounded-full object-cover
+                     cursor-pointer border-4 border-transparent
+                     hover:border-blue-500 transition snap-center"
+              [class.border-blue-400]="editableUser.profilePicture === av"
+              alt="avatar option"
+            />
+          </ng-container>
+        </div>
       </div>
-      <input
-        #fileInput
-        id="avatarFile"
-        type="file"
-        accept="image/*"
-        class="hidden"
-        (change)="onFileSelected($event)"
-      />
     </div>
 
     <!-- Username input -->
@@ -119,7 +109,8 @@
         type="text"
         pInputText
         [(ngModel)]="editableUser.name"
-        class="bg-zinc-700 border border-zinc-600 text-white rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500"
+        class="!bg-zinc-800 !border !border-zinc-900 !text-white !rounded-md px-3 py-2
+         focus:outline-none focus:ring-2 focus:ring-blue-500 !placeholder-white"
         placeholder="Enter your username"
       />
       <p class="text-xs text-gray-400 mt-1">
@@ -131,12 +122,12 @@
   <!-- FOOTER -->
   <ng-template pTemplate="footer">
     <div
-      class="flex justify-end gap-3 bg-zinc-800 px-6 pb-4 pt-3 border-t border-zinc-700"
+      class="flex items-center justify-between w-full bg-zinc-900 px-1 pt-3 pb-4 !border-t border-zinc-700"
     >
       <button
         pButton
         type="button"
-        class="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-white rounded font-medium text-sm"
+        class="px-4 py-2 !bg-zinc-700 hover:bg-zinc-600 text-white rounded font-medium text-sm"
         (click)="closeEdit()"
       >
         Cancel
@@ -144,11 +135,12 @@
       <button
         pButton
         type="button"
-        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-medium text-sm"
+        class="px-4 py-2 !bg-red-600 hover:bg-red-700 text-white rounded font-medium text-sm"
         (click)="saveProfile()"
       >
         Save
       </button>
     </div>
   </ng-template>
+
 </p-dialog>

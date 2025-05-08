@@ -1,33 +1,35 @@
-/* profile.component.scss */
-
+/* pull the content in from the left sidebar */
 .profile-content {
   flex: 1;
-  /* pulled in from the left more tightly */
   padding: 2rem 2rem 2rem 17rem;
   color: #fff;
-  min-width: 0;
+  min-width: 0; /* allow flex-shrink */
 }
 
+/* Header layout */
 .profile-header {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
 
+/* TikTok-style oversized avatar */
 .profile-avatar {
   width: 15rem;
   height: 15rem;
   border-radius: 50%;
   object-fit: cover;
-  /* no border */
+  /* no border here */
 }
 
+/* Under-avatar info */
 .profile-info {
   display: flex;
-  flex-direction: column;  /* stack name + button vertically */
-  gap: 0.5rem;             /* small gap between them */
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
+/* Username style */
 .profile-name {
   font-size: 2rem;
   margin: 0;
@@ -37,15 +39,34 @@
   text-overflow: ellipsis;
 }
 
+/* Edit button under the name */
 .edit-avatar-btn {
-  /* blue TikTok‐style button under the name */
   padding: 0.5rem 1.2rem;
-  background-color: #006aff !important;  /* bright blue */
+  background-color: #006aff !important;
   color: white !important;
   border: none !important;
   border-radius: 0.5rem;
   font-weight: 500;
   font-size: 0.9rem;
+}
 
-  /* no extra margins needed */
+/* ─── Avatar scroll custom scrollbar ─── */
+.avatar-scroll {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #52525b #18181b; /* thumb zinc-600, track zinc-900 */
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #18181b; /* zinc-900 */
+    border-radius: 9999px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #52525b; /* zinc-600 */
+    border-radius: 9999px;
+  }
 }

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule }   from '@angular/common';
 import { FormsModule }    from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-
-// PrimeNG modules
 import { DialogModule }      from 'primeng/dialog';
 import { ButtonModule }      from 'primeng/button';
 import { InputTextModule }   from 'primeng/inputtext';
@@ -32,6 +30,10 @@ export class ProfileComponent implements OnInit {
   showEditDialog = false;
   selectedFilePreview?: string;
   editableUser: Partial<UserResponse> = {};
+  public avatarOptions = [
+    'avatar1.png',
+    'avatar2.png',
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -69,6 +71,12 @@ export class ProfileComponent implements OnInit {
       reader.readAsDataURL(file);
       // TODO: upload the file or store it in editableUser.profilePicture
     }
+  }
+
+  selectAvatar(filename: string) {
+    this.editableUser.profilePicture = filename;
+    // clear any old “upload preview”
+    this.selectedFilePreview = undefined;
   }
 
   saveProfile() {
