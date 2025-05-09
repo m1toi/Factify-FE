@@ -1,12 +1,11 @@
 <!-- PROFILE LAYOUT -->
-<!-- for confirmations -->
-<p-confirmDialog header="Please Confirm"
-                 icon="pi pi-exclamation-triangle !text-red-500"
-                 [acceptLabel]="'Continue'"
-                 [rejectLabel]="'Cancel'"
-                 [style]="{width: '450px'}"
-                 styleClass="!bg-zinc-900 !text-white !rounded-lg !shadow-xl">
-
+<p-confirmDialog
+  header="Please Confirm"
+  icon="pi pi-exclamation-triangle !text-red-500"
+  [acceptLabel]="'Continue'"
+  [rejectLabel]="'Cancel'"
+  [style]="{ width: '450px' }"
+  styleClass="!bg-zinc-900 !text-white !rounded-lg !shadow-xl">
 </p-confirmDialog>
 
 <div class="profile-layout flex h-screen bg-black">
@@ -36,7 +35,10 @@
             *ngIf="isOwnProfile"
             pButton
             type="button"
-            class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-medium text-sm w-fit"
+            class="px-4 py-2 rounded text-white font-medium text-sm w-fit
+         bg-blue-700 hover:bg-blue-200
+         focus:outline-none focus:ring-2 focus:ring-blue-400
+         !bg-blue-700 !hover:bg-blue-200"
             (click)="openEdit()"
           >
             Edit profile
@@ -77,59 +79,75 @@
         pButton
         type="button"
         icon="pi pi-times"
-        class="p-button-rounded p-button-text p-button-plain !text-white  !bg-transparent
-    "
+        class="p-button-rounded p-button-text p-button-plain !text-white !bg-transparent"
         (click)="closeEdit()"
       ></button>
     </div>
   </ng-template>
 
-  <!-- CONTENT -->
-  <div class="text-white p-6 bg-zinc-900 space-y-6">
-    <!-- Profile photo chooser -->
-    <div class="flex flex-col w-full">
-      <span class="text-sm font-medium text-gray-300 mb-2">Profile photo</span>
-
-      <!-- SCROLLABLE AVATAR ROW -->
-      <div
-        class="overflow-x-auto snap-x snap-mandatory avatar-scroll mt-4"
-        style="scroll-padding: 0 1rem;"
-      >
-        <div class="flex space-x-4 px-4 pb-3">
-          <ng-container *ngFor="let av of avatarOptions">
-            <img
-              [src]="'/assets/avatars/' + av"
-              (click)="selectAvatar(av)"
-              [class]="
-      'w-24 h-24 flex-shrink-0 rounded-full object-cover cursor-pointer snap-center border-4 ' +
-      (editableUser.profilePicture === av
-        ? 'border-blue-400'
-        : 'border-transparent hover:border-blue-500')
-      "
-              alt="avatar option"
-            />
-          </ng-container>
+  <!-- CONTENT (Reactive Form) -->
+  <form [formGroup]="editForm">
+    <div class="text-white p-6 bg-zinc-900 space-y-6">
+      <!-- Profile photo chooser -->
+      <div class="flex flex-col w-full">
+        <span class="text-sm font-medium text-gray-300 mb-2">Profile photo</span>
+        <div
+          class="overflow-x-auto snap-x snap-mandatory avatar-scroll mt-4"
+          style="scroll-padding: 0 1rem;"
+        >
+          <div class="flex space-x-4 px-4 pb-3">
+            <ng-container *ngFor="let av of avatarOptions">
+              <img
+                [src]="'/assets/avatars/' + av"
+                (click)="selectAvatar(av)"
+                [class]="
+                  'w-24 h-24 flex-shrink-0 rounded-full object-cover cursor-pointer snap-center border-4 ' +
+                  ((editForm.get('profilePicture')?.value === av)
+                    ? 'border-blue-400'
+                    : 'border-transparent hover:border-blue-500')
+                "
+                alt="avatar option"
+              />
+            </ng-container>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Username input -->
-    <div class="flex flex-col gap-2">
-      <span class="text-sm font-medium text-gray-300">Username</span>
-      <input
-        id="username"
-        type="text"
-        pInputText
-        [(ngModel)]="editableUser.name"
-        class="!bg-zinc-800 !border !border-zinc-900 !text-white !rounded-md px-3 py-2
-         focus:outline-none focus:ring-2 focus:ring-blue-500 !placeholder-white"
-        placeholder="Enter your username"
-      />
-      <p class="text-xs text-gray-400 mt-1">
-        Usernames can only contain letters, numbers, underscores, and periods.
-      </p>
+      <!-- Username input + errors -->
+      <div class="flex flex-col gap-2">
+        <span class="text-sm font-medium text-gray-300">Username</span>
+        <input
+          id="username"
+          type="text"
+          pInputText
+          formControlName="name"
+          class="!bg-zinc-800 !border !border-zinc-900 !text-white !rounded-md px-3 py-2
+                 focus:outline-none focus:ring-2 focus:ring-blue-500 !placeholder-white"
+          placeholder="Enter your username"
+        />
+
+        <p *ngIf="editForm.get('name')?.hasError('required')" class="text-red-500 text-sm mt-1">
+          Username is required.
+        </p>
+        <p *ngIf="editForm.get('name')?.hasError('minlength')" class="text-red-500 text-sm mt-1">
+          Username has to be at least 2 characters long.
+        </p>
+        <p *ngIf="editForm.get('name')?.hasError('maxlength')" class="text-red-500 text-sm mt-1">
+          Username cannot exceed 30 characters.
+        </p>
+        <p *ngIf="editForm.get('name')?.hasError('pattern')" class="text-red-500 text-sm mt-1">
+          Username not allowed.
+        </p>
+        <p *ngIf="errorMessage && editForm.valid" class="text-red-500 text-sm mt-1">
+          {{ errorMessage }}
+        </p>
+
+        <p class="text-xs text-gray-400 mt-1">
+          Usernames can only contain letters, numbers, underscores, and periods.
+        </p>
+      </div>
     </div>
-  </div>
+  </form>
 
   <!-- FOOTER -->
   <ng-template pTemplate="footer">
@@ -139,25 +157,21 @@
       <button
         pButton
         type="button"
-        class="px-4 py-2 !bg-zinc-700 hover:bg-zinc-600 text-white rounded font-medium text-sm"
+        class="px-4 py-2 text-white rounded font-medium text-sm"
         (click)="closeEdit()"
       >
         Cancel
       </button>
-      <!-- … inside pTemplate="footer" … -->
       <button
         pButton
         type="button"
-        class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded font-medium text-sm
-         disabled:opacity-50 disabled:cursor-not-allowed"
+        class="px-4 py-2 !bg-blue-700 !hover:bg-blue-700 text-white rounded font-medium text-sm
+               disabled:opacity-50 disabled:cursor-not-allowed"
         (click)="saveProfile()"
-        [disabled]="!hasChanges"
+        [disabled]="editForm.invalid || !editForm.dirty || !hasChanges"
       >
         Save
       </button>
-
     </div>
   </ng-template>
-
 </p-dialog>
-

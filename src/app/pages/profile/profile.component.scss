@@ -70,9 +70,3 @@
     border-radius: 9999px;
   }
 }
-
-/* in src/styles.scss (or your global stylesheet) */
-:root ::ng-deep .p-confirm-dialog .p-dialog-footer {
-  display: flex !important;
-  justify-content: center !important;
-}
