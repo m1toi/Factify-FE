@@ -1,48 +1,59 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule }   from '@angular/common';
-import {FormBuilder, FormGroup, FormsModule, Validators} from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { DialogModule }      from 'primeng/dialog';
-import { ButtonModule }      from 'primeng/button';
-import { InputTextModule }   from 'primeng/inputtext';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmationService } from 'primeng/api';
-import { ConfirmDialogModule }   from 'primeng/confirmdialog';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import {UserService, UserResponse, UpdateUserDto} from '../../services/user.service';
-import {switchMap, tap} from 'rxjs';
+import { UserService, UserResponse, UpdateUserDto } from '../../services/user.service';
+import { switchMap, tap } from 'rxjs/operators';
+import { Post } from '../../models/post.model';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     DialogModule,
     ButtonModule,
     InputTextModule,
     SidebarComponent,
-    ConfirmDialogModule,
-    ReactiveFormsModule
+    ConfirmDialogModule
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
   providers: [ConfirmationService]
 })
 export class ProfileComponent implements OnInit {
+
   user?: UserResponse;
   isOwnProfile = false;
   defaultAvatar = '/assets/avatars/placeholder1.png';
+
+  // edit-profile form
   showEditDialog = false;
-  selectedFilePreview?: string;
-  errorMessage ='';
   editForm!: FormGroup;
-  editableUser: Partial<UserResponse> = {};
-  public avatarOptions = [
-    'avatar1.png',
-    'avatar2.png',
-  ];
+  errorMessage = '';
+  public avatarOptions = ['avatar1.png', 'avatar2.png'];
+
+  // infinite scroll
+  posts: Post[] = [];
+  flipped: boolean[] = [];
+  page = 1;
+  pageSize = 10;    // magic number de start
+  loadingMore = false;
+  hasMore = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,27 +65,81 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
-      // mai întâi află cine e „eu”
       this.userService.getCurrent().pipe(
         switchMap(current =>
           this.userService.getById(+idParam).pipe(
             tap(u => {
               this.user = u;
-              // dacă id-ul din url e al meu, pot edita
               this.isOwnProfile = u.id === current.id;
               this.buildForm(u);
+              this.resetPosts();   // lansez încărcarea primului batch
             })
           )
         )
       ).subscribe();
     } else {
+      // profil propriu
       this.isOwnProfile = true;
-      this.userService.getCurrent().subscribe(u => {
-        this.user = u;
-        this.buildForm(u);
-      });
+      this.userService.getCurrent().pipe(
+        tap(u => {
+          this.user = u;
+          this.buildForm(u);
+          this.resetPosts();   // lansez încărcarea primului batch
+        })
+      ).subscribe();
     }
   }
+
+  // ─── infinite scroll ─────────────────────────────────────────────────────
+
+  private resetPosts(): void {
+    this.posts = [];
+    this.flipped = [];
+    this.page = 1;
+    this.hasMore = true;
+    this.loadPosts();
+  }
+
+  private loadPosts(): void {
+    if (!this.user || this.loadingMore || !this.hasMore) return;
+
+    this.loadingMore = true;
+    this.userService
+      .getPostsByUser(this.user.id, this.page, this.pageSize)
+      .subscribe({
+        next: batch => {
+          console.log('BATCH RECEIVED:', batch);
+          this.posts.push(...batch);
+          this.flipped.push(...batch.map(() => false));
+          this.hasMore = batch.length === this.pageSize;
+          this.loadingMore = false;
+        },
+        error: err => {
+          console.error('Error loading posts:', err);
+          if (err.error instanceof ProgressEvent) {
+            console.error('⚠️ This is likely a response parsing issue');
+          }
+          this.loadingMore = false;
+        }
+      });
+  }
+
+  onScroll(event: Event): void {
+    const el = event.target as HTMLElement;
+    // dacă mai e <100px până jos, car ă încărc următoarea pagină
+    if (el.scrollHeight - el.scrollTop <= el.clientHeight + 100) {
+      if (this.hasMore && !this.loadingMore) {
+        this.page++;
+        this.loadPosts();
+      }
+    }
+  }
+
+  toggleFlip(idx: number): void {
+    this.flipped[idx] = !this.flipped[idx];
+  }
+
+  // ─── edit-profile form ───────────────────────────────────────────────────
 
   private buildForm(u: UserResponse) {
     this.editForm = this.fb.group({
@@ -90,57 +155,38 @@ export class ProfileComponent implements OnInit {
       profilePicture: [u.profilePicture]
     });
 
-    // când cineva modifică numele, ștergi eroarea de server
-    this.editForm.get('name')!.valueChanges.subscribe(() => {
-      this.errorMessage = '';
-    });
+    this.editForm.get('name')!
+      .valueChanges
+      .subscribe(() => this.errorMessage = '');
   }
 
-  openEdit() {
+  openEdit(): void {
     if (!this.user) return;
     this.editForm.reset({
       name: this.user.name,
       profilePicture: this.user.profilePicture
     });
     this.errorMessage = '';
-    this.selectedFilePreview = undefined;
     this.showEditDialog = true;
   }
 
-  closeEdit() {
+  closeEdit(): void {
     this.showEditDialog = false;
   }
 
-  selectAvatar(filename: string) {
+  selectAvatar(filename: string): void {
     this.editForm.patchValue({ profilePicture: filename });
-    // forţează dirty, ca să activezi butonul Save
     this.editForm.get('profilePicture')!.markAsDirty();
-    this.selectedFilePreview = undefined;
   }
-
 
   get hasChanges(): boolean {
     if (!this.user) return false;
-    const currentName = this.editForm.get('name')?.value;
-    const currentPic  = this.editForm.get('profilePicture')?.value;
-    return currentName !== this.user.name
-      || currentPic  !== this.user.profilePicture;
+    const name = this.editForm.get('name')?.value;
+    const pic  = this.editForm.get('profilePicture')?.value;
+    return name !== this.user.name || pic !== this.user.profilePicture;
   }
 
-  get isNameTooShort(): boolean {
-    const name = this.editableUser.name?.trim() || '';
-    return name.length < 2;
-  }
-
-  get isNameTooLong(): boolean {
-    return !!this.editableUser.name && this.editableUser.name.length > 30;
-  }
-
-  get isNameInvalid(): boolean {
-    return this.isNameTooShort || this.isNameTooLong;
-  }
-
-  saveProfile() {
+  saveProfile(): void {
     this.showEditDialog = false;
     this.confirmation.confirm({
       message: 'Are you sure you want to save these changes?',
@@ -149,9 +195,8 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  private actuallySave() {
+  private actuallySave(): void {
     if (!this.user || this.editForm.invalid) return;
-
     const dto: UpdateUserDto = this.editForm.value;
     this.userService.updateProfile(dto).subscribe({
       next: () => {

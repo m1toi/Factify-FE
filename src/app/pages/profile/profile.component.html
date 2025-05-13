@@ -10,14 +10,15 @@
 
 <div class="profile-layout flex h-screen bg-black">
   <!-- Sidebar -->
-  <div class="sidebar-col w-14 flex-shrink-0">
+  <div class="sidebar-col w-[0px] flex-shrink-0">
     <app-sidebar></app-sidebar>
   </div>
 
   <!-- CONTENT -->
-  <div class="profile-content flex-1 p-8 text-white overflow-auto">
+  <div class="profile-content flex-1 p-8 text-white flex flex-col">
     <ng-container *ngIf="user as u; else loading">
-      <div class="profile-header flex items-center gap-6 mb-8">
+      <!-- ─── HEADER ─────────────────────────────────────────────────────────── -->
+      <div class="profile-header flex items-center gap-6 mb-6">
         <!-- Avatar -->
         <img
           class="w-32 h-32 rounded-full object-cover"
@@ -36,9 +37,7 @@
             pButton
             type="button"
             class="px-4 py-2 rounded text-white font-medium text-sm w-fit
-         bg-blue-700 hover:bg-blue-200
-         focus:outline-none focus:ring-2 focus:ring-blue-400
-         !bg-blue-700 !hover:bg-blue-200"
+                   !bg-blue-700 !hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             (click)="openEdit()"
           >
             Edit profile
@@ -46,9 +45,30 @@
         </div>
       </div>
 
-      <!-- placeholder for posts -->
-      <div class="text-center py-10 border-t border-gray-700">
-        <p class="text-gray-400">User’s posts will appear here.</p>
+      <hr class="border-t border-gray-700 mb-6" />
+
+      <!-- ─── POSTS GRID (infinite scroll) ─────────────────────────────────── -->
+      <div
+        #postsContainer
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 overflow-auto flex-1 avatar-scroll"
+        (scroll)="onScroll($event)"
+      >
+        <ng-container *ngFor="let post of posts; let i = index">
+          <div class="flip-card" [class.flipped]="flipped[i]" (click)="toggleFlip(i)">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div class="question-text">{{ post.question }}</div>
+              </div>
+              <div class="flip-card-back">
+                <div class="answer-text">{{ post.answer }}</div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <div *ngIf="loadingMore" class="col-span-full text-center text-gray-400 py-4">
+          Loading more…
+        </div>
       </div>
     </ng-container>
 
@@ -165,7 +185,7 @@
       <button
         pButton
         type="button"
-        class="px-4 py-2 !bg-blue-700 !hover:bg-blue-700 text-white rounded font-medium text-sm
+        class="px-4 py-2 !bg-blue-700 !hover:bg-blue-600 text-white rounded font-medium text-sm
                disabled:opacity-50 disabled:cursor-not-allowed"
         (click)="saveProfile()"
         [disabled]="editForm.invalid || !editForm.dirty || !hasChanges"

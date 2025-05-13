@@ -1,8 +1,8 @@
-// src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
+import {Post} from '../models/post.model';
 
 export interface UserResponse {
   id: number;
@@ -36,5 +36,12 @@ export class UserService {
 
   updateProfile(payload: UpdateUserDto): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/profile`, payload);
+  }
+
+  getPostsByUser(userId: number, page: number, pageSize: number): Observable<Post[]> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+    return this.http.get<Post[]>(`${this.apiUrl}/${userId}/posts`, { params });
   }
 }
