@@ -13,17 +13,21 @@
 }
 
 app-sidebar {
-  flex: 0 0 55px; // Sidebar width
+  flex: 0 0 55px; /* Sidebar width */
   height: 100%;
 }
 
+/* ------------------------------------------------------
+   CONTAINER: full-screen scroll + snap on Y axis
+------------------------------------------------------- */
 .feed-scroll-container {
   flex: 1;
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   scroll-snap-type: y mandatory;
   -webkit-overflow-scrolling: touch;
 
+  /* hide scrollbar */
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -31,87 +35,43 @@ app-sidebar {
   display: none;
 }
 
-.feed-post {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+/* each snap-item fills the viewport and snaps to center */
+.snap-item {
   height: 100vh;
-  scroll-snap-align: start;
-  padding: 1rem;
-  box-sizing: border-box;
-}
-
-.flip-card {
-  background-color: transparent;
-  width: 400px;
-  height: 780px;
-  perspective: 1000px;
-}
-
-.flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
-}
-
-.flip-card.flipped .flip-card-inner {
-  transform: rotateY(180deg);
-}
-
-.flip-card-front,
-.flip-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 1.5rem;
+  scroll-snap-align: center;
+  flex-shrink: 0;             /* don’t let it collapse */
   display: flex;
-  justify-content: center;
   align-items: center;
-  backface-visibility: hidden;
-  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.2);
-  background-color: #000;
-  color: white;
-  padding: 3rem;
-  font-size: 1.4rem;
-  font-weight: bold;
-  text-align: center;
+  justify-content: center;
 }
 
-.flip-card-back {
-  transform: rotateY(180deg);
-}
-
-.interaction-buttons {
-  margin-left: 1rem;
+/* ------------------------------------------------------
+   PROFILE BUBBLE & NAV ARROWS (unchanged)
+------------------------------------------------------- */
+.profile-card {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: #222;
+  padding: 0.15rem 0.6rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  z-index: 10;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
 
-  button {
-    width: 3.2rem;
-    height: 3.2rem;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #1e1e1e;
-    color: white;
+  .profile-bubble {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none;
+    width: 3rem;
+    height: 3rem;
     border-radius: 50%;
-    border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: #333;
-    }
-
-    i {
-      font-size: 1.4rem;
-    }
+    overflow: hidden;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    &:hover { background-color: rgba(255, 255, 255, 0.05); }
   }
 }
 
@@ -123,63 +83,16 @@ app-sidebar {
   flex-direction: column;
   gap: 1rem;
   z-index: 100;
-}
 
-.navigation-arrows button {
-  background-color: #fff;
-  color: black;
-  border: none;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-  cursor: pointer;
-}
-
-.liked {
-  background-color: #ff2f66 !important;
-  color: white;
-}
-
-.profile-card {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-
-  /* darker, almost-black gray */
-  background-color: #222;
-
-  /* very slim vertical padding, moderate horizontal */
-  padding: 0.15rem 0.6rem;
-
-  /* pill shape */
-  border-radius: 1.5rem;
-
-  /* subtle shadow */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-
-  /* center the bubble inside */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  z-index: 200;
-}
-
-.profile-card .profile-bubble {
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none;
-  width: 3rem;
-  height: 3rem;
-  padding: 0;
-  border-radius: 50%;
-  overflow: hidden;
-  cursor: pointer;
-
-  transition: background-color 0.2s;
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+  button {
+    background-color: #fff;
+    color: black;
+    border: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
   }
 }

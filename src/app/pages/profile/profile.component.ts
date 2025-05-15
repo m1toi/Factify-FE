@@ -13,6 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {PostCardComponent} from '../post-card/post-card.component';
 
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { UserService, UserResponse, UpdateUserDto } from '../../services/user.service';
@@ -29,7 +30,8 @@ import { Post } from '../../models/post.model';
     ButtonModule,
     InputTextModule,
     SidebarComponent,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    PostCardComponent
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],

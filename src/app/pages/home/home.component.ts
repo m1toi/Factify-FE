@@ -4,7 +4,6 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
-  HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FeedService } from '../../services/feed.service';
@@ -15,11 +14,12 @@ import { Post } from '../../models/post.model';
 import { ButtonModule } from 'primeng/button';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { InteractionService } from '../../services/interaction.service';
+import{ PostCardComponent } from '../post-card/post-card.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, SidebarComponent],
+  imports: [CommonModule, RouterModule, ButtonModule, SidebarComponent , PostCardComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -81,24 +81,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   detectCurrentPost(): void {
     const container = this.scrollContainer.nativeElement;
-    const postElements = Array.from(container.children) as HTMLElement[];
+    const children  = Array.from(container.children) as HTMLElement[];
+    const viewportMiddle = window.innerHeight / 2;
 
-    for (let i = 0; i < postElements.length; i++) {
-      const rect = postElements[i].getBoundingClientRect();
-      const inView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+    for (let i = 0; i < children.length; i++) {
+      const rect = children[i].getBoundingClientRect();
 
-      if (inView && i !== this.currentPostIndex) {
-        this.currentPostIndex = i;
-        this.interactionService.markAsSeen(this.posts[i].postId).subscribe();
-
-        // 🔥 Load more posts if we are close to the bottom (2 posts before the end)
-        if (i >= this.posts.length - 3 && !this.loadingMore) {
-          this.loadMorePosts();
+      if (rect.top <= viewportMiddle && rect.bottom >= viewportMiddle) {
+        if (this.currentPostIndex !== i) {
+          this.currentPostIndex = i;
+          this.interactionService
+            .markAsSeen(this.posts[i].postId)
+            .subscribe();
         }
         break;
       }
     }
   }
+
 
   loadMorePosts(callback?: () => void): void {
     this.loadingMore = true;

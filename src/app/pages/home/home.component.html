@@ -1,43 +1,27 @@
 <div class="home-layout">
   <app-sidebar></app-sidebar>
+
   <div class="profile-card">
     <button class="profile-bubble" (click)="goToProfile()">
       <img [src]="defaultAvatar" />
     </button>
   </div>
-  <div class="feed-scroll-container" #scrollContainer>
-    <div class="feed-post" *ngFor="let post of posts; let i = index">
-      <div class="flip-card" [class.flipped]="flipped[i]" (click)="toggleFlip(i)">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <div class="question-text">{{ post.question }}</div>
-          </div>
-          <div class="flip-card-back">
-            <div class="answer-text">{{ post.answer }}</div>
-          </div>
-        </div>
-      </div>
 
-      <div class="interaction-buttons">
-        <!-- Like Button -->
-        <button
-          pButton
-          class="p-button-rounded p-button-text"
-          (click)="toggleLike(i)"
-          [ngClass]="{ 'liked': likedPosts[i] }"
-        >
-          <i class="pi" [ngClass]="likedPosts[i] ? 'pi-heart-fill' : 'pi-heart'"></i>
-        </button>
+  <div class="feed-scroll-container flex flex-col items-center" #scrollContainer>
+    <app-post-card
+      *ngFor="let post of posts; let i = index"
+      class="w-[500px] flex-shrink-0 mx-auto snap-start"
 
-        <!-- Share Button -->
-        <button
-          pButton
-          class="p-button-rounded p-button-text"
-          (click)="sharePost(i)"
-        >
-          <i class="pi pi-send"></i>
-        </button>
-      </div>
+      [post]="post"
+      [flipped]="flipped[i]"
+      [liked]="likedPosts[i]"
+      (flip)="toggleFlip(i)"
+      (like)="toggleLike(i)"
+      (share)="sharePost(i)"
+    ></app-post-card>
+
+    <div *ngIf="loadingMore" class="col-span-full text-center text-gray-400 py-4">
+      Loading more…
     </div>
   </div>
 

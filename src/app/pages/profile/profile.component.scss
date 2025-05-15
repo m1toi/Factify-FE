@@ -1,56 +1,24 @@
-/* pull the content in from the left sidebar */
+/* conţinutul principal, sub sidebar */
 .profile-content {
   flex: 1;
   padding: 2rem 2rem 2rem 17rem;
   color: #fff;
   min-width: 0; /* allow flex-shrink */
+
+  /* ocupă tot verticalul şi aşază conţinutul pe coloană */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-/* Header layout */
+/* layout header (avatar + nume) */
 .profile-header {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
 
-/* TikTok-style oversized avatar */
-.profile-avatar {
-  width: 15rem;
-  height: 15rem;
-  border-radius: 50%;
-  object-fit: cover;
-  /* no border here */
-}
-
-/* Under-avatar info */
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-/* Username style */
-.profile-name {
-  font-size: 2rem;
-  margin: 0;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Edit button under the name */
-.edit-avatar-btn {
-  padding: 0.5rem 1.2rem;
-  background-color: #006aff !important;
-  color: white !important;
-  border: none !important;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-/* ─── Avatar scroll custom scrollbar ─── */
+/* container-ul de postări: grid + scrollbar stilizat */
 .avatar-scroll {
   /* Firefox */
   scrollbar-width: thin;
@@ -59,79 +27,28 @@
   &::-webkit-scrollbar {
     height: 8px;
   }
-
   &::-webkit-scrollbar-track {
     background: #18181b; /* zinc-900 */
     border-radius: 9999px;
   }
-
   &::-webkit-scrollbar-thumb {
     background: #52525b; /* zinc-600 */
     border-radius: 9999px;
   }
 }
 
-/* 1) fă conținutul principal să umple vertical tot spațiul */
-.profile-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-/* 2) separatorul sub header */
+/* linia de sub header */
 hr {
   border-color: #374151;  /* tailwind gray-700 */
   margin-bottom: 1.5rem;
 }
 
-/* 3) stil pentru flip-card-uri */
-.flip-card {
-  background-color: transparent;
-  width: 100%;
-  aspect-ratio: 400 / 780; /* păstrează raportul */
-  perspective: 1000px;
-  position: relative;
-}
+///* in your profile.component.scss */
+//.profile-content app-post-card.profile-card-sm .flip-card {
+//  /* fill its grid-column instead of forcing 224px */
+//  width: 100%;
+//  max-width: 350px;     /* so on very big screens it doesn’t grow beyond the original design */
+//  aspect-ratio: 224/256; /* preserve your desired height/width ratio */
+//  height: auto !important;
+//}
 
-.flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.6s;
-  transform-style: preserve-3d;
-}
-
-.flip-card.flipped .flip-card-inner {
-  transform: rotateY(180deg);
-}
-
-.flip-card-front,
-.flip-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backface-visibility: hidden;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-  background-color: #000;
-  color: #fff;
-  padding: 1rem;
-  text-align: center;
-  font-weight: bold;
-}
-
-.flip-card-back {
-  transform: rotateY(180deg);
-}
-
-/* 4) ascunde scrollbar-ul, dacă vrei */
-.posts-container, /* dacă ai definit o clasă */
-#postsContainer { /* sau direct pe id, dar tailwind-ul tău deja are overflow-auto */
-  scrollbar-width: none;
-}
-#postsContainer::-webkit-scrollbar {
-  display: none;
-}

@@ -1,0 +1,36 @@
+<div class="feed-post">
+  <div class="flip-card" [class.flipped]="flipped" (click)="onFlip()">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <div class="question-text">{{ post.question }}</div>
+      </div>
+      <div class="flip-card-back">
+        <div class="answer-text">{{ post.answer }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="interaction-buttons">
+    <button
+      *ngIf="showLikeButton"
+      pButton
+      class="p-button-rounded p-button-text"
+      (click)="onLike()"
+      [ngClass]="{ 'liked': liked }"
+      type="button"
+    >
+      <i class="pi" [ngClass]="liked ? 'pi-heart-fill' : 'pi-heart'"></i>
+    </button>
+
+    <button
+      *ngIf="showShareButton"
+      pButton
+      class="p-button-rounded p-button-text"
+      (click)="onShare()"
+      type="button"
+    >
+      <i class="pi pi-send"></i>
+    </button>
+  </div>
+
+</div>
