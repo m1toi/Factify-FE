@@ -11,6 +11,12 @@ export interface UserResponse {
   profilePicture?: string;     // e.g. "avatar2.png"
 }
 
+export interface UserSearchResult {
+  userId: number;
+  username: string;
+  profilePicture?: string;
+}
+
 export interface UpdateUserDto {
   name: string;
   profilePicture?: string;
@@ -44,4 +50,11 @@ export class UserService {
       .set('pageSize', pageSize.toString());
     return this.http.get<Post[]>(`${this.apiUrl}/${userId}/posts`, { params });
   }
+
+  searchUsers(query: string): Observable<UserSearchResult[]> {
+    return this.http.get<UserSearchResult[]>(`${this.apiUrl}/search`, {
+      params: new HttpParams().set('query', query)
+    });
+  }
+
 }

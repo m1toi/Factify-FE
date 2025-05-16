@@ -12,5 +12,16 @@
         <span>Create</span>
       </button>
     </li>
+    <li>
+      <button pButton class="p-button-rounded p-button-text sidebar-btn" (click)="toggleSearch()">
+        <i class="pi pi-search"></i>
+        <span>Search</span>
+      </button>
+    </li>
+    <!-- în interiorul unui <li> ca să fie valid HTML -->
+    <li *ngIf="isSearchOpen" class="search-wrapper">
+      <app-user-search></app-user-search>
+    </li>
+
   </ul>
 </nav>

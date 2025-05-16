@@ -1,0 +1,20 @@
+<div class="search-panel bg-zinc-900 text-white p-4 w-[300px] rounded shadow">
+  <input
+    type="text"
+    [(ngModel)]="searchQuery"
+    (input)="onSearch()"
+    placeholder="Search users..."
+    class="w-full p-2 rounded bg-zinc-800 text-white"
+  />
+
+  <ul class="mt-4">
+    <li *ngFor="let user of results" class="flex items-center gap-3 py-2">
+      <img
+        *ngIf="user.profilePicture"
+        [src]="'/assets/avatars/' + user.profilePicture"
+        class="w-10 h-10 rounded-full object-cover"
+      />
+      <span>{{ user.username }}</span>
+    </li>
+  </ul>
+</div>
