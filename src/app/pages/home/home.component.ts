@@ -130,6 +130,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.interactionService.likePost(post.postId, newLikeStatus).subscribe({
       next: () => {
         this.likedPosts[index] = newLikeStatus;
+        if (newLikeStatus) {
+          post.likesCount++; // like adăugat
+        } else {
+          post.likesCount = Math.max(0, post.likesCount - 1); // like scăzut
+        }
       },
       error: err => console.error('Failed to like/unlike post:', err)
     });
@@ -140,6 +145,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.interactionService.sharePost(post.postId).subscribe({
       next: () => {
         console.log('Post shared successfully');
+        post.sharesCount++;
       },
       error: err => console.error('Failed to share post:', err)
     });

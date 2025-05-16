@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { Post } from '../../models/post.model';
@@ -10,7 +10,7 @@ import { Post } from '../../models/post.model';
   templateUrl: './post-card.component.html',
   styleUrls: ['./post-card.component.scss']
 })
-export class PostCardComponent {
+export class PostCardComponent implements OnInit {
   @Input() post!: Post;
   @Input() flipped = false;
   @Input() liked = false;
@@ -25,4 +25,9 @@ export class PostCardComponent {
   onFlip()   { this.flip.emit(); }
   onLike()   { this.like.emit(); }
   onShare()  { this.share.emit(); }
+
+  ngOnInit() {
+    console.log('post:', this.post);
+  }
+
 }

@@ -5,5 +5,7 @@ export interface Post {
   createdAt: string;
   userName: string;
   categoryName: string;
+  likesCount: number;
+  sharesCount: number;
   userId: number;
 }
