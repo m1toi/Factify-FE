@@ -37,7 +37,8 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/profile/profile.component')
         .then(m => m.ProfileComponent),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    runGuardsAndResolvers:'paramsChange'
   },
 
   { path: '**', redirectTo: 'login' }

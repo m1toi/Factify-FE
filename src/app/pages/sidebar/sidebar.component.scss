@@ -1,48 +1,75 @@
 .sidebar {
+  position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  width: 220px;
+  width: 220px;               /* lățime normală */
   background-color: #000;
+  overflow:visible;
   padding-top: 1rem;
   z-index: 200;
-  display: flex;
-  flex-direction: column;
+  transition: width 0.3s ease;
 
   ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
+    margin: 0; padding: 0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
   }
 
   .sidebar-btn {
-    width: 90%;
-    margin: 0 auto;
+    width: 100%;
     padding: 0.75rem 1rem;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
     gap: 1rem;
-    font-size: 1rem;
-    color: white;
-    background-color: #000;
-    border-radius: 12px;
+    justify-content: left;
+    color: #fff;
+    background: #000;
     border: none;
+    border-radius: 12px;
+    transition: background 0.2s ease, justify-content 0.3s ease;
 
-    i {
-      font-size: 1.2rem;
-    }
+    &:hover { background-color: #333; }
+    i { font-size: 1.2rem; }
+    span { font-size: 1rem; font-weight: 500; }
+  }
 
-    span {
-      font-size: 1rem;
-      font-weight: 500;
-    }
+  &.collapsed {
+    width: 60px; /* ajustabil */
 
-    &:hover {
-      background-color: #333;
+    .sidebar-btn {
+      justify-content: center;
+      padding: 0.75rem 0;
     }
+    .sidebar-btn span { display: none; }
+  }
+
+  /* ─── WRAPPER de search ───────────────────────────────── */
+  .search-wrapper {
+    position: absolute;
+    top: 0;
+    left: 220px;                     /* poziție când sidebar e normal */
+    height: 100vh;
+    overflow: hidden;
+
+    /* tranzitie pe transform și opacitate */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateX(-100%);   /* ascuns spre stânga */
+    opacity: 0;                     /* invizibil */
+    pointer-events: none;           /* click-urile trec prin el */
+  }
+
+  /* când sidebar e collapsed, wrapper-ul rămâne tot la left: 60px */
+  &.collapsed .search-wrapper {
+    left: 60px;
+  }
+
+  /* când deschizi search, adaugă clasa .open */
+  .search-wrapper.open {
+    transform: translateX(0);       /* slide in */
+    opacity: 1;                     /* vizibil */
+    pointer-events: auto;           /* reactiv la click */
   }
 }

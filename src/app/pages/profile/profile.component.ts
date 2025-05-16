@@ -1,21 +1,26 @@
+// profile.component.ts
 import {
   Component,
   OnInit,
-  AfterViewInit,
   ViewChild,
-  ElementRef
+  ElementRef,
+  AfterViewInit
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import {PostCardComponent} from '../post-card/post-card.component';
-
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { PostCardComponent } from '../post-card/post-card.component';
 import { UserService, UserResponse, UpdateUserDto } from '../../services/user.service';
 import { switchMap, tap } from 'rxjs/operators';
 import { Post } from '../../models/post.model';
@@ -38,7 +43,6 @@ import { Post } from '../../models/post.model';
   providers: [ConfirmationService]
 })
 export class ProfileComponent implements OnInit {
-
   user?: UserResponse;
   isOwnProfile = false;
   defaultAvatar = '/assets/avatars/placeholder1.png';
@@ -53,7 +57,7 @@ export class ProfileComponent implements OnInit {
   posts: Post[] = [];
   flipped: boolean[] = [];
   page = 1;
-  pageSize = 10;    // magic number de start
+  pageSize = 10;
   loadingMore = false;
   hasMore = true;
 
@@ -65,34 +69,43 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    if (idParam) {
-      this.userService.getCurrent().pipe(
-        switchMap(current =>
-          this.userService.getById(+idParam).pipe(
-            tap(u => {
-              this.user = u;
-              this.isOwnProfile = u.id === current.id;
-              this.buildForm(u);
-              this.resetPosts();   // lansez încărcarea primului batch
-            })
-          )
-        )
-      ).subscribe();
-    } else {
-      // profil propriu
-      this.isOwnProfile = true;
-      this.userService.getCurrent().pipe(
-        tap(u => {
-          this.user = u;
-          this.buildForm(u);
-          this.resetPosts();   // lansez încărcarea primului batch
+    // ne abonăm la orice schimbare de :id din URL
+    this.route.paramMap
+      .pipe(
+        switchMap(params => {
+          const idStr = params.get('id');
+          if (idStr) {
+            // când vinem de pe /profile/:id
+            const requestedId = +idStr;
+            return this.userService.getCurrent().pipe(
+              switchMap(current => {
+                this.isOwnProfile = current.id === requestedId;
+                return this.userService.getById(requestedId).pipe(
+                  tap(u => {
+                    this.user = u;
+                    this.buildForm(u);
+                    this.resetPosts();
+                  })
+                );
+              })
+            );
+          } else {
+            // când suntem pur și simplu pe /profile (profilul propriu)
+            this.isOwnProfile = true;
+            return this.userService.getCurrent().pipe(
+              tap(u => {
+                this.user = u;
+                this.buildForm(u);
+                this.resetPosts();
+              })
+            );
+          }
         })
-      ).subscribe();
-    }
+      )
+      .subscribe({
+        error: err => console.error('Profile load failed', err)
+      });
   }
-
-  // ─── infinite scroll ─────────────────────────────────────────────────────
 
   private resetPosts(): void {
     this.posts = [];
@@ -106,11 +119,9 @@ export class ProfileComponent implements OnInit {
     if (!this.user || this.loadingMore || !this.hasMore) return;
 
     this.loadingMore = true;
-    this.userService
-      .getPostsByUser(this.user.id, this.page, this.pageSize)
+    this.userService.getPostsByUser(this.user.id, this.page, this.pageSize)
       .subscribe({
         next: batch => {
-          console.log('BATCH RECEIVED:', batch);
           this.posts.push(...batch);
           this.flipped.push(...batch.map(() => false));
           this.hasMore = batch.length === this.pageSize;
@@ -118,9 +129,6 @@ export class ProfileComponent implements OnInit {
         },
         error: err => {
           console.error('Error loading posts:', err);
-          if (err.error instanceof ProgressEvent) {
-            console.error('⚠️ This is likely a response parsing issue');
-          }
           this.loadingMore = false;
         }
       });
@@ -128,7 +136,6 @@ export class ProfileComponent implements OnInit {
 
   onScroll(event: Event): void {
     const el = event.target as HTMLElement;
-    // dacă mai e <100px până jos, car ă încărc următoarea pagină
     if (el.scrollHeight - el.scrollTop <= el.clientHeight + 100) {
       if (this.hasMore && !this.loadingMore) {
         this.page++;
@@ -140,8 +147,6 @@ export class ProfileComponent implements OnInit {
   toggleFlip(idx: number): void {
     this.flipped[idx] = !this.flipped[idx];
   }
-
-  // ─── edit-profile form ───────────────────────────────────────────────────
 
   private buildForm(u: UserResponse) {
     this.editForm = this.fb.group({
@@ -159,7 +164,7 @@ export class ProfileComponent implements OnInit {
 
     this.editForm.get('name')!
       .valueChanges
-      .subscribe(() => this.errorMessage = '');
+      .subscribe(() => (this.errorMessage = ''));
   }
 
   openEdit(): void {
@@ -184,7 +189,7 @@ export class ProfileComponent implements OnInit {
   get hasChanges(): boolean {
     if (!this.user) return false;
     const name = this.editForm.get('name')?.value;
-    const pic  = this.editForm.get('profilePicture')?.value;
+    const pic = this.editForm.get('profilePicture')?.value;
     return name !== this.user.name || pic !== this.user.profilePicture;
   }
 
@@ -193,7 +198,7 @@ export class ProfileComponent implements OnInit {
     this.confirmation.confirm({
       message: 'Are you sure you want to save these changes?',
       accept: () => this.actuallySave(),
-      reject: () => this.showEditDialog = true
+      reject: () => (this.showEditDialog = true)
     });
   }
 

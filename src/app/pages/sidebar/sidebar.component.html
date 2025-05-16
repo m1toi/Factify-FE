@@ -1,27 +1,39 @@
-<nav class="sidebar">
+<nav class="sidebar" [class.collapsed]="isCollapsed">
   <ul>
     <li>
-      <button pButton class="p-button-rounded p-button-text sidebar-btn" (click)="goToForYou()">
+      <button
+        pButton
+        class="p-button-rounded p-button-text sidebar-btn"
+        (click)="goToForYou()"
+      >
         <i class="pi pi-home"></i>
         <span>For You</span>
       </button>
     </li>
     <li>
-      <button pButton class="p-button-rounded p-button-text sidebar-btn" (click)="goToCreatePost()">
+      <button
+        pButton
+        class="p-button-rounded p-button-text sidebar-btn"
+        (click)="goToCreatePost()"
+      >
         <i class="pi pi-plus-circle"></i>
         <span>Create</span>
       </button>
     </li>
     <li>
-      <button pButton class="p-button-rounded p-button-text sidebar-btn" (click)="toggleSearch()">
+      <button
+        pButton
+        class="p-button-rounded p-button-text sidebar-btn"
+        (click)="toggleSearch()"
+      >
         <i class="pi pi-search"></i>
         <span>Search</span>
       </button>
     </li>
-    <!-- în interiorul unui <li> ca să fie valid HTML -->
-    <li *ngIf="isSearchOpen" class="search-wrapper">
-      <app-user-search></app-user-search>
-    </li>
-
   </ul>
+
+  <!-- wrapper-ul de search, mereu în DOM, doar clasa .open îl arată -->
+  <div class="search-wrapper" [class.open]="isSearchOpen">
+    <app-user-search (close)="toggleSearch()"></app-user-search>
+  </div>
 </nav>

@@ -1,20 +1,44 @@
-<div class="search-panel bg-zinc-900 text-white p-4 w-[300px] rounded shadow">
-  <input
-    type="text"
-    [(ngModel)]="searchQuery"
-    (input)="onSearch()"
-    placeholder="Search users..."
-    class="w-full p-2 rounded bg-zinc-800 text-white"
-  />
+<div class="search-panel">
+  <button class="close-btn" (click)="close.emit()">×</button>
 
-  <ul class="mt-4">
-    <li *ngFor="let user of results" class="flex items-center gap-3 py-2">
+  <div class="search-header">
+    <h2 class="search-title">Search</h2>
+  </div>
+
+  <div class="search-input-wrapper">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+      placeholder="Search users..."
+      class="search-input"
+    />
+    <i
+      *ngIf="searchQuery"
+      class="pi pi-times clear-icon"
+      (click)="clearSearch()"
+    ></i>
+  </div>
+
+  <div *ngIf="results.length === 0" class="recent-label">
+    Recent
+  </div>
+
+  <ul class="search-results">
+    <li
+      *ngFor="let user of results"
+      class="search-result-item"
+      (click)="goToProfile(user.userId)"
+    >
       <img
         *ngIf="user.profilePicture"
         [src]="'/assets/avatars/' + user.profilePicture"
-        class="w-10 h-10 rounded-full object-cover"
+        class="avatar"
       />
-      <span>{{ user.username }}</span>
+      <span class="username">{{ user.username }}</span>
+    </li>
+    <li *ngIf="results.length === 0" class="no-results">
+      No recent searches.
     </li>
   </ul>
 </div>

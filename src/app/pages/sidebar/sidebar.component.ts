@@ -13,6 +13,7 @@ import {UserSearchComponent} from '../user-search/user-search.component';
 })
 export class SidebarComponent {
   isSearchOpen: boolean = false;
+  isCollapsed: boolean = false;
   constructor(private router: Router) {}
 
   goToForYou() {
@@ -26,6 +27,12 @@ export class SidebarComponent {
   }
 
   toggleSearch(): void {
-    this.isSearchOpen = !this.isSearchOpen;
+    if (!this.isSearchOpen) {
+      this.isCollapsed   = true;
+      this.isSearchOpen  = true;
+    } else {
+      this.isSearchOpen  = false;
+      this.isCollapsed   = false;
+    }
   }
 }
