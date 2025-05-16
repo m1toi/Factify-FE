@@ -7,10 +7,10 @@
     </button>
   </div>
 
-  <div class="feed-scroll-container flex flex-col items-center" #scrollContainer>
+  <div class="feed-scroll-container flex flex-col items-start ml-85" #scrollContainer>
     <app-post-card
       *ngFor="let post of posts; let i = index"
-      class="w-[500px] flex-shrink-0 mx-auto snap-start"
+      class="w-[500px] flex-shrink-0  snap-start h-full"
 
       [post]="post"
       [flipped]="flipped[i]"

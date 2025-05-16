@@ -16,6 +16,7 @@ export class PostCardComponent {
   @Input() liked = false;
   @Input() showLikeButton = true;
   @Input() showShareButton = true;
+  @Input() size: 'forYou' | 'profile' = 'forYou';
 
   @Output() flip    = new EventEmitter<void>();
   @Output() like    = new EventEmitter<void>();

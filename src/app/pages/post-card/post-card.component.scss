@@ -9,6 +9,24 @@
   padding: 1rem;
   box-sizing: border-box;
 
+  &.profile .flip-card{
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 300 / 500;
+    height: auto;
+  }
+  &.profile .flip-card-front,
+  &.profile .flip-card-back {
+    font-size: 0.875rem;  // Tailwind echivalent: text-sm
+    padding: 2rem 1.5rem; // opțional, mai compact
+  }
+  &.forYou .flip-card{
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 300 / 525;
+    height: auto !important;
+  }
+
   .flip-card {
     background-color: transparent;
     width: 100%;               /* ← fill whatever parent gives you */

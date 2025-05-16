@@ -63,8 +63,9 @@
         (scroll)="onScroll($event)"
       >
         <app-post-card
-          class="w-full "
+          class="w-full text-xs]"
           *ngFor="let post of posts; let i = index"
+          [size]="'profile'"
           [post]="post"
           [flipped]="flipped[i]"
           [showLikeButton]="false"
