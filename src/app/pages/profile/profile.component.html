@@ -42,6 +42,25 @@
           >
             Edit profile
           </button>
+
+          <button
+            *ngIf="!isOwnProfile"
+            pButton
+            type="button"
+            [disabled]="actionInProgress"
+            class="px-4 py-2 rounded text-white font-medium text-sm w-fit
+             !bg-blue-700 !hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            (click)="onFriendAction()"
+          >
+            <ng-container [ngSwitch]="friendStatus">
+              <span *ngSwitchCase="FriendshipStatus.NotFriends">Add Friend</span>
+              <span *ngSwitchCase="FriendshipStatus.PendingOutgoing">Cancel Request</span>
+              <span *ngSwitchCase="FriendshipStatus.PendingIncoming">Accept Request</span>
+              <span *ngSwitchCase="FriendshipStatus.Friends">Unfriend</span>
+            </ng-container>
+            <!-- optional spinner -->
+            <i *ngIf="actionInProgress" class="pi pi-spin pi-spinner ml-2"></i>
+          </button>
         </div>
       </div>
 
