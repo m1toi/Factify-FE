@@ -1,0 +1,20 @@
+<div class="chat-page-container">
+  <app-sidebar [defaultCollapsed]="true"></app-sidebar>
+
+  <div class="chat-content">
+    <!-- ── LISTA DE CONVERSAȚII ─────────────────────────── -->
+    <div class="chat-sidebar">
+      <app-conversation-list></app-conversation-list>
+    </div>
+
+    <!-- ── ZONA DE CHAT (EMPTY STATE) ───────────────────── -->
+    <div class="chat-window">
+      <div class="empty-state">
+        <i class="pi pi-comments"></i>
+        <p class="title">Your messages</p>
+        <p class="subtitle">Send a message to start a chat.</p>
+        <button class="btn-send">Send message</button>
+      </div>
+    </div>
+  </div>
+</div>

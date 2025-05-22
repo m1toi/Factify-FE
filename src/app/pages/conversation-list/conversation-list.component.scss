@@ -1,0 +1,88 @@
+.conversation-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #000;
+
+  color: #fff;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: none;
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .tab-requests {
+      background: none;
+      border: none;
+      color: #8e8e8e;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+  }
+
+  ul {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-y: auto;
+
+    li {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 0.75rem;
+      }
+
+      .info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .username {
+            font-weight: 600;
+            font-size: 1rem;
+          }
+          .time {
+            font-size: 0.75rem;
+            color: #8e8e8e;
+          }
+        }
+
+        .bottom {
+          .last-message {
+            font-size: 0.85rem;
+            color: #8e8e8e;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+          }
+        }
+      }
+    }
+  }
+}

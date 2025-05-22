@@ -1,0 +1,23 @@
+<div class="conversation-list">
+  <div class="header">
+    <h3>Messages</h3>
+  </div>
+  <ul>
+    <li *ngFor="let conv of conversations" (click)="openConversation(conv)">
+      <img
+        [src]="'https://yourcdn.com/avatars/' + otherParticipant(conv).id + '.jpg'"
+        alt="avatar"
+        class="avatar"
+      />
+      <div class="info">
+        <div class="top">
+          <span class="username">{{ otherParticipant(conv).username }}</span>
+          <span class="time">{{ conv.createdAt | date:'shortTime' }}</span>
+        </div>
+        <div class="bottom">
+          <span class="last-message">Ultimul mesaj…</span>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

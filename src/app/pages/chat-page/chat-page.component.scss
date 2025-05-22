@@ -1,0 +1,65 @@
+.chat-page-container {
+  display: flex;
+  height: 100vh;
+  background-color: #000;
+}
+
+/* ─── coloana care conține lista ─── */
+.chat-sidebar {
+  width: 360px;
+  height: 100%;
+  background-color: #000;      /* fundal identic cu listă */
+  border-left: 1px solid #333;/* linia de separare */
+  border-right: 1px solid #333;
+  box-sizing: border-box;      /* border inclus în width/height */
+  z-index: 1;                  /* deasupra conținutului */
+}
+
+.chat-content {
+  display: flex;
+  flex: 1;
+  margin-left: 60px;
+  overflow: hidden;
+}
+
+
+.chat-window {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: #fff;
+
+  .empty-state {
+    text-align: center;
+
+    i.pi-comments {
+      font-size: 4rem;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0.5rem 0;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #8e8e8e;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-send {
+      background-color: #0095f6;
+      border: none;
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+  }
+}

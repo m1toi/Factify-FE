@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import {ButtonDirective} from 'primeng/button';
-import {UserSearchComponent} from '../user-search/user-search.component';
+import { ButtonDirective } from 'primeng/button';
+import { UserSearchComponent } from '../user-search/user-search.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,27 +12,44 @@ import {UserSearchComponent} from '../user-search/user-search.component';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent {
-  isSearchOpen: boolean = false;
-  isCollapsed: boolean = false;
-  constructor(private router: Router) {}
+  isSearchOpen = false;
 
-  goToForYou() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-      this.router.navigate(['/home']);
-    });
+  // stocăm intern valoarea defaultCollapsed
+  private _defaultCollapsed = false;
+
+  // setter care se execută înainte de primul render
+  @Input()
+  set defaultCollapsed(value: boolean) {
+    this._defaultCollapsed = value;
+    this.isCollapsed = value;
+  }
+  get defaultCollapsed(): boolean {
+    return this._defaultCollapsed;
   }
 
-  goToCreatePost(){
+  // inițializăm imediat cu valoarea defaultCollapsed
+  isCollapsed = this._defaultCollapsed;
+
+  constructor(private router: Router) {}
+
+  goToForYou(): void {
+    this.router
+      .navigateByUrl('/', { skipLocationChange: true })
+      .then(() => this.router.navigate(['/home']));
+  }
+
+  goToCreatePost(): void {
     this.router.navigate(['/create-post']);
   }
 
   toggleSearch(): void {
-    if (!this.isSearchOpen) {
-      this.isCollapsed   = true;
-      this.isSearchOpen  = true;
-    } else {
-      this.isSearchOpen  = false;
-      this.isCollapsed   = false;
-    }
+    this.isSearchOpen = !this.isSearchOpen;
+    // collapsed dacă e deschis search sau dacă defaultCollapsed e true
+    this.isCollapsed = this.isSearchOpen || this.defaultCollapsed;
   }
+
+  goToChat(): void {
+    this.router.navigate(['/chat']);
+  }
+
 }
