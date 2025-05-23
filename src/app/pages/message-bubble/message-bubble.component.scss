@@ -1,0 +1,18 @@
+.bubble {
+  max-width: 60%;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 16px;
+  background: #222;
+  color: #fff;
+  &.mine {
+    background: #005c4b;
+    margin-left: auto;
+  }
+  .time {
+    font-size: 0.7rem;
+    color: #888;
+    text-align: right;
+    margin-top: 0.25rem;
+  }
+}

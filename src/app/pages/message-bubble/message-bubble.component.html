@@ -1,0 +1,8 @@
+<div class="bubble" [class.mine]="isMine">
+  <div class="content">
+    {{ message.content }}
+  </div>
+  <div class="time">
+    {{ message.sentAt | date:'shortTime' }}
+  </div>
+</div>

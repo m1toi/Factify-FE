@@ -1,0 +1,9 @@
+<div class="message-input">
+  <input
+    type="text"
+    [(ngModel)]="message"
+    [placeholder]="placeholder"
+    (keyup.enter)="onSend()"
+  />
+  <button (click)="onSend()">Send</button>
+</div>

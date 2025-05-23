@@ -5,7 +5,11 @@
   <ul>
     <li *ngFor="let conv of conversations" (click)="openConversation(conv)">
       <img
-        [src]="'https://yourcdn.com/avatars/' + otherParticipant(conv).id + '.jpg'"
+        [src]="
+      otherParticipant(conv).avatar
+        ? '/assets/avatars/' + otherParticipant(conv).avatar
+        : '/assets/avatars/placeholder1.png'
+    "
         alt="avatar"
         class="avatar"
       />
@@ -19,5 +23,6 @@
         </div>
       </div>
     </li>
+
   </ul>
 </div>

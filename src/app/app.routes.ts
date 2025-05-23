@@ -43,6 +43,7 @@ export const routes: Routes = [
   },
 
   {path: 'chat', component: ChatPageComponent},
+  { path: 'chat/:conversationId', component: ChatPageComponent },
 
   { path: '**', redirectTo: 'login' }
 ];

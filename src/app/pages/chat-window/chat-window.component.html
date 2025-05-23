@@ -1,0 +1,15 @@
+<div class="chat-window-root">
+  <div class="messages-container">
+    <app-message-bubble
+      *ngFor="let m of messages"
+      [message]="m"
+      [isMine]="m.senderId === currentUserId"
+    ></app-message-bubble>
+  </div>
+  <div class="input-container">
+    <app-message-input
+      placeholder="Type a message…"
+      (send)="onSendText($event)"
+    ></app-message-input>
+  </div>
+</div>

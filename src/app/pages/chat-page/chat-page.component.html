@@ -2,19 +2,27 @@
   <app-sidebar [defaultCollapsed]="true"></app-sidebar>
 
   <div class="chat-content">
-    <!-- ── LISTA DE CONVERSAȚII ─────────────────────────── -->
     <div class="chat-sidebar">
       <app-conversation-list></app-conversation-list>
     </div>
 
-    <!-- ── ZONA DE CHAT (EMPTY STATE) ───────────────────── -->
     <div class="chat-window">
-      <div class="empty-state">
-        <i class="pi pi-comments"></i>
-        <p class="title">Your messages</p>
-        <p class="subtitle">Send a message to start a chat.</p>
-        <button class="btn-send">Send message</button>
-      </div>
+      <!-- dacă nicio conversație nu e selectată -->
+      <ng-container *ngIf="!selectedConversationId; else chatTpl">
+        <div class="empty-state">
+          <i class="pi pi-comments"></i>
+          <p class="title">Your messages</p>
+        </div>
+      </ng-container>
+
+      <!-- conținutul efectiv al conversației -->
+      <ng-template #chatTpl>
+        <!-- afișăm ChatWindow numai când selectedConversationId e truthy -->
+        <app-chat-window
+          *ngIf="selectedConversationId !== undefined"
+          [conversationId]="selectedConversationId"
+        ></app-chat-window>
+      </ng-template>
     </div>
   </div>
 </div>

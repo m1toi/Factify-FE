@@ -44,10 +44,14 @@ export class ConversationListComponent implements OnInit {
 
   /** Returnează username-ul și ID-ul „celuilalt” */
   otherParticipant(conv: Conversation) {
-    return conv.user1Id === this.currentUserId
-      ? { id: conv.user2Id, username: conv.user2Username }
-      : { id: conv.user1Id, username: conv.user1Username };
+    const isUser1 = conv.user1Id === this.currentUserId;
+    return {
+      id:      isUser1 ? conv.user2Id   : conv.user1Id,
+      username:isUser1 ? conv.user2Username : conv.user1Username,
+      avatar:  isUser1 ? conv.user2ProfilePicture : conv.user1ProfilePicture
+    };
   }
+
 
   openConversation(conv: Conversation) {
     this.router.navigate(['/chat', conv.conversationId]);
