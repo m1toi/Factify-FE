@@ -9,7 +9,7 @@
   width: 360px;
   height: 100%;
   background-color: #000;      /* fundal identic cu listă */
-  border-left: 1px solid #333;/* linia de separare */
+  border-left: 1px solid #333; /* linia de separare */
   border-right: 1px solid #333;
   box-sizing: border-box;      /* border inclus în width/height */
   z-index: 1;                  /* deasupra conținutului */
@@ -18,20 +18,29 @@
 .chat-content {
   display: flex;
   flex: 1;
+  height: 100%;
   margin-left: 60px;
-  overflow: hidden;
-}
 
+}
 
 .chat-window {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  flex-direction: column; /* stack vertical: mesaje deasupra, input jos */
+  height: 100%;
+  background-color: #000;
+  //overflow-y:auto;
   color: #fff;
+  min-height: 0;
+  /* ascunde vechea centrare */
+  /* align-items și justify-content nu mai trebuie */
 
   .empty-state {
+    /* păstrează stilul tău existent pentru „Your messages” */
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
 
     i.pi-comments {
