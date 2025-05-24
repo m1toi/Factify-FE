@@ -28,13 +28,6 @@ export class MessageService {
 
   constructor(private http: HttpClient) {}
 
-  /** 1) Aduce istoricul de mesaje */
-  getMessages(conversationId: number): Observable<Message[]> {
-    return this.http.get<Message[]>(
-      `${this.apiUrl}/conversation/${conversationId}`
-    );
-  }
-
   getMessagesBatch(
     conversationId: number,
     beforeMessageId?: number,

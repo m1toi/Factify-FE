@@ -1,5 +1,3 @@
-// src/app/chat/chat-window/chat-window.component.ts
-
 import {
   Component,
   Input,
@@ -13,13 +11,13 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { fromEvent, Subscription } from 'rxjs';
-import { throttleTime, filter } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { MessageService, Message } from '../../services/message.service';
 import { ChatSignalRService } from '../../services/chat-signalr.service';
 import { AuthService } from '../../services/auth.service';
 import { MessageInputComponent } from '../message-input/message-input.component';
 import { MessageBubbleComponent } from '../message-bubble/message-bubble.component';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-chat-window',
@@ -70,7 +68,6 @@ export class ChatWindowComponent
     // Pornește conexiunea SignalR o singură dată
     this.signalR.startConnection(this.jwtToken);
     this.signalR.onReceiveMessage((msg: Message) => {
-      // Adaugă doar dacă e din conversația curentă
       if (msg.conversationId === this.conversationId) {
         this.messages.push(msg);
         this.scrollToBottom();
@@ -79,16 +76,15 @@ export class ChatWindowComponent
   }
 
   ngAfterViewInit() {
-    // Abonare la evenimentul de scroll în sus
+    // Abonare la evenimentul de scroll
     this.scrollSub = fromEvent(
       this.messagesContainer.nativeElement,
       'scroll'
     )
       .pipe(
-        throttleTime(200),
+        // fără throttleTime, ca să nu ratăm evenimentele când user-ul ajunge rapid sus
         filter(() => {
           const el = this.messagesContainer.nativeElement;
-          // scroll sus mai puțin de 50px și nu e deja încărcare
           return (
             el.scrollTop < 50 &&
             !this.isLoadingBatch &&
@@ -129,7 +125,6 @@ export class ChatWindowComponent
     this.msgService
       .getMessagesBatch(this.conversationId, undefined, 20)
       .subscribe(batch => {
-        // batch este deja în ordine cronologică
         this.messages = batch;
         this.earliestMessageId = batch.length
           ? batch[0].messageId
@@ -146,23 +141,28 @@ export class ChatWindowComponent
     const prevScrollHeight = el.scrollHeight;
 
     this.msgService
-      .getMessagesBatch(
-        this.conversationId,
-        this.earliestMessageId,
-        20
-      )
+      .getMessagesBatch(this.conversationId, this.earliestMessageId, 20)
       .subscribe(batch => {
         if (batch.length) {
           // Prepend batch la lista existentă
           this.messages = [...batch, ...this.messages];
           this.earliestMessageId = batch[0].messageId;
-          // Păstrează poziția de scroll
+
+          // După ce DOM-ul se actualizează, ajustăm scroll-ul și, dacă mai e nevoie, încărcăm iar
           setTimeout(() => {
             const newScrollHeight = el.scrollHeight;
             el.scrollTop = newScrollHeight - prevScrollHeight;
+            this.isLoadingBatch = false;
+
+            // Dacă suntem încă aproape de top, mai încărcăm un batch
+            if (el.scrollTop < 50 && this.earliestMessageId) {
+              this.loadPreviousBatch();
+            }
           });
+        } else {
+          // Nu mai sunt mesaje vechi
+          this.isLoadingBatch = false;
         }
-        this.isLoadingBatch = false;
       });
   }
 
