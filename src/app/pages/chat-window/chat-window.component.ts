@@ -1,12 +1,19 @@
+// src/app/chat/chat-window/chat-window.component.ts
+
 import {
   Component,
   Input,
   OnInit,
   OnDestroy,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  AfterViewInit,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { fromEvent, Subscription } from 'rxjs';
+import { throttleTime, filter } from 'rxjs/operators';
 import { MessageService, Message } from '../../services/message.service';
 import { ChatSignalRService } from '../../services/chat-signalr.service';
 import { AuthService } from '../../services/auth.service';
@@ -25,11 +32,23 @@ import {jwtDecode} from 'jwt-decode';
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.scss']
 })
-export class ChatWindowComponent implements OnInit, OnDestroy, OnChanges {
+export class ChatWindowComponent
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+{
   @Input() conversationId!: number;
+
+  @ViewChild('messagesContainer', { static: false })
+  private messagesContainer!: ElementRef<HTMLElement>;
+
   messages: Message[] = [];
   currentUserId!: number;
   private jwtToken!: string;
+
+  // pentru paginare
+  private earliestMessageId?: number;
+  isLoadingBatch = false;
+
+  private scrollSub?: Subscription;
 
   constructor(
     private msgService: MessageService,
@@ -42,7 +61,9 @@ export class ChatWindowComponent implements OnInit, OnDestroy, OnChanges {
     const token = this.authService.getToken();
     if (token) {
       const decoded: any = jwtDecode(token);
-      this.currentUserId = +decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+      this.currentUserId = +decoded[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+        ];
       this.jwtToken = token;
     }
 
@@ -57,16 +78,40 @@ export class ChatWindowComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
+  ngAfterViewInit() {
+    // Abonare la evenimentul de scroll în sus
+    this.scrollSub = fromEvent(
+      this.messagesContainer.nativeElement,
+      'scroll'
+    )
+      .pipe(
+        throttleTime(200),
+        filter(() => {
+          const el = this.messagesContainer.nativeElement;
+          // scroll sus mai puțin de 50px și nu e deja încărcare
+          return (
+            el.scrollTop < 50 &&
+            !this.isLoadingBatch &&
+            this.earliestMessageId !== undefined
+          );
+        })
+      )
+      .subscribe(() => this.loadPreviousBatch());
+  }
+
   ngOnChanges(changes: SimpleChanges) {
-    // Dacă conversationId s-a schimbat, reîncarcă istoricul
-    if (changes['conversationId'] && changes['conversationId'].currentValue) {
-      this.loadHistory();
+    // La fiecare conversatie nouă, încărcăm primul batch
+    if (
+      changes['conversationId'] &&
+      changes['conversationId'].currentValue
+    ) {
+      this.loadInitialBatch();
     }
   }
 
   ngOnDestroy() {
-    // Opresc SignalR când componenta e distrusă
     this.signalR.stopConnection();
+    this.scrollSub?.unsubscribe();
   }
 
   onSendText(content: string) {
@@ -79,21 +124,52 @@ export class ChatWindowComponent implements OnInit, OnDestroy, OnChanges {
       });
   }
 
-  private loadHistory() {
-    // Golește lista curentă și reîncarcă
-    this.messages = [];
-    this.msgService.getMessages(this.conversationId).subscribe(msgs => {
-      this.messages = msgs;
-      this.scrollToBottom();
-    });
+  private loadInitialBatch() {
+    this.isLoadingBatch = true;
+    this.msgService
+      .getMessagesBatch(this.conversationId, undefined, 20)
+      .subscribe(batch => {
+        // batch este deja în ordine cronologică
+        this.messages = batch;
+        this.earliestMessageId = batch.length
+          ? batch[0].messageId
+          : undefined;
+        this.scrollToBottom();
+        this.isLoadingBatch = false;
+      });
+  }
+
+  private loadPreviousBatch() {
+    if (!this.earliestMessageId) return;
+    this.isLoadingBatch = true;
+    const el = this.messagesContainer.nativeElement;
+    const prevScrollHeight = el.scrollHeight;
+
+    this.msgService
+      .getMessagesBatch(
+        this.conversationId,
+        this.earliestMessageId,
+        20
+      )
+      .subscribe(batch => {
+        if (batch.length) {
+          // Prepend batch la lista existentă
+          this.messages = [...batch, ...this.messages];
+          this.earliestMessageId = batch[0].messageId;
+          // Păstrează poziția de scroll
+          setTimeout(() => {
+            const newScrollHeight = el.scrollHeight;
+            el.scrollTop = newScrollHeight - prevScrollHeight;
+          });
+        }
+        this.isLoadingBatch = false;
+      });
   }
 
   private scrollToBottom() {
     setTimeout(() => {
-      const container = document.querySelector('.messages-container');
-      if (container) {
-        container.scrollTop = container.scrollHeight;
-      }
+      const el = this.messagesContainer.nativeElement;
+      el.scrollTop = el.scrollHeight;
     });
   }
 }

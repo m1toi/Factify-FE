@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -33,6 +33,27 @@ export class MessageService {
     return this.http.get<Message[]>(
       `${this.apiUrl}/conversation/${conversationId}`
     );
+  }
+
+  getMessagesBatch(
+    conversationId: number,
+    beforeMessageId?: number,
+    limit: number = 10
+  ): Observable<Message[]> {
+    let params = new HttpParams().set('limit', limit.toString());
+    if (beforeMessageId != null) {
+      params = params.set('beforeMessageId', beforeMessageId.toString());
+    }
+    return this.http
+      .get<Message[]>(
+        `${this.apiUrl}/conversation/${conversationId}`,
+        { params }
+      )
+      .pipe(
+        // serverul returnează mesajele în ordine cronologică,
+        // dar dacă vreați să le inversați aici, o puteți face
+        // map(arr => arr)
+      );
   }
 
   /** 2) Trimite mesaj text sau post share-uit */

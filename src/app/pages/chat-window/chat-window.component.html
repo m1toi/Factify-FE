@@ -1,5 +1,5 @@
 <div class="chat-window-root">
-  <div class="messages-container">
+  <div #messagesContainer class="messages-container">
     <app-message-bubble
       *ngFor="let m of messages"
       [message]="m"
