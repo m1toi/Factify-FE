@@ -31,3 +31,10 @@
     <button (click)="nextPost()"><i class="pi pi-chevron-down"></i></button>
   </div>
 </div>
+
+<app-share-dialog
+  [visible]="shareDialogVisible"
+  [postId]="sharePostId"
+  (close)="shareDialogVisible = false"
+  (shareConfirmed)="onShareConfirmed($event)"
+></app-share-dialog>

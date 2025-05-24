@@ -1,0 +1,60 @@
+<div class="overlay" *ngIf="visible">
+  <div class="dialog">
+    <header class="header">
+      <h2>Share</h2>
+      <button class="close-btn" (click)="close.emit()">×</button>
+    </header>
+
+    <div class="body">
+      <label class="label">To:</label>
+      <div class="chips">
+        <span
+          class="chip"
+          *ngFor="let u of selected"
+          (click)="removeRecipient(u)"
+        >
+          {{ u.username }} ×
+        </span>
+      </div>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search users..."
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+      />
+
+      <ul class="results" *ngIf="results.length">
+        <li
+          *ngFor="let u of results"
+          (click)="addRecipient(u)"
+          class="result-item"
+        >
+          <img
+            *ngIf="u.profilePicture"
+            [src]="'/assets/avatars/' + u.profilePicture"
+            class="avatar"
+          />
+          <span>{{ u.username }}</span>
+        </li>
+      </ul>
+
+      <textarea
+        *ngIf="selected.length"
+        [(ngModel)]="messageText"
+        class="message-area"
+        placeholder="Write a message..."
+      ></textarea>
+    </div>
+
+    <footer class="footer">
+      <button
+        class="send-btn"
+        [disabled]="!selected.length"
+        (click)="onSend()"
+      >
+        Send
+      </button>
+    </footer>
+  </div>
+</div>

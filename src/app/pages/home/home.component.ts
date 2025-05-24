@@ -15,11 +15,20 @@ import { ButtonModule } from 'primeng/button';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { InteractionService } from '../../services/interaction.service';
 import{ PostCardComponent } from '../post-card/post-card.component';
+import {ShareDialogComponent} from '../share-dialog/share-dialog.component';
+import {ConversationService} from '../../services/conversation.service';
+import {MessageService} from '../../services/message.service';
+import {Conversation} from '../../models/conversation.model';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, SidebarComponent , PostCardComponent],
+  imports: [CommonModule,
+    RouterModule,
+    ButtonModule,
+    SidebarComponent ,
+    PostCardComponent,
+    ShareDialogComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -34,11 +43,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   private userId!: number; // 🔥 NEW: Store userId so we don't decode token every time
 
+  shareDialogVisible = false;
+  sharePostId!: number; // 🔥 NEW: Store the post ID to share
+  myConversations: Conversation[] = [];
+
   constructor(
     private feedService: FeedService,
     private authService: AuthService,
     private interactionService: InteractionService,
     private router: Router,
+    private convService: ConversationService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +65,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         ]);
 
       this.loadInitialPosts();
+      this.convService.getMyConversations().subscribe(convs => {
+        this.myConversations = convs;
+      });
     }
   }
 
@@ -149,7 +167,32 @@ export class HomeComponent implements OnInit, AfterViewInit {
       },
       error: err => console.error('Failed to share post:', err)
     });
+    this.sharePostId = post.postId;
+    this.shareDialogVisible = true;
   }
+
+  onShareConfirmed(payload: {
+    userIds: number[]; content?: string; postId: number;
+      }) {
+        this.shareDialogVisible = false;
+        for (const userId of payload.userIds) {
+            // găsește conversația unu-la-unu deja creată
+          const conv = this.myConversations.find(c =>
+                c.user1Id === userId || c.user2Id === userId
+              );
+            if (conv) {
+        this.messageService.sendMessage({
+          conversationId: conv.conversationId,
+          postId: payload.postId,
+          content: payload.content
+               }).subscribe(() => {
+                   console.log(`Shared post ${payload.postId} in conv ${conv.conversationId}`);
+                  });
+              } else {
+              console.error('Nu am găsit conversație cu userId', userId);
+              }
+          }
+     }
 
   scrollToPost(index: number): void {
     const container = this.scrollContainer.nativeElement;
@@ -177,8 +220,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
     }
   }
-
-
 
   previousPost(): void {
     if (this.currentPostIndex > 0) {
