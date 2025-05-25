@@ -1,25 +1,23 @@
-<div class="bubble" [class.mine]="isMine">
-  <!-- Dacă e share de post -->
-  <ng-container *ngIf="message.post; else textTpl">
+<!-- message-bubble.component.html -->
+<ng-container *ngIf="message.post; else textTpl">
+  <!-- Wrapper special pentru postări (fără bubble) -->
+  <div class="post-wrapper" [class.mine]="isMine">
     <app-post-card
       [post]="message.post"
       size="chat"
       [flipped]="flipped"
       [showLikeButton]="false"
       [showShareButton]="false"
-      class="mini-post"
       (flip)="flipped = !flipped"
     ></app-post-card>
-  </ng-container>
-
-  <!-- Mesaj text simplu -->
-  <ng-template #textTpl>
-    <div class="content">
-      {{ message.content }}
-    </div>
-  </ng-template>
-
-  <div class="time">
-    {{ message.sentAt | date:'shortTime' }}
+    <div class="time">{{ message.sentAt | date:'shortTime' }}</div>
   </div>
-</div>
+</ng-container>
+
+<ng-template #textTpl>
+  <!-- Mesaje text intr-o bulă normală -->
+  <div class="bubble" [class.mine]="isMine">
+    <div class="content">{{ message.content }}</div>
+    <div class="time">{{ message.sentAt | date:'shortTime' }}</div>
+  </div>
+</ng-template>

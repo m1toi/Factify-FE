@@ -42,20 +42,22 @@
   clear: both; /* asigură-se că timpul nu stă lângă float */
 }
 .post-wrapper {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
+  display: inline-block;    /* INLINE-BLOCK în loc de INLINE-FLEX */
+  width: auto;
+  max-width: 60%;
   margin-bottom: 0.5rem;
-  /* dacă e mesaj propriu, împingem card-ul în dreapta */
+  clear: both;              /* te asigură că începe sub orice float anterior */
+
+  /* Float în funcție de cine a trimis postarea */
+  float: left;
   &.mine {
-    margin-left: auto;
-    align-items: flex-end;
+    float: right;
   }
 
-  /* card-ul e deja fixat de PostCardComponent */
+  /* Card-ul vine gata dimensionat de PostCardComponent */
   .mini-post {
-    /* asigurăm colțuri rotunjite și fără shadow extra dacă e nevoie */
     border-radius: 12px !important;
+    box-shadow: none !important;
     overflow: hidden;
   }
 
@@ -63,6 +65,7 @@
     font-size: 0.7rem;
     color: #888;
     margin-top: 0.25rem;
-    /* vrem să apară dedesubt, suficient spațiu */
+    text-align: right;
+    clear: both;            /* evită orice fel de overlapping */
   }
 }

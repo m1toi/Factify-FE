@@ -28,14 +28,14 @@
   }
   &.chat {
     .flip-card {
-      width: 200px;            /* dimensiune fixă ideală în bulă */
-      max-width: 200px;
+      width: 260px;            /* dimensiune fixă ideală în bulă */
+      max-width: 500px;
       aspect-ratio: 200 / 300; /* păstrează raportul cardului */
     }
 
     .flip-card-front,
     .flip-card-back {
-      padding: 1rem;           /* mai compact în chat */
+      padding: 2rem;           /* mai compact în chat */
       font-size: 1rem;         /* text puțin mai mic */
     }
 
