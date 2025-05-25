@@ -69,7 +69,8 @@ export class ChatWindowComponent
     this.signalR.startConnection(this.jwtToken);
     this.signalR.onReceiveMessage((msg: Message) => {
       if (msg.conversationId === this.conversationId) {
-        this.messages.push(msg);
+      //  this.messages.push(msg);
+        this.enqueueMessage(msg);
         this.scrollToBottom();
       }
     });
@@ -115,7 +116,8 @@ export class ChatWindowComponent
     this.msgService
       .sendMessage({ conversationId: this.conversationId, content })
       .subscribe(msg => {
-        this.messages.push(msg);
+        //this.messages.push(msg);
+        this.enqueueMessage(msg);
         this.scrollToBottom();
       });
   }
@@ -125,7 +127,11 @@ export class ChatWindowComponent
     this.msgService
       .getMessagesBatch(this.conversationId, undefined, 20)
       .subscribe(batch => {
-        this.messages = batch;
+        // golim lista curentă
+        this.messages = [];
+        // folosim enqueueMessage pentru fiecare mesaj din batch
+        batch.forEach(m => this.enqueueMessage(m));
+        // actualizăm earliestMessageId
         this.earliestMessageId = batch.length
           ? batch[0].messageId
           : undefined;
@@ -137,33 +143,67 @@ export class ChatWindowComponent
   private loadPreviousBatch() {
     if (!this.earliestMessageId) return;
     this.isLoadingBatch = true;
+
     const el = this.messagesContainer.nativeElement;
     const prevScrollHeight = el.scrollHeight;
 
     this.msgService
       .getMessagesBatch(this.conversationId, this.earliestMessageId, 20)
       .subscribe(batch => {
-        if (batch.length) {
-          // Prepend batch la lista existentă
-          this.messages = [...batch, ...this.messages];
-          this.earliestMessageId = batch[0].messageId;
-
-          // După ce DOM-ul se actualizează, ajustăm scroll-ul și, dacă mai e nevoie, încărcăm iar
-          setTimeout(() => {
-            const newScrollHeight = el.scrollHeight;
-            el.scrollTop = newScrollHeight - prevScrollHeight;
-            this.isLoadingBatch = false;
-
-            // Dacă suntem încă aproape de top, mai încărcăm un batch
-            if (el.scrollTop < 50 && this.earliestMessageId) {
-              this.loadPreviousBatch();
-            }
-          });
-        } else {
-          // Nu mai sunt mesaje vechi
+        if (!batch.length) {
           this.isLoadingBatch = false;
+          return;
         }
+
+        // păstrăm mesajele vechi
+        const oldMessages = [...this.messages];
+
+        // resetăm lista și prepend‐uim batch‐ul cu enqueueMessage
+        this.messages = [];
+        batch.forEach(m => this.enqueueMessage(m));
+        // apoi adăugăm și mesajele vechi (vor rămâne în ordinea lor deja procesată)
+        oldMessages.forEach(m => this.enqueueMessage(m));
+
+        // actualizăm earliestMessageId
+        this.earliestMessageId = batch[0].messageId;
+
+        // reajustăm scroll‐ul după ce DOM-ul s-a updatat
+        setTimeout(() => {
+          const newScrollHeight = el.scrollHeight;
+          el.scrollTop = newScrollHeight - prevScrollHeight;
+          this.isLoadingBatch = false;
+
+          // dacă mai e încă aproape de top, tragem iar
+          if (el.scrollTop < 50 && this.earliestMessageId) {
+            this.loadPreviousBatch();
+          }
+        });
       });
+  }
+
+  private enqueueMessage(msg: Message) {
+    // dacă avem şi post, şi text, creăm două intrări
+    const hasPost = !!msg.postId;
+    const hasText  = !!msg.content?.trim();
+
+    if (hasPost && hasText) {
+      // 1) bubble pentru post
+      this.messages.push({
+        ...msg,
+        content: undefined,     // golim textul
+        // păstrăm postId/post
+      });
+      // 2) bubble pentru text
+      this.messages.push({
+        ...msg,
+        postId: undefined,     // golim postarea
+        post: null!,
+        content: msg.content
+      });
+    } else {
+      // singular: text-only sau post-only
+      this.messages.push(msg);
+    }
   }
 
   private scrollToBottom() {
