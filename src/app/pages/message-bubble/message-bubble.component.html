@@ -1,10 +1,10 @@
 <div class="bubble" [class.mine]="isMine">
-  <!-- Dacă e un share de post -->
+  <!-- Dacă e share de post -->
   <ng-container *ngIf="message.post; else textTpl">
     <app-post-card
       [post]="message.post"
+      size="chat"
       [flipped]="flipped"
-      size="profile"
       [showLikeButton]="false"
       [showShareButton]="false"
       class="mini-post"

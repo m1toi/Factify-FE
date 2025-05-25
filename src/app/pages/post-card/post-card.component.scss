@@ -26,6 +26,24 @@
     aspect-ratio: 300 / 525;
     height: auto !important;
   }
+  &.chat {
+    .flip-card {
+      width: 200px;            /* dimensiune fixă ideală în bulă */
+      max-width: 200px;
+      aspect-ratio: 200 / 300; /* păstrează raportul cardului */
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      padding: 1rem;           /* mai compact în chat */
+      font-size: 1rem;         /* text puțin mai mic */
+    }
+
+    /* ascundem butoanele interactive în chat */
+    .interaction-buttons {
+      display: none !important;
+    }
+  }
 
   .flip-card {
     background-color: transparent;

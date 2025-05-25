@@ -16,7 +16,7 @@ export class PostCardComponent implements OnInit {
   @Input() liked = false;
   @Input() showLikeButton = true;
   @Input() showShareButton = true;
-  @Input() size: 'forYou' | 'profile' = 'forYou';
+  @Input() size: 'forYou' | 'profile' | 'chat' = 'forYou';
 
   @Output() flip    = new EventEmitter<void>();
   @Output() like    = new EventEmitter<void>();
