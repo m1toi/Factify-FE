@@ -1,7 +1,24 @@
 <div class="bubble" [class.mine]="isMine">
-  <div class="content">
-    {{ message.content }}
-  </div>
+  <!-- Dacă e un share de post -->
+  <ng-container *ngIf="message.post; else textTpl">
+    <app-post-card
+      [post]="message.post"
+      [flipped]="flipped"
+      size="profile"
+      [showLikeButton]="false"
+      [showShareButton]="false"
+      class="mini-post"
+      (flip)="flipped = !flipped"
+    ></app-post-card>
+  </ng-container>
+
+  <!-- Mesaj text simplu -->
+  <ng-template #textTpl>
+    <div class="content">
+      {{ message.content }}
+    </div>
+  </ng-template>
+
   <div class="time">
     {{ message.sentAt | date:'shortTime' }}
   </div>
