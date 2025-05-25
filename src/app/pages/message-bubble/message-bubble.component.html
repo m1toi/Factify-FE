@@ -1,23 +1,55 @@
-<!-- message-bubble.component.html -->
 <ng-container *ngIf="message.post; else textTpl">
-  <!-- Wrapper special pentru postări (fără bubble) -->
-  <div class="post-wrapper" [class.mine]="isMine">
-    <app-post-card
-      [post]="message.post"
-      size="chat"
-      [flipped]="flipped"
-      [showLikeButton]="false"
-      [showShareButton]="false"
-      (flip)="flipped = !flipped"
-    ></app-post-card>
-    <div class="time">{{ message.sentAt | date:'shortTime' }}</div>
+  <!-- mesaje tip “post” -->
+  <div
+    class="message-row"
+    [class.mine]="isMine"
+  >
+    <!-- pentru postările primite afișăm avatarul -->
+    <img
+      *ngIf="!isMine"
+      class="avatar"
+      [src]="
+        message.senderProfilePicture
+          ? '/assets/avatars/' + message.senderProfilePicture
+          : '/assets/avatars/placeholder1.png'
+      "
+      alt="avatar"
+    />
+
+    <div class="post-wrapper" [class.mine]="isMine">
+      <app-post-card
+        [post]="message.post"
+        size="chat"
+        [flipped]="flipped"
+        [showLikeButton]="false"
+        [showShareButton]="false"
+        (flip)="flipped = !flipped"
+      ></app-post-card>
+      <div class="time">{{ message.sentAt | date:'shortTime' }}</div>
+    </div>
   </div>
 </ng-container>
 
 <ng-template #textTpl>
-  <!-- Mesaje text intr-o bulă normală -->
-  <div class="bubble" [class.mine]="isMine">
-    <div class="content">{{ message.content }}</div>
-    <div class="time">{{ message.sentAt | date:'shortTime' }}</div>
+  <!-- mesaje text -->
+  <div
+    class="message-row"
+    [class.mine]="isMine"
+  >
+    <img
+      *ngIf="!isMine"
+      class="avatar"
+      [src]="
+        message.senderProfilePicture
+          ? '/assets/avatars/' + message.senderProfilePicture
+          : '/assets/avatars/placeholder1.png'
+      "
+      alt="avatar"
+    />
+
+    <div class="bubble" [class.mine]="isMine">
+      <div class="content">{{ message.content }}</div>
+      <div class="time">{{ message.sentAt | date:'shortTime' }}</div>
+    </div>
   </div>
 </ng-template>

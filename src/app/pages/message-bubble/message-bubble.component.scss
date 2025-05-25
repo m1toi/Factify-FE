@@ -1,99 +1,104 @@
 /* message-bubble.component.scss */
 
-/* ─── Bulă pentru mesaje text ─── */
-.bubble {
-  /* Shrink-wrap după conținut, până la maxim 60% */
-  display: inline-block;
+/* ─── Container pentru fiecare mesaj (row) ─── */
+.message-row {
+  display: flex;
+  align-items: flex-end;   /* aliniază avatar și conținut pe baza zonei de jos */
+  margin-bottom: 0.4rem;
   clear: both;
-  width: auto;
-  max-width: 60%;
 
-  /* Sparge liniile prea lungi */
-  word-break: break-word;
-  white-space: pre-wrap;
+  &.mine {
+    justify-content: flex-end;  /* mesajele mele la dreapta */
+  }
 
-  margin-bottom: 0.5rem;
-  padding: 0.75rem;
-  border-radius: 16px;
-
-  background: #222;
-  color: #fff;
+  &:not(.mine) {
+    justify-content: flex-start; /* mesajele primite la stânga */
+  }
 }
 
-/* Mesajele primite: bulă la stânga + timestamp pe stânga */
-.bubble:not(.mine) {
-  float: left;
+/* ─── Avatar ─── */
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.5rem;
+  margin-bottom: 0.25rem;  /* pentru a alinia puțin mai jos față de bulă */
+}
+
+/* ─── Bulă pentru mesaje text ─── */
+.bubble {
+  /* În flex layout nu mai folosim float */
+  float: none !important;
+  display: inline-block;
+  width: auto;
+  max-width: 60%;
+  word-break: break-word;
+  white-space: pre-wrap;
+  padding: 0.75rem;
+  border-radius: 16px;
+  background: #222;
+  color: #fff;
 
   .time {
     display: block;
     font-size: 0.7rem;
     color: #888;
-    text-align: left;
     margin-top: 0.25rem;
-    margin-left: 0.5rem;  /* spațiu față de bulă */
-    margin-right: 0;      /* fără spațiu în dreapta */
-    clear: both;
+  }
+}
+
+/* Mesajele primite: timestamp la stânga */
+.bubble:not(.mine) {
+  .time {
+    text-align: left;
+    margin-left: 0; /* spațiu gestionat de .message-row + .avatar */
   }
 }
 
 /* Mesajele mele: bulă la dreapta + timestamp pe dreapta */
 .bubble.mine {
-  float: right;
   background: #005c4b;
 
   .time {
-    display: block;
-    font-size: 0.7rem;
-    color: #888;
     text-align: right;
-    margin-top: 0.25rem;
-    margin-right: 0.5rem; /* spațiu față de marginea din dreapta */
-    margin-left: 0;
-    clear: both;
+    margin-right: 0; /* spațiu gestionat de .message-row */
   }
 }
 
 /* ─── Wrapper pentru postări (fără bulă) ─── */
 .post-wrapper {
+  /* În flex layout nu mai folosim float */
+  float: none !important;
   display: inline-flex;
   flex-direction: column;
-  margin-bottom: 0.5rem;
   max-width: 60%;
-  clear: both;
 
-  /* Postări primite: la stânga + timestamp pe stânga */
-  &:not(.mine) {
-    float: left;
-    margin-left: -1rem;
-    align-items: flex-start;
+  .time {
+    display: block;
+    font-size: 0.7rem;
+    color: #888;
+    margin-top: 0.25rem;
+  }
 
+  /* Aliniere pentru timestamp și card */
+  &.mine {
+    align-items: flex-end;
+    margin-right: -1rem;
     .time {
-      display: block;
-      font-size: 0.7rem;
-      color: #888;
-      text-align: left;
+      text-align: right;
+      margin-right: 1rem;
       margin-top: -0.5rem;
-      margin-left: 1.2rem;
-      margin-right: 0;
-      clear: both;
     }
   }
 
-  /* Postările mele: la dreapta + timestamp pe dreapta */
-  &.mine {
-    float: right;
-    margin-right: -1rem;
-    align-items: flex-end;
+  &:not(.mine) {
+    align-items: flex-start;
+    margin-left: -1rem;
 
     .time {
-      display: block;
-      font-size: 0.7rem;
-      color: #888;
-      text-align: right;
-      margin-top: -0.5rem;
-      margin-right: 1.2rem;
-      margin-left: 0;
-      clear: both;
+      text-align: left;
+      margin-left: 1rem;
     }
   }
 
