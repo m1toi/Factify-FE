@@ -1,3 +1,6 @@
+/* message-bubble.component.scss */
+
+/* ─── Bulă pentru mesaje text ─── */
 .bubble {
   /* Shrink-wrap după conținut, până la maxim 60% */
   display: inline-block;
@@ -17,55 +20,86 @@
   color: #fff;
 }
 
-/* Mesajele mele, aliniate la dreapta */
+/* Mesajele primite: bulă la stânga + timestamp pe stânga */
+.bubble:not(.mine) {
+  float: left;
+
+  .time {
+    display: block;
+    font-size: 0.7rem;
+    color: #888;
+    text-align: left;
+    margin-top: 0.25rem;
+    margin-left: 0.5rem;  /* spațiu față de bulă */
+    margin-right: 0;      /* fără spațiu în dreapta */
+    clear: both;
+  }
+}
+
+/* Mesajele mele: bulă la dreapta + timestamp pe dreapta */
 .bubble.mine {
   float: right;
   background: #005c4b;
-}
-
-/* Mesajele celuilalt, aliniate la stânga */
-.bubble:not(.mine) {
-  float: left;
-}
-
-.content {
-  /* dacă vrei extra padding sau stil specific conținutului text */
-}
-
-/* Timpul rămâne dedesubt, corect poziționat */
-.time {
-  display: block;
-  font-size: 0.7rem;
-  color: #888;
-  text-align: right;
-  margin-top: 0.25rem;
-  clear: both; /* asigură-se că timpul nu stă lângă float */
-}
-.post-wrapper {
-  display: inline-block;    /* INLINE-BLOCK în loc de INLINE-FLEX */
-  width: auto;
-  max-width: 60%;
-  margin-bottom: 0.5rem;
-  clear: both;              /* te asigură că începe sub orice float anterior */
-
-  /* Float în funcție de cine a trimis postarea */
-  float: left;
-  &.mine {
-    float: right;
-  }
-
-  /* Card-ul vine gata dimensionat de PostCardComponent */
-  .mini-post {
-    border-radius: 12px !important;
-    box-shadow: none !important;
-    overflow: hidden;
-  }
 
   .time {
+    display: block;
     font-size: 0.7rem;
     color: #888;
-    margin-top: 0.25rem;
     text-align: right;
-    clear: both;            /* evită orice fel de overlapping */
+    margin-top: 0.25rem;
+    margin-right: 0.5rem; /* spațiu față de marginea din dreapta */
+    margin-left: 0;
+    clear: both;
+  }
+}
+
+/* ─── Wrapper pentru postări (fără bulă) ─── */
+.post-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+  max-width: 60%;
+  clear: both;
+
+  /* Postări primite: la stânga + timestamp pe stânga */
+  &:not(.mine) {
+    float: left;
+    margin-left: -1rem;
+    align-items: flex-start;
+
+    .time {
+      display: block;
+      font-size: 0.7rem;
+      color: #888;
+      text-align: left;
+      margin-top: -0.5rem;
+      margin-left: 1.2rem;
+      margin-right: 0;
+      clear: both;
+    }
+  }
+
+  /* Postările mele: la dreapta + timestamp pe dreapta */
+  &.mine {
+    float: right;
+    margin-right: -1rem;
+    align-items: flex-end;
+
+    .time {
+      display: block;
+      font-size: 0.7rem;
+      color: #888;
+      text-align: right;
+      margin-top: -0.5rem;
+      margin-right: 1.2rem;
+      margin-left: 0;
+      clear: both;
+    }
+  }
+
+  /* Stiluri suplimentare pentru card */
+  .mini-post {
+    border-radius: 12px !important;
+    overflow: hidden;
   }
 }
