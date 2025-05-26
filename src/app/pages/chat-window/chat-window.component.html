@@ -1,4 +1,21 @@
 <div class="chat-window-root">
+  <!-- HEADER -->
+  <div class="chat-header" *ngIf="otherUser">
+    <img
+      class="avatar-header"
+      [src]="
+        otherUser.profilePicture
+          ? '/assets/avatars/' + otherUser.profilePicture
+          : '/assets/avatars/placeholder1.png'
+      "
+      alt="avatar interlocutor"
+    />
+    <div class="user-info">
+      <div class="username">{{ otherUser.username }}</div>
+    </div>
+  </div>
+
+  <!-- MESSAGES -->
   <div #messagesContainer class="messages-container">
     <app-message-bubble
       *ngFor="let m of messages"
@@ -6,6 +23,8 @@
       [isMine]="m.senderId === currentUserId"
     ></app-message-bubble>
   </div>
+
+  <!-- INPUT -->
   <div class="input-container">
     <app-message-input
       placeholder="Type a message…"

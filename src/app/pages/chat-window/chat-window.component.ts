@@ -41,6 +41,12 @@ export class ChatWindowComponent
   messages: Message[] = [];
   currentUserId!: number;
   private jwtToken!: string;
+  otherUser?: {
+    userId: number;
+    username: string;
+    profilePicture?: string;
+  };
+
 
   // pentru paginare
   private earliestMessageId?: number;
@@ -132,6 +138,17 @@ export class ChatWindowComponent
         // folosim enqueueMessage pentru fiecare mesaj din batch
         batch.forEach(m => this.enqueueMessage(m));
         // actualizăm earliestMessageId
+        if (!this.otherUser) {
+          const firstOther = batch.find(m => m.senderId !== this.currentUserId);
+          if (firstOther) {
+            this.otherUser = {
+              userId: firstOther.senderId,
+              username: firstOther.senderUsername,
+              profilePicture: firstOther.senderProfilePicture
+            };
+          }
+        }
+
         this.earliestMessageId = batch.length
           ? batch[0].messageId
           : undefined;
