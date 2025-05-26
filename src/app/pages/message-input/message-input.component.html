@@ -1,9 +1,34 @@
 <div class="message-input">
-  <input
-    type="text"
-    [(ngModel)]="message"
-    [placeholder]="placeholder"
-    (keyup.enter)="onSend()"
-  />
-  <button (click)="onSend()">Send</button>
+  <div class="input-wrapper">
+    <!-- containerul nou marcat -->
+    <div class="emoji-container" #emojiContainer>
+      <button
+        type="button"
+        class="icon-btn emoji-toggle"
+        (click)="toggleEmojiPicker()"
+      >
+        <i class="pi pi-face-smile"></i>
+      </button>
+      <emoji-mart
+        *ngIf="showEmojiPicker"
+        (emojiSelect)="addEmoji($event)"
+        class="emoji-picker"
+      ></emoji-mart>
+    </div>
+
+    <input
+      type="text"
+      [(ngModel)]="message"
+      [placeholder]="placeholder"
+      (keyup.enter)="onSend()"
+    />
+
+    <button
+      type="button"
+      class="icon-btn send-icon"
+      (click)="onSend()"
+    >
+      <i class="pi pi-send"></i>
+    </button>
+  </div>
 </div>
