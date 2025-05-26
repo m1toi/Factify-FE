@@ -32,19 +32,18 @@
   float: none !important;
   display: inline-block;
   width: auto;
-  max-width: 60%;
+  max-width: 45%;
   word-break: break-word;
   white-space: pre-wrap;
-  padding: 0.75rem;
-  border-radius: 16px;
+  padding: 0.45rem;
+  border-radius: 12px;
   background: #222;
   color: #fff;
 
   .time {
     display: block;
-    font-size: 0.7rem;
+    font-size: 0.55rem;
     color: #888;
-    margin-top: 0.25rem;
   }
 }
 
@@ -58,11 +57,12 @@
 
 /* Mesajele mele: bulă la dreapta + timestamp pe dreapta */
 .bubble.mine {
-  background: #005c4b;
+  background: #0095f6;
 
   .time {
     text-align: right;
     margin-right: 0; /* spațiu gestionat de .message-row */
+    color: #fff;
   }
 }
 
