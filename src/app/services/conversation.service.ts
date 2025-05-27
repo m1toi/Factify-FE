@@ -5,6 +5,12 @@ import { Observable } from 'rxjs';
 import { Conversation } from '../models/conversation.model';
 import { environment } from '../../environments/environment';
 
+export interface Participant {
+  userId: number;
+  username: string;
+  profilePicture?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ConversationService {
   private apiUrl = `${environment.apiUrl}/Conversations`;
@@ -14,5 +20,11 @@ export class ConversationService {
   /** Aduce toate conversațiile curentului */
   getMyConversations(): Observable<Conversation[]> {
     return this.http.get<Conversation[]>(`${this.apiUrl}/mine`);
+  }
+
+  getParticipants(conversationId: number): Observable<Participant[]> {
+    return this.http.get<Participant[]>(
+      `${this.apiUrl}/${conversationId}/participants`
+    );
   }
 }

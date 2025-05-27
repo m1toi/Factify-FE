@@ -18,6 +18,7 @@ import { AuthService } from '../../services/auth.service';
 import { MessageInputComponent } from '../message-input/message-input.component';
 import { MessageBubbleComponent } from '../message-bubble/message-bubble.component';
 import { jwtDecode } from 'jwt-decode';
+import {ConversationService, Participant} from '../../services/conversation.service';
 
 @Component({
   selector: 'app-chat-window',
@@ -41,11 +42,7 @@ export class ChatWindowComponent
   messages: Message[] = [];
   currentUserId!: number;
   private jwtToken!: string;
-  otherUser?: {
-    userId: number;
-    username: string;
-    profilePicture?: string;
-  };
+  otherUser?: Participant;
 
 
   // pentru paginare
@@ -57,6 +54,7 @@ export class ChatWindowComponent
   constructor(
     private msgService: MessageService,
     private signalR: ChatSignalRService,
+    private convoService: ConversationService,
     private authService: AuthService
   ) {}
 
@@ -103,11 +101,13 @@ export class ChatWindowComponent
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // La fiecare conversatie nouă, încărcăm primul batch
-    if (
-      changes['conversationId'] &&
-      changes['conversationId'].currentValue
-    ) {
+    if (changes['conversationId'] && changes['conversationId'].currentValue) {
+      // 1) aduc interlocutorul
+      this.convoService.getParticipants(this.conversationId)
+        .subscribe(list => {
+          this.otherUser = list.find(p => p.userId !== this.currentUserId);
+        });
+      // 2) apoi mesaje
       this.loadInitialBatch();
     }
   }
@@ -133,25 +133,9 @@ export class ChatWindowComponent
     this.msgService
       .getMessagesBatch(this.conversationId, undefined, 20)
       .subscribe(batch => {
-        // golim lista curentă
         this.messages = [];
-        // folosim enqueueMessage pentru fiecare mesaj din batch
         batch.forEach(m => this.enqueueMessage(m));
-        // actualizăm earliestMessageId
-        if (!this.otherUser) {
-          const firstOther = batch.find(m => m.senderId !== this.currentUserId);
-          if (firstOther) {
-            this.otherUser = {
-              userId: firstOther.senderId,
-              username: firstOther.senderUsername,
-              profilePicture: firstOther.senderProfilePicture
-            };
-          }
-        }
-
-        this.earliestMessageId = batch.length
-          ? batch[0].messageId
-          : undefined;
+        this.earliestMessageId = batch.length ? batch[0].messageId : undefined;
         this.scrollToBottom();
         this.isLoadingBatch = false;
       });
@@ -160,7 +144,6 @@ export class ChatWindowComponent
   private loadPreviousBatch() {
     if (!this.earliestMessageId) return;
     this.isLoadingBatch = true;
-
     const el = this.messagesContainer.nativeElement;
     const prevScrollHeight = el.scrollHeight;
 
@@ -171,33 +154,21 @@ export class ChatWindowComponent
           this.isLoadingBatch = false;
           return;
         }
-
-        // păstrăm mesajele vechi
-        const oldMessages = [...this.messages];
-
-        // resetăm lista și prepend‐uim batch‐ul cu enqueueMessage
+        const old = [...this.messages];
         this.messages = [];
         batch.forEach(m => this.enqueueMessage(m));
-        // apoi adăugăm și mesajele vechi (vor rămâne în ordinea lor deja procesată)
-        oldMessages.forEach(m => this.enqueueMessage(m));
-
-        // actualizăm earliestMessageId
+        old.forEach(m => this.enqueueMessage(m));
         this.earliestMessageId = batch[0].messageId;
-
-        // reajustăm scroll‐ul după ce DOM-ul s-a updatat
         setTimeout(() => {
-          const newScrollHeight = el.scrollHeight;
-          el.scrollTop = newScrollHeight - prevScrollHeight;
+          const newH = el.scrollHeight;
+          el.scrollTop = newH - prevScrollHeight;
           this.isLoadingBatch = false;
-
-          // dacă mai e încă aproape de top, tragem iar
           if (el.scrollTop < 50 && this.earliestMessageId) {
             this.loadPreviousBatch();
           }
         });
       });
   }
-
   private enqueueMessage(msg: Message) {
     // dacă avem şi post, şi text, creăm două intrări
     const hasPost = !!msg.postId;
