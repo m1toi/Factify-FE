@@ -1,5 +1,5 @@
 // src/app/chat/conversation-list/conversation-list.component.ts
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConversationService } from '../../services/conversation.service';
 import { Conversation } from '../../models/conversation.model';
@@ -18,6 +18,7 @@ import { ChatSignalRService } from '../../services/chat-signalr.service';
   styleUrls: ['./conversation-list.component.scss']
 })
 export class ConversationListComponent implements OnInit {
+  @Input() selectedConversationId?: number;  // ← nou
   conversations: Conversation[] = [];
   currentUserId!: number;
 

@@ -3,7 +3,8 @@
     <h3>Messages</h3>
   </div>
   <ul>
-    <li *ngFor="let conv of conversations" (click)="openConversation(conv)">
+    <li *ngFor="let conv of conversations" (click)="openConversation(conv)"
+    [class.active]="conv.conversationId === selectedConversationId">
       <img
         [src]="
       otherParticipant(conv).avatar

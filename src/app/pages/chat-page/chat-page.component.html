@@ -3,7 +3,9 @@
 
   <div class="chat-content">
     <div class="chat-sidebar">
-      <app-conversation-list></app-conversation-list>
+      <app-conversation-list
+        [selectedConversationId]="selectedConversationId"
+      ></app-conversation-list>
     </div>
 
     <div class="chat-window">
