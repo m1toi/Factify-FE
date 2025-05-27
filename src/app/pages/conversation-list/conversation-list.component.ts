@@ -66,9 +66,12 @@ export class ConversationListComponent implements OnInit {
 
     // 4) încărcăm conversațiile inițiale
     this.convService.getMyConversations().subscribe(list => {
-      this.conversations = list.sort((a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
+      this.conversations = list.sort((a, b) => {
+        const tA = a.lastMessageSentAt ?? a.createdAt;
+        const tB = b.lastMessageSentAt ?? b.createdAt;
+        return new Date(tB).getTime() - new Date(tA).getTime();
+      });
+
     });
   }
 
