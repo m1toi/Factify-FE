@@ -34,4 +34,17 @@ export class ChatSignalRService {
       this.hubConnection.stop().catch(err => console.error(err));
     }
   }
+
+  /** 4) Ascultă update-uri de conversație */
+  public onConversationUpdated(handler: (update: {
+    conversationId: number;
+    lastMessage: string;
+    lastMessageSenderId: number;
+    lastMessageSentAt: string;
+  }) => void): void {
+    this.hubConnection.on('ConversationUpdated', (upd: any) => {
+      handler(upd);
+    });
+  }
+
 }
