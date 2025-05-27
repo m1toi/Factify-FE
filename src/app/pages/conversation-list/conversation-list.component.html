@@ -16,10 +16,24 @@
       <div class="info">
         <div class="top">
           <span class="username">{{ otherParticipant(conv).username }}</span>
-          <span class="time">{{ conv.createdAt | date:'shortTime' }}</span>
+          <span class="time">
+            <ng-container *ngIf="conv.lastMessageSentAt; else createdTpl">
+                 {{ conv.lastMessageSentAt | date:'shortTime' }}
+            </ng-container>
+            <ng-template #createdTpl>
+                 {{ conv.createdAt | date:'shortTime' }}
+             </ng-template>
+          </span>
         </div>
         <div class="bottom">
-          <span class="last-message">Ultimul mesaj…</span>
+            <span class="last-message">
+              <ng-container *ngIf="conv.lastMessage">
+                 <ng-container *ngIf="conv.lastMessageSenderId === currentUserId">
+                     You:
+                  </ng-container>
+                   {{ conv.lastMessage }}
+                  </ng-container>
+            </span>
         </div>
       </div>
     </li>

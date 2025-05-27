@@ -7,5 +7,7 @@ export interface Conversation {
   user2Username: string;
   user2ProfilePicture?: string; // e.g. "avatar2.png"
   createdAt: string;  // primim ISO date string
-  // mai putem adăuga pe viitor: lastMessage, lastSentAt, avatarUrl etc.
+  lastMessage?: string;
+  lastMessageSenderId?: number;
+  lastMessageSentAt?: string;
 }
