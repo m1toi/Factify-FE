@@ -7,7 +7,7 @@ import {
   SimpleChanges,
   AfterViewInit,
   ViewChild,
-  ElementRef
+  ElementRef, AfterViewChecked
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { fromEvent, Subscription } from 'rxjs';
@@ -32,7 +32,7 @@ import {ConversationService, Participant} from '../../services/conversation.serv
   styleUrls: ['./chat-window.component.scss']
 })
 export class ChatWindowComponent
-  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy, AfterViewChecked
 {
   @Input() conversationId!: number;
 
@@ -50,6 +50,7 @@ export class ChatWindowComponent
   isLoadingBatch = false;
 
   private scrollSub?: Subscription;
+  private scrollToBottomPending = false;
 
   constructor(
     private msgService: MessageService,
@@ -75,7 +76,7 @@ export class ChatWindowComponent
       if (msg.conversationId === this.conversationId) {
       //  this.messages.push(msg);
         this.enqueueMessage(msg);
-        this.scrollToBottom();
+        this.scrollToBottomPending = true;
       }
       this.convoService
         .markAsRead(this.conversationId)
@@ -84,6 +85,13 @@ export class ChatWindowComponent
           error: err => console.error('Mark-as-read error', err)
         });
     });
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.scrollToBottomPending) {
+      this.scrollToBottom();
+      this.scrollToBottomPending = false;
+    }
   }
 
   ngAfterViewInit() {
