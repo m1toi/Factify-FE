@@ -67,7 +67,7 @@ export class ConversationListComponent implements OnInit {
           conv.hasUnread   = false;
         }
 
-        if (update.lastMessageSentAt !== oldTs) {
+        if (update.lastMessage && update.lastMessageSentAt !== oldTs) {
           this.conversations.splice(idx, 1);
           this.conversations.unshift(conv);
         }
