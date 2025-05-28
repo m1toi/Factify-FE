@@ -22,6 +22,10 @@ export class ConversationService {
     return this.http.get<Conversation[]>(`${this.apiUrl}/mine`);
   }
 
+  markAsRead(conversationId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${conversationId}/mark-read`, {});
+  }
+
   getParticipants(conversationId: number): Observable<Participant[]> {
     return this.http.get<Participant[]>(
       `${this.apiUrl}/${conversationId}/participants`

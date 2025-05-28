@@ -77,6 +77,12 @@ export class ChatWindowComponent
         this.enqueueMessage(msg);
         this.scrollToBottom();
       }
+      this.convoService
+        .markAsRead(this.conversationId)
+        .subscribe({
+          next: () => {/* optional: poți actualiza vreun flag local */},
+          error: err => console.error('Mark-as-read error', err)
+        });
     });
   }
 
@@ -138,6 +144,12 @@ export class ChatWindowComponent
         this.earliestMessageId = batch.length ? batch[0].messageId : undefined;
         this.scrollToBottom();
         this.isLoadingBatch = false;
+        this.convoService
+          .markAsRead(this.conversationId)
+          .subscribe({
+            next: () => {/* eventual actualizează ceva în UI */},
+            error: err => console.error('Mark-as-read error', err)
+          });
       });
   }
 

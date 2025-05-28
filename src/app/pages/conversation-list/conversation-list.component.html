@@ -4,7 +4,9 @@
   </div>
   <ul>
     <li *ngFor="let conv of conversations" (click)="openConversation(conv)"
-    [class.active]="conv.conversationId === selectedConversationId">
+    [class.active]="conv.conversationId === selectedConversationId"
+    [class.unread]="conv.hasUnread"
+    >
       <img
         [src]="
       otherParticipant(conv).avatar
@@ -34,6 +36,9 @@
                   </ng-container>
                    {{ conv.lastMessage }}
                   </ng-container>
+            </span>
+            <span class="badge" *ngIf="conv.unreadCount && conv.unreadCount > 0">
+                   {{ conv.unreadCount }}
             </span>
         </div>
       </div>

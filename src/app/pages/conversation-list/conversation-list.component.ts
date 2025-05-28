@@ -52,13 +52,25 @@ export class ConversationListComponent implements OnInit {
 
         // actualizăm preview-ul
         const conv = this.conversations[idx];
+        const oldTs = conv.lastMessageSentAt;
         conv.lastMessage         = update.lastMessage;
         conv.lastMessageSenderId = update.lastMessageSenderId;
         conv.lastMessageSentAt   = update.lastMessageSentAt;
+        // 2) dacă expeditorul e altcineva, aplicăm necititele
+        if (update.lastMessageSenderId !== this.currentUserId) {
+          conv.unreadCount = update.unreadCount;
+          conv.hasUnread   = update.hasUnread;
+        }
+        // 3) dacă tocmai tu ai trimis mesajul, nu apare necitit
+        else {
+          conv.unreadCount = 0;
+          conv.hasUnread   = false;
+        }
 
-        // mutăm în capul listei
-        this.conversations.splice(idx, 1);
-        this.conversations.unshift(conv);
+        if (update.lastMessageSentAt !== oldTs) {
+          this.conversations.splice(idx, 1);
+          this.conversations.unshift(conv);
+        }
 
         // forțăm Angular să redea lista
         this.conversations = [...this.conversations];
@@ -88,6 +100,10 @@ export class ConversationListComponent implements OnInit {
   }
 
   openConversation(conv: Conversation) {
+    this.convService.markAsRead(conv.conversationId).subscribe(() => {
+      conv.unreadCount = 0;
+      conv.hasUnread   = false;
+    });
     this.router.navigate(['/chat', conv.conversationId]);
   }
 }

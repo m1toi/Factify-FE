@@ -10,4 +10,6 @@ export interface Conversation {
   lastMessage?: string;
   lastMessageSenderId?: number;
   lastMessageSentAt?: string;
+  unreadCount?: number;
+  hasUnread?: boolean;
 }

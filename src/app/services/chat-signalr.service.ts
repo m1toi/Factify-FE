@@ -41,6 +41,8 @@ export class ChatSignalRService {
     lastMessage: string;
     lastMessageSenderId: number;
     lastMessageSentAt: string;
+    unreadCount: number;
+    hasUnread: boolean;
   }) => void): void {
     this.hubConnection.on('ConversationUpdated', (upd: any) => {
       handler(upd);
