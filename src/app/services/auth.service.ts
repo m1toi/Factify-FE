@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import {ChatSignalRService} from './chat-signalr.service';
 
 interface LoginRequest {
   email: string;
@@ -21,7 +22,8 @@ interface RegisterRequest {
 export class AuthService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router
+  , private chatSignalR: ChatSignalRService) {}
 
   login(data: LoginRequest): Observable<string> {
     return this.http.post(`${this.apiUrl}/Users/login`, data, { responseType: 'text' });
@@ -33,6 +35,8 @@ export class AuthService {
 
   saveToken(token: string) {
     sessionStorage.setItem('token', token);
+    this.chatSignalR.startConnection(token);
+
   }
 
   getToken(): string | null {

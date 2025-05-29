@@ -49,4 +49,12 @@ export class ChatSignalRService {
     });
   }
 
+  public onConversationRead(
+    handler: (update: { conversationId: number; unreadCount: number; hasUnread: boolean }) => void
+  ): void {
+    this.hubConnection.on('ConversationRead', (upd: any) => {
+      handler(upd);
+    });
+  }
+
 }

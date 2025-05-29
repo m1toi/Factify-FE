@@ -52,6 +52,7 @@ export class ChatWindowComponent
   private scrollToBottomPending = false;
 
   sendError: string | null = null;
+  private isActive = false;
 
   constructor(
     private msgService: MessageService,
@@ -72,19 +73,18 @@ export class ChatWindowComponent
     }
 
     // Pornește conexiunea SignalR o singură dată
-    this.signalR.startConnection(this.jwtToken);
+   // this.signalR.startConnection(this.jwtToken);
     this.signalR.onReceiveMessage((msg: Message) => {
       if (msg.conversationId === this.conversationId) {
-      //  this.messages.push(msg);
         this.enqueueMessage(msg);
         this.scrollToBottomPending = true;
+        if (this.isActive) {
+          this.convoService.markAsRead(this.conversationId).subscribe({
+            next: () => { /*…*/ },
+            error: err => console.error(err)
+          });
+        }
       }
-      this.convoService
-        .markAsRead(this.conversationId)
-        .subscribe({
-          next: () => {/* optional: poți actualiza vreun flag local */},
-          error: err => console.error('Mark-as-read error', err)
-        });
     });
   }
 
@@ -118,6 +118,7 @@ export class ChatWindowComponent
   ngOnChanges(changes: SimpleChanges) {
     if (changes['conversationId'] && changes['conversationId'].currentValue) {
       this.sendError = null;
+      this.isActive = true;
       // 1) aduc interlocutorul
       this.convoService.getParticipants(this.conversationId)
         .subscribe(list => {
@@ -125,11 +126,18 @@ export class ChatWindowComponent
         });
       // 2) apoi mesaje
       this.loadInitialBatch();
+
+      this.convoService.markAsRead(this.conversationId)
+        .subscribe({
+          next: () => { /* eventual actualizezi vreun flag local */ },
+          error: err => console.error('Mark-as-read error', err)
+        });
     }
   }
 
   ngOnDestroy() {
-    this.signalR.stopConnection();
+  //  this.signalR.stopConnection();
+    this.isActive = false;
     this.scrollSub?.unsubscribe();
   }
 
