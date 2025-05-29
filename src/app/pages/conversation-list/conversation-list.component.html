@@ -1,18 +1,21 @@
+<!-- conversation-list.component.html -->
 <div class="conversation-list">
   <div class="header">
     <h3>Messages</h3>
   </div>
   <ul>
-    <li *ngFor="let conv of conversations" (click)="openConversation(conv)"
-    [class.active]="conv.conversationId === selectedConversationId"
-    [class.unread]="conv.hasUnread"
+    <li
+      *ngFor="let conv of conversations"
+      (click)="openConversation(conv)"
+      [class.active]="conv.conversationId === selectedConversationId"
+      [class.unread]="conv.hasUnread"
     >
       <img
         [src]="
-      otherParticipant(conv).avatar
-        ? '/assets/avatars/' + otherParticipant(conv).avatar
-        : '/assets/avatars/placeholder1.png'
-    "
+          otherParticipant(conv).avatar
+            ? '/assets/avatars/' + otherParticipant(conv).avatar
+            : '/assets/avatars/placeholder1.png'
+        "
         alt="avatar"
         class="avatar"
       />
@@ -21,28 +24,41 @@
           <span class="username">{{ otherParticipant(conv).username }}</span>
           <span class="time">
             <ng-container *ngIf="conv.lastMessageSentAt; else createdTpl">
-                 {{ conv.lastMessageSentAt | date:'shortTime' }}
+              {{ conv.lastMessageSentAt | date:'shortTime' }}
             </ng-container>
             <ng-template #createdTpl>
-                 {{ conv.createdAt | date:'shortTime' }}
-             </ng-template>
+              {{ conv.createdAt | date:'shortTime' }}
+            </ng-template>
           </span>
         </div>
+
         <div class="bottom">
-            <span class="last-message">
-              <ng-container *ngIf="conv.lastMessage">
-                 <ng-container *ngIf="conv.lastMessageSenderId === currentUserId">
-                     You:
-                  </ng-container>
-                   {{ conv.lastMessage }}
-                  </ng-container>
-            </span>
-            <span class="badge" *ngIf="conv.unreadCount && conv.unreadCount > 0">
-                   {{ conv.unreadCount }}
-            </span>
+          <span class="last-message">
+            <!-- 1) dacă există un text de mesaj, îl afișăm normal -->
+            <ng-container *ngIf="conv.lastMessage; else postTpl">
+              <ng-container *ngIf="conv.lastMessageSenderId === currentUserId">
+                You:
+              </ng-container>
+              {{ conv.lastMessage }}
+            </ng-container>
+
+            <!-- 2) altfel tratăm ca fiind o postare -->
+            <ng-template #postTpl>
+              <ng-container *ngIf="conv.lastMessageSenderId === currentUserId; else receivedPost">
+                You sent a post.
+              </ng-container>
+              <ng-template #receivedPost>
+                {{ otherParticipant(conv).username }} sent you a post.
+              </ng-template>
+            </ng-template>
+          </span>
+
+          <!-- badge necitite -->
+          <span class="badge" *ngIf="conv.unreadCount && conv.unreadCount > 0">
+            {{ conv.unreadCount }}
+          </span>
         </div>
       </div>
     </li>
-
   </ul>
 </div>
