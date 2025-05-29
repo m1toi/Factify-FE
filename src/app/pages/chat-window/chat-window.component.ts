@@ -44,13 +44,14 @@ export class ChatWindowComponent
   private jwtToken!: string;
   otherUser?: Participant;
 
-
   // pentru paginare
   private earliestMessageId?: number;
   isLoadingBatch = false;
 
   private scrollSub?: Subscription;
   private scrollToBottomPending = false;
+
+  sendError: string | null = null;
 
   constructor(
     private msgService: MessageService,
@@ -116,6 +117,7 @@ export class ChatWindowComponent
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['conversationId'] && changes['conversationId'].currentValue) {
+      this.sendError = null;
       // 1) aduc interlocutorul
       this.convoService.getParticipants(this.conversationId)
         .subscribe(list => {
@@ -135,10 +137,21 @@ export class ChatWindowComponent
     if (!content.trim()) return;
     this.msgService
       .sendMessage({ conversationId: this.conversationId, content })
-      .subscribe(msg => {
-        //this.messages.push(msg);
-        this.enqueueMessage(msg);
-        this.scrollToBottom();
+      .subscribe({
+        next: msg => {
+          this.enqueueMessage(msg);
+          this.scrollToBottom();
+          this.sendError = null;
+          this.convoService.markAsRead(this.conversationId).subscribe();
+        },
+        error: err => {
+          if (err.status === 403) {
+            this.sendError = err.error || 'You cannot send this message.';
+          } else {
+            this.sendError = 'A apărut o eroare. Încearcă din nou.';
+            console.error(err);
+          }
+        }
       });
   }
 

@@ -38,6 +38,10 @@
 
   </div>
 
+  <div class="send-error" *ngIf="sendError">
+    {{ sendError }}
+  </div>
+
   <!-- INPUT -->
   <div class="input-container">
     <app-message-input
