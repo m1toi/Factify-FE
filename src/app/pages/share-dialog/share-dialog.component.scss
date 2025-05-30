@@ -1,8 +1,7 @@
-/* src/app/chat/share-dialog/share-dialog.component.scss */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,13 +10,14 @@
 
 .dialog {
   background: #111;
-  width: 360px;
-  max-height: 90vh;
+  width: 380px;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   overflow: hidden;
   color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
 .header {
@@ -25,12 +25,26 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #222;
-  h2 { margin: 0; }
+  border-bottom: 1px solid #333;
+  background: #1c1c1c;
+
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
   .close-btn {
-    background: transparent; border: none; font-size: 1.5rem; color: #888;
+    background: transparent;
+    border: none;
+    font-size: 1.3rem;
+    color: #0095f6;
+    font-weight: bold;
     cursor: pointer;
-    &:hover { color: #fff; }
+
+    &:hover {
+      color: #33afff;
+    }
   }
 }
 
@@ -39,30 +53,46 @@
   flex: 1;
   overflow-y: auto;
 
-  .label { display: block; margin-bottom: 0.5rem; }
+  .label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #aaa;
+  }
 
   .chips {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+
     .chip {
-      background: #333;
-      padding: 0.25rem 0.75rem;
-      border-radius: 1rem;
+      background: #2a2a2a;
+      padding: 0.3rem 0.8rem;
+      border-radius: 1.2rem;
       cursor: pointer;
-      font-size: 0.875rem;
+      font-size: 0.85rem;
+      color: #fff;
+      border: 1px solid #444;
+
+      &:hover {
+        background: #3a3a3a;
+      }
     }
   }
 
   .search-input {
     width: 100%;
-    padding: 0.5rem;
-    background: #222;
-    border: none;
-    border-radius: 0.25rem;
+    padding: 0.6rem;
+    background: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 0.5rem;
     color: #fff;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+
+    &::placeholder {
+      color: #888;
+    }
   }
 
   .friends-list {
@@ -75,15 +105,23 @@
     li {
       display: flex;
       align-items: center;
-      padding: 0.5rem;
+      padding: 0.6rem;
       cursor: pointer;
-      position: relative;
-      &:hover { background: #222; }
-      &.selected { background: #333; }
+      border-radius: 0.5rem;
+      transition: background 0.2s;
+      margin-bottom: 0.25rem;
+
+      &:hover {
+        background: #1f1f1f;
+      }
+
+      &.selected {
+        background: #2a2a2a;
+      }
 
       .avatar {
-        width: 2rem;
-        height: 2rem;
+        width: 2.2rem;
+        height: 2.2rem;
         border-radius: 50%;
         object-fit: cover;
         margin-right: 0.75rem;
@@ -91,13 +129,23 @@
 
       .friend-info {
         flex: 1;
-        .friend-name { font-weight: 500; }
-        .friend-time { font-size: 0.75rem; color: #888; }
+
+        .friend-name {
+          font-weight: 500;
+          font-size: 0.95rem;
+        }
+
+        .friend-time {
+          font-size: 0.75rem;
+          color: #888;
+        }
       }
 
       .checkmark {
-        font-size: 1rem;
+        font-size: 1.2rem;
+        font-weight: bold;
         color: #0095f6;
+        margin-left: auto;
       }
     }
   }
@@ -105,27 +153,38 @@
   .message-area {
     width: 100%;
     min-height: 4rem;
-    padding: 0.5rem;
-    background: #222;
-    border: none;
-    border-radius: 0.25rem;
+    padding: 0.6rem;
+    background: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 0.5rem;
     color: #fff;
     resize: vertical;
+    margin-top: 0.75rem;
   }
 }
 
 .footer {
   padding: 1rem;
-  background: #222;
+  border-top: 1px solid #333;
+  background: #1c1c1c;
   text-align: right;
+
   .send-btn {
     background: #0095f6;
     border: none;
     color: #fff;
     padding: 0.6rem 1.2rem;
-    border-radius: 0.375rem;
-    cursor: pointer;
+    border-radius: 0.5rem;
     font-weight: 600;
-    &:disabled { opacity: 0.5; cursor: default; }
+    cursor: pointer;
+
+    &:hover {
+      background: #33afff;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
   }
 }
