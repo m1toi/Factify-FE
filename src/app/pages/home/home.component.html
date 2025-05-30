@@ -38,3 +38,7 @@
   (close)="shareDialogVisible = false"
   (shareConfirmed)="onShareConfirmed($event)"
 ></app-share-dialog>
+
+<div class="post-toast" *ngIf="toastVisible">
+  <span class="checkmark-icon">✔</span> Post sent
+</div>

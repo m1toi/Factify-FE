@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   likedPosts: boolean[] = [];
   loadingMore = false;   // 🔥 NEW: to avoid double loading
   public defaultAvatar = 'assets/avatars/placeholder1.png';
-
+  toastVisible = false;
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   private userId!: number; // 🔥 NEW: Store userId so we don't decode token every time
 
@@ -186,6 +186,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           postId: payload.postId,
           content: payload.content
                }).subscribe(() => {
+                   this.showToast();
                    console.log(`Shared post ${payload.postId} in conv ${conv.conversationId}`);
                   });
               } else {
@@ -193,6 +194,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
               }
           }
      }
+  showToast() {
+    this.toastVisible = true;
+    setTimeout(() => {
+      this.toastVisible = false;
+    }, 2500); // ascunde toast-ul după 2.5 secunde
+  }
 
   scrollToPost(index: number): void {
     const container = this.scrollContainer.nativeElement;
