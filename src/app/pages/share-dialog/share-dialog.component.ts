@@ -24,7 +24,18 @@ import {
 })
 export class ShareDialogComponent implements OnInit {
   @Input() postId!: number;
-  @Input() visible = false;
+  private _visible = false;
+
+  @Input() set visible(value: boolean) {
+    this._visible = value;
+    if (!value) {
+      this.resetDialog();
+    }
+  }
+  get visible(): boolean {
+    return this._visible;
+  }
+
 
   @Output() close = new EventEmitter<void>();
   @Output() shareConfirmed = new EventEmitter<{
@@ -81,4 +92,12 @@ export class ShareDialogComponent implements OnInit {
       postId: this.postId
     });
   }
+
+  private resetDialog(): void {
+    this.searchQuery = '';
+    this.filtered = this.friends;
+    this.selected = [];
+    this.messageText = '';
+  }
+
 }
