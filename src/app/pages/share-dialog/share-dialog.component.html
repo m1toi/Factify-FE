@@ -33,10 +33,10 @@
           [class.selected]="isSelected(u.userId)"
         >
           <img
-            *ngIf="u.profilePicture"
-            [src]="'/assets/avatars/' + u.profilePicture"
+            [src]="u.profilePicture ? '/assets/avatars/' + u.profilePicture : '/assets/avatars/placeholder1.png'"
             class="avatar"
           />
+
           <div class="friend-info">
             <span class="friend-name">{{ u.username }}</span>
 
