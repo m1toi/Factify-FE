@@ -27,7 +27,7 @@ export class PostCardComponent implements OnInit {
   onShare()  { this.share.emit(); }
 
   ngOnInit() {
-    console.log('post:', this.post);
+  //  console.log('post:', this.post);
   }
 
 }

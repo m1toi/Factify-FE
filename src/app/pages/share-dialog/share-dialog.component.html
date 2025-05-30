@@ -1,3 +1,4 @@
+<!-- src/app/chat/share-dialog/share-dialog.component.html -->
 <div class="overlay" *ngIf="visible">
   <div class="dialog">
     <header class="header">
@@ -16,26 +17,34 @@
           {{ u.username }} ×
         </span>
       </div>
+
       <input
         type="text"
         class="search-input"
-        placeholder="Search users..."
+        placeholder="Search friends..."
         [(ngModel)]="searchQuery"
         (input)="onSearch()"
       />
 
-      <ul class="results" *ngIf="results.length">
+      <ul class="friends-list">
         <li
-          *ngFor="let u of results"
+          *ngFor="let u of filtered"
           (click)="addRecipient(u)"
-          class="result-item"
+          [class.selected]="isSelected(u.userId)"
         >
           <img
             *ngIf="u.profilePicture"
             [src]="'/assets/avatars/' + u.profilePicture"
             class="avatar"
           />
-          <span>{{ u.username }}</span>
+          <div class="friend-info">
+            <span class="friend-name">{{ u.username }}</span>
+
+          </div>
+             <span class="checkmark"
+                            *ngIf="isSelected(u.userId)">
+            ✓
+          </span>
         </li>
       </ul>
 

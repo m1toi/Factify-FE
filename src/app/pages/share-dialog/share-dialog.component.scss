@@ -1,3 +1,4 @@
+/* src/app/chat/share-dialog/share-dialog.component.scss */
 .overlay {
   position: fixed;
   inset: 0;
@@ -45,7 +46,6 @@
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
-
     .chip {
       background: #333;
       padding: 0.25rem 0.75rem;
@@ -65,26 +65,39 @@
     margin-bottom: 0.5rem;
   }
 
-  .results {
+  .friends-list {
     list-style: none;
+    margin: 0;
     padding: 0;
-    margin: 0 0 1rem 0;
-    max-height: 150px;
+    max-height: 40vh;
     overflow-y: auto;
 
-    .result-item {
+    li {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 0;
+      padding: 0.5rem;
       cursor: pointer;
-      &:hover { background: #333; }
+      position: relative;
+      &:hover { background: #222; }
+      &.selected { background: #333; }
 
       .avatar {
         width: 2rem;
         height: 2rem;
         border-radius: 50%;
         object-fit: cover;
+        margin-right: 0.75rem;
+      }
+
+      .friend-info {
+        flex: 1;
+        .friend-name { font-weight: 500; }
+        .friend-time { font-size: 0.75rem; color: #888; }
+      }
+
+      .checkmark {
+        font-size: 1rem;
+        color: #0095f6;
       }
     }
   }
@@ -105,7 +118,6 @@
   padding: 1rem;
   background: #222;
   text-align: right;
-
   .send-btn {
     background: #0095f6;
     border: none;

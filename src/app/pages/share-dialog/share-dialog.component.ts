@@ -1,16 +1,18 @@
+// src/app/chat/share-dialog/share-dialog.component.ts
 import {
   Component,
   Input,
   Output,
   EventEmitter,
+  OnInit,
   ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  UserService,
-  UserSearchResult
-} from '../../services/user.service';
+  FriendshipService,
+  FriendForShare
+} from '../../services/friendship.service';
 
 @Component({
   selector: 'app-share-dialog',
@@ -20,7 +22,7 @@ import {
   styleUrls: ['./share-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ShareDialogComponent {
+export class ShareDialogComponent implements OnInit {
   @Input() postId!: number;
   @Input() visible = false;
 
@@ -32,37 +34,42 @@ export class ShareDialogComponent {
   }>();
 
   searchQuery = '';
-  results: UserSearchResult[] = [];
-  selected: UserSearchResult[] = [];
+  friends: FriendForShare[] = [];    // întreaga listă
+  filtered: FriendForShare[] = [];   // filtru după căutare
+  selected: FriendForShare[] = [];   // destinatarii selectați
   messageText = '';
 
-  constructor(private userService: UserService) {}
+  constructor(private friendSvc: FriendshipService) {}
 
-  onSearch(): void {
-    const q = this.searchQuery.trim();
-    if (q.length < 2) {
-      this.results = [];
-      return;
-    }
-    this.userService.searchUsers(q).subscribe({
-      next: users => {
-        // elimină deja selectații
-        this.results = users.filter(u =>
-          !this.selected.find(s => s.userId === u.userId)
-        );
-      },
-      error: () => (this.results = [])
+  ngOnInit(): void {
+    this.friendSvc.getFriendsForShare().subscribe(list => {
+      this.friends  = list;
+      this.filtered = list;
     });
   }
 
-  addRecipient(user: UserSearchResult) {
-    this.selected = [...this.selected, user];
-    this.searchQuery = '';
-    this.results = [];
+  /** Filtrează lista de prieteni local */
+  onSearch(): void {
+    const q = this.searchQuery.trim().toLowerCase();
+    this.filtered = q
+      ? this.friends.filter(f =>
+        f.username.toLowerCase().includes(q)
+      )
+      : this.friends;
   }
 
-  removeRecipient(user: UserSearchResult) {
-    this.selected = this.selected.filter(u => u.userId !== user.userId);
+  addRecipient(u: FriendForShare) {
+    if (!this.selected.find(s => s.userId === u.userId)) {
+      this.selected = [...this.selected, u];
+    }
+  }
+
+  removeRecipient(u: FriendForShare) {
+    this.selected = this.selected.filter(s => s.userId !== u.userId);
+  }
+
+  isSelected(userId: number): boolean {
+    return this.selected.some(s => s.userId === userId);
   }
 
   onSend() {

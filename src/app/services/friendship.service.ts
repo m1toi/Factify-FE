@@ -11,6 +11,13 @@ export interface FriendshipResponse {
   createdAt:     string;
 }
 
+export interface FriendForShare {
+  userId: number;
+  username: string;
+  profilePicture?: string;
+  lastChatAt: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class FriendshipService {
   private apiUrl = `${environment.apiUrl}/Friendships`;
@@ -40,5 +47,9 @@ export class FriendshipService {
   // șterge o relație (unfriend sau cancel request)
   remove(friendshipId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${friendshipId}`);
+  }
+
+  getFriendsForShare(): Observable<FriendForShare[]> {
+    return this.http.get<FriendForShare[]>(`${this.apiUrl}/friends-for-share`);
   }
 }
