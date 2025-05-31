@@ -164,43 +164,75 @@ export class ProfileComponent implements OnInit {
         this.friendshipService
           .sendRequest(this.currentUserId, pid)
           .subscribe({
-            next: (f: FriendshipResponse) => {
-              this.friendStatus = FriendshipStatus.PendingOutgoing;
-              this.currentFriendshipId = f.friendshipId;
+            next: () => {
+              // după ce cererea a fost trimisă, resincronizăm starea complet
+              this.initFriendshipState(pid);
             },
-            error: e => console.error(e),
-            complete: () => this.actionInProgress = false
+            error: e => {
+              console.error(e);
+              this.actionInProgress = false;
+            },
+            complete: () => {
+              this.actionInProgress = false;
+            }
           });
         break;
 
       case FriendshipStatus.PendingOutgoing:
       case FriendshipStatus.Friends:
-        // cancel pending or unfriend
+        if (!this.currentFriendshipId) {
+          console.warn('Friendship ID not set — cannot remove friendship.');
+          this.actionInProgress = false;
+          return;
+        }
+
         this.friendshipService
-          .remove(this.currentFriendshipId!)
+          .remove(this.currentFriendshipId)
           .subscribe({
             next: () => {
               this.friendStatus = FriendshipStatus.NotFriends;
               this.currentFriendshipId = undefined;
+              this.actionInProgress = false;
             },
-            error: e => console.error(e),
-            complete: () => this.actionInProgress = false
+            error: e => {
+              console.error(e);
+              this.actionInProgress = false;
+            }
           });
         break;
 
       case FriendshipStatus.PendingIncoming:
+        if (!this.currentFriendshipId) {
+          console.warn('Friendship ID not set — cannot accept request.');
+          this.actionInProgress = false;
+          return;
+        }
+
         this.friendshipService
-          .accept(this.currentFriendshipId!)
+          .accept(this.currentFriendshipId)
           .subscribe({
-            next: f => {
-              this.friendStatus = FriendshipStatus.Friends;
+            next: () => {
+              this.initFriendshipState(pid); // sincronizează după acceptare
+              this.actionInProgress = false;
             },
-            error: e => console.error(e),
-            complete: () => this.actionInProgress = false
+            error: (e) => {
+              if (e.status === 400) {
+                // caz special: deja acceptată din cauza auto-acceptării
+                console.info('Friendship already confirmed — syncing state.');
+                this.initFriendshipState(pid);
+              } else {
+                console.error(e);
+              }
+              this.actionInProgress = false;
+            }
           });
         break;
+
+
     }
   }
+
+
 
   // ─── infinite scroll posts ────────────────────────────
 
