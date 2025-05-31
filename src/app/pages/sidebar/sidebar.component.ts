@@ -52,4 +52,7 @@ export class SidebarComponent {
     this.router.navigate(['/chat']);
   }
 
+  goToNotifications(): void {
+    this.router.navigate(['/notifications']);
+  }
 }
