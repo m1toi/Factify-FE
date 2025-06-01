@@ -8,12 +8,14 @@ export interface NotificationDto {
   notificationId: number;
   fromUserId: number;
   fromUsername: string;
+  fromUserProfilePicture: string | null; // nou
+
   toUserId: number;
   type: 'FriendRequest';
   message: string;
-  referenceId: number | null; // conține friendshipId
+  referenceId: number | null;
   isRead: boolean;
-  createdAt: string; // ISO-string
+  createdAt: string; // ISO
 }
 
 @Component({

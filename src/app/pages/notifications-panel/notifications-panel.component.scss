@@ -32,6 +32,7 @@
   // ─── HEADER ───────────────────────────────────────
   .panel-header {
     margin-bottom: 1rem;
+
     .panel-title {
       font-size: 1.25rem;
       font-weight: 600;
@@ -59,16 +60,36 @@
 
       .notif-content {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        gap: 0.75rem;
 
-        .message {
-          font-size: 1rem;
+        .avatar {
+          width: 2.5rem;       /* 40px */
+          height: 2.5rem;      /* 40px */
+          border-radius: 50%;
+          object-fit: cover;
+          border: 1px solid #555;
+          flex-shrink: 0;
         }
-        .timestamp {
-          font-size: 0.85rem;
-          color: #888;
+
+        .text-content {
+          display: flex;
+          flex-direction: column;
+
+          .message {
+            font-size: 1rem;
+            color: #fff;
+          }
+
+          .timestamp {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 0.25rem;
+          }
         }
+
+        /* Dacă vrei ca textul și timestamp să fie pe linii separate, eliminați justify-content: space-between */
+        /* Dacă ai folosit anterior justify-content, asigură-te că text-content tratează corect spațierea */
       }
 
       .notif-actions {
@@ -78,12 +99,23 @@
 
         button {
           color: #fff;
-          border: none;
           background: transparent;
+          border: none;
           cursor: pointer;
           &:hover {
             color: #ccc;
           }
+        }
+      }
+
+      .result-action {
+        margin-top: 0.5rem;
+
+        button {
+          color: #888;
+          background-color: #333;
+          border: none;
+          cursor: not-allowed;
         }
       }
     }

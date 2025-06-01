@@ -7,13 +7,16 @@ export interface NotificationDto {
   notificationId: number;
   fromUserId: number;
   fromUsername: string;
+  fromUserProfilePicture: string | null; // nou
+
   toUserId: number;
   type: 'FriendRequest';
   message: string;
   referenceId: number | null;
   isRead: boolean;
-  createdAt: string;
+  createdAt: string; // ISO
 }
+
 
 @Injectable({
   providedIn: 'root',
