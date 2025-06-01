@@ -44,7 +44,7 @@
       <button
         pButton
         class="p-button-rounded p-button-text sidebar-btn"
-        (click)="goToNotifications()"
+        (click)="toggleNotifications()"
       >
         <i class="pi pi-bell"></i>
         <span>Notifications</span>
@@ -55,5 +55,9 @@
   <!-- wrapper-ul de search, mereu în DOM, doar clasa .open îl arată -->
   <div class="search-wrapper" [class.open]="isSearchOpen">
     <app-user-search (close)="toggleSearch()"></app-user-search>
+  </div>
+
+  <div class="notifications-wrapper" [class.open]="isNotificationsOpen">
+    <app-notifications-panel (close)="onNotificationsClose()"></app-notifications-panel>
   </div>
 </nav>

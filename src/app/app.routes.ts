@@ -6,7 +6,6 @@ import { AuthGuard } from './auth/guard/auth.guard';
 import {PreferenceGuard} from './auth/preference.guard'
 import {SkipIfHasPreferencesGuard} from './auth/skip-preference.guard';
 import {ChatPageComponent} from './pages/chat-page/chat-page.component';
-import {NotificationsComponent} from './pages/notifications/notifications.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -41,11 +40,6 @@ export const routes: Routes = [
         .then(m => m.ProfileComponent),
     canActivate: [AuthGuard],
     runGuardsAndResolvers:'paramsChange'
-  },
-  {
-    path: 'notifications',
-    component: NotificationsComponent,
-    canActivate: [AuthGuard],
   },
 
   {path: 'chat', component: ChatPageComponent},

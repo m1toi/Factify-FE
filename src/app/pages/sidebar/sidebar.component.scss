@@ -72,4 +72,25 @@
     opacity: 1;                     /* vizibil */
     pointer-events: auto;           /* reactiv la click */
   }
+
+  .notifications-wrapper {
+    position: absolute;
+    top: 0;
+    left: 220px;       /* aceeași poziție când sidebar e extins */
+    height: 100vh;
+    overflow: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  &.collapsed .notifications-wrapper {
+    left: 60px;       /* când sidebar e collapsed */
+  }
+  .notifications-wrapper.open {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
+

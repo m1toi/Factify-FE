@@ -1,0 +1,77 @@
+<div class="notifications-panel">
+  <!-- buton de închidere -->
+  <button class="close-btn" (click)="onCloseClicked()">×</button>
+
+  <!-- header -->
+  <div class="panel-header">
+    <h2 class="panel-title">Notifications</h2>
+  </div>
+
+  <!-- lista de notificări -->
+  <ul class="notification-list">
+    <!-- Dacă nu sunt notificări → afișăm mesajul corespunzător -->
+    <li *ngIf="notifications.length === 0" class="no-notifs">
+      No notifications.
+    </li>
+
+    <!-- Pentru fiecare notificare necitită (server-ul trimite doar IsRead=false) -->
+    <li
+      *ngFor="let notif of notifications"
+      class="notification-item"
+      [ngClass]="{ 'processed': localActionMap[notif.notificationId] !== null }"
+    >
+      <div class="notif-content">
+        <span class="message">
+          <strong>{{ notif.fromUsername }}</strong> {{ notif.message }}
+        </span>
+        <span class="timestamp">
+          {{ notif.createdAt | date: 'short' }}
+        </span>
+      </div>
+
+      <!-- Dacă localActionMap e null → afișăm butoanele Accept / Deny -->
+      <div class="notif-actions" *ngIf="localActionMap[notif.notificationId] === null">
+        <button
+          pButton
+          type="button"
+          class="p-button-sm p-button-text btn-accept"
+          (click)="acceptFriendRequest(notif)"
+        >
+          Accept
+        </button>
+        <button
+          pButton
+          type="button"
+          class="p-button-sm p-button-text btn-deny"
+          (click)="denyFriendRequest(notif)"
+        >
+          Deny
+        </button>
+      </div>
+
+      <!-- Dacă localActionMap === 'accepted' → arătăm un singur buton disabled -->
+      <div *ngIf="localActionMap[notif.notificationId] === 'accepted'" class="result-action">
+        <button
+          pButton
+          type="button"
+          class="p-button-sm p-button-text btn-confirmed"
+          disabled
+        >
+          Request Confirmed
+        </button>
+      </div>
+
+      <!-- Dacă localActionMap === 'denied' → arătăm un singur buton disabled -->
+      <div *ngIf="localActionMap[notif.notificationId] === 'denied'" class="result-action">
+        <button
+          pButton
+          type="button"
+          class="p-button-sm p-button-text btn-denied"
+          disabled
+        >
+          Request Denied
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>
