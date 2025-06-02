@@ -1,14 +1,13 @@
 // src/app/components/report-dialog/report-dialog.component.ts
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { ReportReason, ReportService, ReportRequest } from '../../services/report.service';
+import { ReportService, ReportReason, ReportRequest } from '../../services/report.service';
 
 @Component({
   selector: 'app-report-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule],
+  imports: [CommonModule, ButtonModule],
   templateUrl: './report-dialog.component.html',
   styleUrls: ['./report-dialog.component.scss']
 })
@@ -19,10 +18,10 @@ export class ReportDialogComponent {
   @Output() close = new EventEmitter<void>();
   @Output() submitted = new EventEmitter<void>();
 
-  // Default la primul motiv
-  selectedReason: ReportReason = ReportReason.InappropriateContent;
+  // ❶ Stocăm motivul selectat (sau null dacă nu e nimic selectat)
+  selectedReason: ReportReason | null = null;
 
-  // Array de opțiuni pentru <select>
+  // ❷ Array de opțiuni (în ordinea în care apar pe UI)
   reasons = [
     { value: ReportReason.InappropriateContent, label: 'Inappropriate Content' },
     { value: ReportReason.WrongCategory,        label: 'Wrong Category' },
@@ -35,13 +34,26 @@ export class ReportDialogComponent {
 
   constructor(private reportService: ReportService) {}
 
+  // ❸ Când dau click pe un motiv, setez selectedReason
+  onSelectReason(reason: ReportReason): void {
+    if (this.isSubmitting) {
+      return; // nu permitem schimbarea în timp ce e în trimitere
+    }
+    this.selectedReason = reason;
+  }
+
   onCancel(): void {
     this.errorMsg = null;
+    this.selectedReason = null;
     this.visible = false;
     this.close.emit();
   }
 
   onSubmit(): void {
+    if (this.selectedReason === null) {
+      return; // deși butonul e dezactivat, prevenim orice apel
+    }
+
     this.errorMsg = null;
     this.isSubmitting = true;
 
@@ -52,8 +64,10 @@ export class ReportDialogComponent {
 
     this.reportService.submitReport(payload).subscribe({
       next: () => {
+        // după trimitere cu succes:
         this.isSubmitting = false;
         this.visible = false;
+        this.selectedReason = null;
         this.submitted.emit();
       },
       error: err => {

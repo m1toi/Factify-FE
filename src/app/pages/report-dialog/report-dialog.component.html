@@ -1,33 +1,50 @@
 <!-- src/app/components/report-dialog/report-dialog.component.html -->
-<div class="dialog-overlay" *ngIf="visible">
-  <div class="dialog-panel">
-    <h3>Report Post</h3>
-
-    <label for="reasonSelect">Select Reason:</label>
-    <select id="reasonSelect" [(ngModel)]="selectedReason">
-      <option *ngFor="let r of reasons" [ngValue]="r.value">{{ r.label }}</option>
-    </select>
-
-    <div class="buttons">
-      <button
-        pButton
-        type="button"
-        label="Cancel"
-        class="p-button-text"
-        (click)="onCancel()"
-        [disabled]="isSubmitting"
-      ></button>
-
-      <button
-        pButton
-        type="button"
-        label="Submit"
-        class="p-button-primary"
-        (click)="onSubmit()"
-        [disabled]="isSubmitting"
-      ></button>
+<div class="overlay" *ngIf="visible">
+  <div class="dialog">
+    <!-- HEADER -->
+    <div class="header">
+      <h2>Report Post</h2>
+      <button class="close-btn" (click)="onCancel()">×</button>
     </div>
 
-    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+    <!-- BODY -->
+    <div class="body">
+      <span class="label">Select a reason:</span>
+
+      <div class="reason-list">
+        <button
+          *ngFor="let r of reasons"
+          type="button"
+          class="reason-button"
+          [class.selected]="selectedReason === r.value"
+          [disabled]="isSubmitting"
+          (click)="onSelectReason(r.value)"
+        >
+          {{ r.label }}
+        </button>
+      </div>
+
+      <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <button
+        class="cancel-btn"
+        type="button"
+        (click)="onCancel()"
+        [disabled]="isSubmitting"
+      >
+        Cancel
+      </button>
+      <button
+        class="submit-btn"
+        type="button"
+        (click)="onSubmit()"
+        [disabled]="isSubmitting || selectedReason === null"
+      >
+        {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+      </button>
+    </div>
   </div>
 </div>

@@ -1,57 +1,161 @@
 /* src/app/components/report-dialog/report-dialog.component.scss */
-.dialog-overlay {
+
+/* 1) Overlay full‐screen */
+.overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
 
-.dialog-panel {
-  background-color: #111;
-  color: #fff;
+/* 2) Dialog central */
+.dialog {
+  background: #111;
   width: 90%;
-  max-width: 400px;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+  max-width: 380px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  overflow: hidden;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
 
-  h3 {
-    margin: 0 0 1rem;
-    text-align: center;
+/* 3) Header (titlu + buton închidere) */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #1c1c1c;
+  border-bottom: 1px solid #333;
+
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
   }
 
-  label {
+  .close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #0095f6;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+
+    &:hover {
+      color: #33afff;
+    }
+  }
+}
+
+/* 4) Body (conținut: label + lista de motive) */
+.body {
+  padding: 1rem;
+  flex: 1;
+  overflow-y: auto;
+
+  .label {
     display: block;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
     font-size: 0.9rem;
+    color: #aaa;
   }
 
-  select {
-    width: 100%;
-    padding: 0.5rem;
-    background-color: #222;
-    color: #fff;
-    border: 1px solid #444;
-    border-radius: 0.25rem;
+  .reason-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
     margin-bottom: 1rem;
   }
 
-  .buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 1rem;
+  .reason-button {
+    background: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 0.5rem;
+    color: #fff;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+
+    &:hover:not(.selected):not(:disabled) {
+      background: #2a2a2a;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    &.selected {
+      background: #0095f6;
+      border-color: #33afff;
+      color: #fff;
+    }
   }
 
   .error {
-    margin-top: 0.75rem;
     color: #e74c3c;
+    font-size: 0.85rem;
     text-align: center;
+    margin-top: 0.5rem;
+  }
+}
+
+/* 5) Footer (butone) */
+.footer {
+  padding: 1rem;
+  background: #1c1c1c;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+
+  .cancel-btn,
+  .submit-btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+  }
+
+  .cancel-btn {
+    background: transparent;
+    color: #aaa;
+
+    &:hover {
+      background: #333;
+      color: #fff;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+  }
+
+  .submit-btn {
+    background: #0095f6;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: #33afff;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
   }
 }
