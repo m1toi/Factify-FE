@@ -19,6 +19,7 @@ import {ShareDialogComponent} from '../share-dialog/share-dialog.component';
 import {ConversationService} from '../../services/conversation.service';
 import {MessageService} from '../../services/message.service';
 import {Conversation} from '../../models/conversation.model';
+import {ReportDialogComponent} from '../report-dialog/report-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -28,7 +29,8 @@ import {Conversation} from '../../models/conversation.model';
     ButtonModule,
     SidebarComponent ,
     PostCardComponent,
-    ShareDialogComponent],
+    ShareDialogComponent,
+    ReportDialogComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -46,6 +48,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   shareDialogVisible = false;
   sharePostId!: number; // 🔥 NEW: Store the post ID to share
   myConversations: Conversation[] = [];
+  reportDialogVisible = false;
+  reportingPostId!: number;
 
   constructor(
     private feedService: FeedService,
@@ -243,4 +247,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/profile']);
   }
 
+  openReportDialog(index: number): void {
+    this.reportingPostId = this.posts[index].postId;
+    this.reportDialogVisible = true;
+  }
+
+  onReportSubmitted(): void {
+    this.posts = this.posts.filter(p => p.postId !== this.reportingPostId);
+
+    this.reportDialogVisible = false;
+  }
+
+  onReportCancel(): void {
+    this.reportDialogVisible = false;
+  }
 }

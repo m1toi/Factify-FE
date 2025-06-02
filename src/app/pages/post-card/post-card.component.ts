@@ -21,10 +21,15 @@ export class PostCardComponent implements OnInit {
   @Output() flip    = new EventEmitter<void>();
   @Output() like    = new EventEmitter<void>();
   @Output() share   = new EventEmitter<void>();
+  @Output() report  = new EventEmitter<void>();
 
   onFlip()   { this.flip.emit(); }
   onLike()   { this.like.emit(); }
   onShare()  { this.share.emit(); }
+  onReport(event: MouseEvent) {
+    event.stopPropagation();
+    this.report.emit();
+  }
 
   ngOnInit() {
   //  console.log('post:', this.post);

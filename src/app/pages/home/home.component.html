@@ -18,6 +18,7 @@
       (flip)="toggleFlip(i)"
       (like)="toggleLike(i)"
       (share)="sharePost(i)"
+      (report)="openReportDialog(i)"
     ></app-post-card>
 
     <div *ngIf="loadingMore" class="col-span-full text-center text-gray-400 py-4">
@@ -38,6 +39,14 @@
   (close)="shareDialogVisible = false"
   (shareConfirmed)="onShareConfirmed($event)"
 ></app-share-dialog>
+
+<app-report-dialog
+  *ngIf="reportDialogVisible"
+  [visible]="reportDialogVisible"
+  [postId]="reportingPostId"
+  (close)="onReportCancel()"
+  (submitted)="onReportSubmitted()"
+></app-report-dialog>
 
 <div class="post-toast" *ngIf="toastVisible">
   <span class="checkmark-icon">✔</span> Post sent
