@@ -1,0 +1,88 @@
+/* src/app/components/report-success-dialog/report-success-dialog.component.scss */
+
+/* 1) Overlay fullscreen negru (70% opacity) */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* 2) Dialog central */
+.dialog {
+  background: #111;
+  width: 90%;
+  max-width: 360px;
+  border-radius: 1rem;
+  overflow: hidden;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem;
+}
+
+/* 3) Zona iconului de check */
+.icon-wrapper {
+  background: #1c1c1c;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+
+  i.pi {
+    font-size: 2rem;
+    color: #00e676; /* un albastru-verzui accent (verde-check) */
+  }
+}
+
+/* 4) Conținutul de text */
+.content {
+  text-align: center;
+  margin-bottom: 1.5rem;
+
+  .title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .message {
+    font-size: 0.95rem;
+    color: #ccc;
+    line-height: 1.4;
+    margin: 0;
+  }
+}
+
+/* 5) Footer cu butonul Done */
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .done-btn {
+    background: #0095f6;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    min-width: 100px;
+    text-align: center;
+  }
+
+  .done-btn:hover {
+    background: #33afff;
+  }
+}

@@ -20,6 +20,7 @@ import {ConversationService} from '../../services/conversation.service';
 import {MessageService} from '../../services/message.service';
 import {Conversation} from '../../models/conversation.model';
 import {ReportDialogComponent} from '../report-dialog/report-dialog.component';
+import {ReportSuccessDialogComponent} from '../report-success-dialog/report-success-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -27,10 +28,10 @@ import {ReportDialogComponent} from '../report-dialog/report-dialog.component';
   imports: [CommonModule,
     RouterModule,
     ButtonModule,
-    SidebarComponent ,
+    SidebarComponent,
     PostCardComponent,
     ShareDialogComponent,
-    ReportDialogComponent],
+    ReportDialogComponent, ReportSuccessDialogComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
@@ -50,6 +51,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   myConversations: Conversation[] = [];
   reportDialogVisible = false;
   reportingPostId!: number;
+  successDialogVisible = false;
 
   constructor(
     private feedService: FeedService,
@@ -256,9 +258,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.posts = this.posts.filter(p => p.postId !== this.reportingPostId);
 
     this.reportDialogVisible = false;
+
+    this.successDialogVisible = true;
   }
 
   onReportCancel(): void {
     this.reportDialogVisible = false;
+  }
+
+  onSuccessDone(): void {
+    this.successDialogVisible = false;
   }
 }

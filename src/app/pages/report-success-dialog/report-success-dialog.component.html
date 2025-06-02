@@ -1,0 +1,28 @@
+<!-- src/app/components/report-success-dialog/report-success-dialog.component.html -->
+<div class="overlay" *ngIf="visible">
+  <div class="dialog">
+    <!-- ICON DE CHECK -->
+    <div class="icon-wrapper">
+      <i class="pi pi-check"></i>
+    </div>
+
+    <!-- TEXT DE MULȚUMIRE -->
+    <div class="content">
+      <h2 class="title">Report Submitted</h2>
+      <p class="message">
+        We appreciate your feedback. Our moderation team will review this post and take action if necessary.
+      </p>
+    </div>
+
+    <!-- BUTON DONE -->
+    <div class="footer">
+      <button
+        class="done-btn"
+        type="button"
+        (click)="onClose()"
+      >
+        Done
+      </button>
+    </div>
+  </div>
+</div>

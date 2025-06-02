@@ -48,6 +48,12 @@
   (submitted)="onReportSubmitted()"
 ></app-report-dialog>
 
+<app-report-success-dialog
+  *ngIf="successDialogVisible"
+  [visible]="successDialogVisible"
+  (done)="onSuccessDone()"
+></app-report-success-dialog>
+
 <div class="post-toast" *ngIf="toastVisible">
   <span class="checkmark-icon">✔</span> Post sent
 </div>
