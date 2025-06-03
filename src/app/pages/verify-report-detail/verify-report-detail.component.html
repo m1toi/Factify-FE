@@ -4,7 +4,8 @@
     <app-sidebar></app-sidebar>
   </div>
 
-  <div class="verify-content report-scroll">
+  <!-- Am eliminat clasa report-scroll pentru a nu mai afișa scrollbar -->
+  <div class="verify-content">
     <div *ngIf="loading" class="loading-text">
       Loading report details…
     </div>
@@ -38,7 +39,8 @@
             <span class="details-value">{{ reasonText(report.reason) }}</span>
           </div>
 
-          <!-- Folosind exp. ternar în [src] -->
+          <!-- Iată noua structură pentru Issuer + Avatar + Username -->
+          <span class="issuer-label">Issuer</span>
           <div class="reporter-info">
             <img
               class="avatar-md"
@@ -49,9 +51,7 @@
               "
               alt="avatar"
             />
-            <span class="reporter-username">
-              {{ report.reporterUsername }}
-            </span>
+            <span class="reporter-username">{{ report.reporterUsername }}</span>
           </div>
 
           <div class="delete-checkbox">

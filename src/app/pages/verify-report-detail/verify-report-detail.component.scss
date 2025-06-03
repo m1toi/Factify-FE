@@ -16,32 +16,14 @@
   width: auto; /* sidebar își determină lățimea singur */
 }
 
-/* Conținutul principal (scrollabil) */
+/* Conținutul principal (fără scrollbar acum) */
 .verify-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
-  overflow-y: auto;
-  margin-left: 220px; /* lățimea aproximativă a sidebar-ului */
-}
-
-/* Stil pentru scrollbar */
-.report-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: #52525b #18181b;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    background: #18181b;
-    border-radius: 9999px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #52525b;
-    border-radius: 9999px;
-  }
+  /* Am eliminat overflow-y:auto și clasa report-scroll */
+  margin-left: 350px; /* lățimea aproximativă a sidebar-ului */
 }
 
 /* Mesaje de loading / erori */
@@ -59,7 +41,7 @@
   display: flex;
   flex-direction: row;
   height: calc(100% - 2rem); /* puțin scăzut ca să nu atingă marginile de sus/jos */
-  gap: 1.5rem;               /* spațiu horizontal între coloană stângă și separator/dreapta */
+  gap: 1.5rem;               /* spațiu orizontal între coloană stângă și separator/dreapta */
 }
 
 /*───────────────────────────────────────────────────────────────────────────────
@@ -133,27 +115,37 @@
 }
 
 /*───────────────────────────────────────────────────────────────────────────────
-  INFORMAȚII DESPRE REPORTER
+  TEXT “Issuer” (același stil ca .details-label)
+───────────────────────────────────────────────────────────────────────────────*/
+.issuer-label {
+  font-size: 1.125rem;   /* identic cu .details-label */
+  font-weight: 600;      /* identic cu .details-label */
+  color: #fff;           /* identic cu .details-label */
+  margin-bottom: 0.5rem; /* distanță puțin mai mare față de avatar */
+}
+
+/*───────────────────────────────────────────────────────────────────────────────
+  INFORMAȚII DESPRE REPORTER (Avatar + Username)
 ───────────────────────────────────────────────────────────────────────────────*/
 .reporter-info {
   display: flex;
   align-items: center;
   margin-bottom: 2rem;
-}
 
-.avatar-md {
-  width: 3rem;       /* ~48px */
-  height: 3rem;      /* ~48px */
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 0.75rem;
-  border: 2px solid #444;
-}
+  .avatar-md {
+    width: 3rem;       /* ~48px */
+    height: 3rem;      /* ~48px */
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.75rem;
+    border: 2px solid #444;
+  }
 
-.reporter-username {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #fff;
+  .reporter-username {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+  }
 }
 
 /*───────────────────────────────────────────────────────────────────────────────
@@ -162,7 +154,6 @@
 .delete-checkbox {
   margin-bottom: 2rem;
 
-  /* Dacă ai ales soluția să pui <p-checkbox> + text într-un <label> */
   label.inline-label {
     display: flex;
     align-items: center;
