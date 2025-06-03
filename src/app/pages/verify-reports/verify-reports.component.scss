@@ -10,25 +10,27 @@
 /* Coloană fixă pentru sidebar */
 .sidebar-col {
   flex-shrink: 0;
-  width: auto; /* lăsăm sidebar-ul să decidă */
+  width: auto; /* sidebar‐ul decidă */
 }
 
-/* Conținutul principal (câmp scrollabil) */
+/* Conținutul principal (scroll vertical) */
 .verify-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
   overflow-y: auto;
-  margin-left: 220px; /* lățimea sidebar-ului */
+  margin-left: 220px; /* împingere ca să nu fie acoperit de sidebar */
 }
 
 /* HEADER STATIC: titlul „Administrator” */
 .header {
   margin-bottom: 1rem;
+
   h1 {
     font-size: 2rem;
     font-weight: 600;
+    color: #fff;
   }
 }
 
@@ -52,57 +54,86 @@
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
   width: 100%;
-  /* Înălțime maximă minus header și back‐button */
-  /* Dacă vrei să fixezi înălțimea, poți ajusta cu calc(100vh - header - back). */
 }
 
-/* FIECARE CARD DE RAPORT */
+/* ─── FIECARE CARD DE RAPORT ─────────────────────────────────────── */
 .report-card {
   display: flex;
   flex-direction: column;
-  background-color: #111;
+  background-color: #1a1a1a;
   border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-}
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-/* Zona de informații (motiv + buton) */
-.report-info {
-  margin-top: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+  /* efect „lift” când treci cu mouse-ul */
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  }
 
+  /* ─ Postarea apare automat, fără padding exterior;
+       app-post-card preia spațiul necesar ─ */
+  app-post-card {
+    /* Dacă vrei un mic padding în jurul ei, îl poți adăuga aici: */
+    /* margin: 0.75rem; */
+  }
+
+  /* ─── ZONA DE RAPORT (separator + motiv + buton) ─── */
+  .report-info {
+    background-color: #141414;
+    border-top: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  /* Motivul raportului */
   .reason {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: #ddd;
+
     .label {
       font-weight: 500;
-      color: #ccc;
+      color: #aaa;
       margin-right: 0.25rem;
     }
+
     .value {
       font-weight: 600;
       color: #fff;
     }
   }
 
+  /* Butonul „Solve Report” */
   .solve-btn {
-    background-color: #007acc;      /* un albastru în ton cu restul aplicației */
+    background-color: #007acc;
     color: #fff;
     border: none;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1rem;
     border-radius: 0.5rem;
-    font-size: 0.875rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+
     &:hover {
       background-color: #005fa3;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    &:active {
+      transform: scale(0.98);
     }
   }
 }
 
-/* BUTONUL “Back to Home” (aliniat jos) */
+/* BUTONUL „Back to Home” (aliniat jos) */
 .back-btn-container {
   margin-top: auto;
   text-align: center;
@@ -118,6 +149,7 @@
   font-size: 0.875rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
+
   &:hover {
     background-color: #666;
   }
