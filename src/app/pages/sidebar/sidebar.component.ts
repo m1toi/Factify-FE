@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ButtonDirective } from 'primeng/button';
 import { UserSearchComponent } from '../user-search/user-search.component';
 import {NotificationsPanelComponent} from '../notifications-panel/notifications-panel.component';
+import {AuthService} from '../../services/auth.service';
+import {jwtDecode} from 'jwt-decode';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,6 +20,7 @@ export class SidebarComponent {
 
   // stocăm intern valoarea defaultCollapsed
   private _defaultCollapsed = false;
+  isAdmin = false;
 
   // setter care se execută înainte de primul render
   @Input()
@@ -32,7 +35,19 @@ export class SidebarComponent {
   // inițializăm imediat cu valoarea defaultCollapsed
   isCollapsed = this._defaultCollapsed;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {
+    const token = this.authService.getToken();
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        // Observație: token-ul folosește namespaces microsoft/ws/2008/06
+        const roleClaim = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        this.isAdmin = roleClaim === 'Admin';
+      } catch {
+        this.isAdmin = false;
+      }
+    }
+  }
 
   goToForYou(): void {
     this.router
@@ -52,6 +67,10 @@ export class SidebarComponent {
 
   goToChat(): void {
     this.router.navigate(['/chat']);
+  }
+  goToAdminVerify(): void {
+    // ③ când apasă butonul admin, navighează către verify-reports
+    this.router.navigate(['/verify-reports']);
   }
 
   toggleNotifications(): void {

@@ -234,7 +234,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, 2500);
   }
 
-
   scrollToPost(index: number): void {
     const container = this.scrollContainer.nativeElement as HTMLElement;
     const postElements = container.children;

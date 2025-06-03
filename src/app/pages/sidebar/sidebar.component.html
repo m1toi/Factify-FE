@@ -50,6 +50,17 @@
         <span>Notifications</span>
       </button>
     </li>
+
+    <li *ngIf="isAdmin">
+      <button
+        pButton
+        class="p-button-rounded p-button-text sidebar-btn"
+        (click)="goToAdminVerify()"
+      >
+        <i class="pi pi-exclamation-triangle"></i>
+        <span>Verify Reports</span>
+      </button>
+    </li>
   </ul>
 
   <!-- wrapper-ul de search, mereu în DOM, doar clasa .open îl arată -->

@@ -6,6 +6,7 @@ import { AuthGuard } from './auth/guard/auth.guard';
 import {PreferenceGuard} from './auth/preference.guard'
 import {SkipIfHasPreferencesGuard} from './auth/skip-preference.guard';
 import {ChatPageComponent} from './pages/chat-page/chat-page.component';
+import {AdminGuard} from './auth/admin.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -44,6 +45,14 @@ export const routes: Routes = [
 
   {path: 'chat', component: ChatPageComponent},
   { path: 'chat/:conversationId', component: ChatPageComponent },
+  {
+    path: 'verify-reports',
+    loadComponent: () =>
+      import('./pages/verify-reports/verify-reports.component').then(
+        (m) => m.VerifyReportsComponent
+      ),
+    canActivate: [AuthGuard, AdminGuard],
+  },
 
   { path: '**', redirectTo: 'login' }
 ];
