@@ -13,11 +13,8 @@
     </div>
 
     <ng-container *ngIf="!loading && report">
-      <div class="header">
-        <h1>Report Details</h1>
-      </div>
-
       <div class="report-detail-container">
+        <!-- COLONA STÂNGĂ (POST) -->
         <div class="post-col">
           <div class="post-wrapper" (click)="toggleFlip()">
             <app-post-card
@@ -32,34 +29,40 @@
 
         <div class="separator"></div>
 
+        <!-- COLONA DREAPTĂ (DETALII) -->
         <div class="details-col">
-          <h2 class="details-title">Reason</h2>
-          <p class="reason-text">{{ reasonText(report.reason) }}</p>
+          <h1 class="details-header">Report Details</h1>
 
-          <div class="reporter-info">
-            <img
-              *ngIf="report.reporterProfilePicture; else noAvatar"
-              [src]="'/assets/avatars/' + report.reporterProfilePicture"
-              alt="avatar"
-              class="avatar-md"
-            />
-            <ng-template #noAvatar>
-              <img
-                src="/assets/avatars/placeholder1.png"
-                alt="placeholder"
-                class="avatar-md"
-              />
-            </ng-template>
-            <span class="reporter-username">{{ report.reporterUsername }}</span>
+          <div class="reason-block">
+            <span class="details-label">Reason</span>
+            <span class="details-value">{{ reasonText(report.reason) }}</span>
           </div>
 
-          <div class="delete-checkbox" style="display: flex; align-items: center; gap: 0.5rem;">
-            <p-checkbox
-              [(ngModel)]="deletePost"
-              binary="true"
-              inputId="chkD"
-            ></p-checkbox>
-            <span>Delete post</span>
+          <!-- Folosind exp. ternar în [src] -->
+          <div class="reporter-info">
+            <img
+              class="avatar-md"
+              [src]="
+                report.reporterProfilePicture
+                  ? '/assets/avatars/' + report.reporterProfilePicture
+                  : '/assets/avatars/placeholder1.png'
+              "
+              alt="avatar"
+            />
+            <span class="reporter-username">
+              {{ report.reporterUsername }}
+            </span>
+          </div>
+
+          <div class="delete-checkbox">
+            <label class="inline-label">
+              <p-checkbox
+                [(ngModel)]="deletePost"
+                binary="true"
+                inputId="chkD"
+              ></p-checkbox>
+              Delete post
+            </label>
           </div>
 
           <button

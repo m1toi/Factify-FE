@@ -23,7 +23,7 @@ import {FormsModule} from '@angular/forms';
     CheckboxModule
   ],
   templateUrl: './verify-report-detail.component.html',
-  styleUrls: ['../verify-reports/verify-reports.component.scss']
+  styleUrls: ['./verify-report-detail.component.scss']
 })
 export class VerifyReportDetailComponent implements OnInit {
   reportId!: number;

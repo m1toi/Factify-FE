@@ -1,6 +1,8 @@
-/* src/app/pages/verify-reports/verify-reports.component.scss */
+/*───────────────────────────────────────────────────────────────────────────────
+  src/app/pages/verify-reports/verify-reports.component.scss
+───────────────────────────────────────────────────────────────────────────────*/
 
-/* Container‐ul general (nu-l schimbăm) */
+/* Container-ul general (nu-l schimbăm) */
 .verify-layout {
   display: flex;
   height: 100vh;
@@ -11,7 +13,7 @@
 /* Coloană fixă pentru sidebar */
 .sidebar-col {
   flex-shrink: 0;
-  width: auto; /* sidebar decide dimensiunea */
+  width: auto; /* sidebar își determină lățimea singur */
 }
 
 /* Conținutul principal (scrollabil) */
@@ -21,14 +23,14 @@
   flex-direction: column;
   padding: 1.5rem;
   overflow-y: auto;
-  margin-left: 220px; /* lățimea sidebar-ului */
+  margin-left: 220px; /* lățimea aproximativă a sidebar-ului */
 }
 
-/* Stil pentru scrollbar (clasa report-scroll) */
+/* Stil pentru scrollbar */
 .report-scroll {
-  /* Firefox */
   scrollbar-width: thin;
   scrollbar-color: #52525b #18181b;
+
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -42,73 +44,97 @@
   }
 }
 
-/* HEADER (titlu pagină) */
-.header {
-  margin-bottom: 1rem;
-  h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: #fff;
-  }
+/* Mesaje de loading / erori */
+.loading-text,
+.no-reports {
+  color: #888;
+  text-align: center;
+  margin-top: 2rem;
 }
 
-/* Întreg containerul detaliu (2 coloane) */
+/*───────────────────────────────────────────────────────────────────────────────
+  CONTURUL DE DOUĂ COLOANE (POST + DETALII)
+───────────────────────────────────────────────────────────────────────────────*/
 .report-detail-container {
   display: flex;
-  height: calc(100% - 4rem); /* ca să nu dea scroll peste header */
+  flex-direction: row;
+  height: calc(100% - 2rem); /* puțin scăzut ca să nu atingă marginile de sus/jos */
+  gap: 1.5rem;               /* spațiu horizontal între coloană stângă și separator/dreapta */
 }
 
-/* ─── COLOANA STÂNGĂ (post-area) ───────────────────────────────── */
+/*───────────────────────────────────────────────────────────────────────────────
+  COLOANA STÂNGĂ (post-area)
+───────────────────────────────────────────────────────────────────────────────*/
 .post-col {
-  flex: 1;
+  flex: 0 0 45%;           /* aproximativ 45% din lățime */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start; /* aliniem în colțul de sus-stânga */
+  justify-content: flex-start;
   padding-right: 1rem;
 }
 
-/* Wrapper pentru a prinde click‐ul pe card */
 .post-wrapper {
   cursor: pointer;
   width: 100%;
-  max-width: 500px; /* așa arată ca pe ForYou */
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  max-width: 400px;        /* lățimea maximă a card-ului, similar cu referința */
+  aspect-ratio: 350 / 700; /* proporție apropiată card-ului din design */
+  /* înălțimea se calculează automat datorită aspect-ratio */
 }
 
-/* ─── LINIE VERTICALĂ SEPARATOR ───────────────────────────────── */
+/*───────────────────────────────────────────────────────────────────────────────
+  LINIE VERTICALĂ SEPARATOR
+───────────────────────────────────────────────────────────────────────────────*/
 .separator {
   width: 1px;
   background-color: #333;
-  margin: 0 1rem;
+  margin-top: 0.5rem; /* puțin spațiu de sus */
 }
 
-/* ─── COLOANA DREAPTĂ (details-area) ─────────────────────────────────── */
+/*───────────────────────────────────────────────────────────────────────────────
+  COLOANA DREAPTĂ (details-area)
+───────────────────────────────────────────────────────────────────────────────*/
 .details-col {
-  flex: 1;
+  flex: 0 0 45%; /* restul lățimii (aprox. 45%) */
   display: flex;
   flex-direction: column;
   padding-left: 1rem;
 }
 
-/* Titlu secțiune */
-.details-title {
-  font-size: 1.75rem;
+/*───────────────────────────────────────────────────────────────────────────────
+  HEADER (titlu pagină în coloana dreaptă)
+───────────────────────────────────────────────────────────────────────────────*/
+.details-header {
+  font-size: 2rem;
   font-weight: 600;
-  margin-bottom: 1rem;
   color: #fff;
+  margin-bottom: 1.5rem;
 }
 
-/* Text motiv */
-.reason-text {
+/*───────────────────────────────────────────────────────────────────────────────
+  BLOCAREA “Reason”
+───────────────────────────────────────────────────────────────────────────────*/
+.reason-block {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.details-label {
   font-size: 1.125rem;
-  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.details-value {
+  font-size: 1rem;
   color: #ccc;
 }
 
-/* Informatii despre reporter */
+/*───────────────────────────────────────────────────────────────────────────────
+  INFORMAȚII DESPRE REPORTER
+───────────────────────────────────────────────────────────────────────────────*/
 .reporter-info {
   display: flex;
   align-items: center;
@@ -116,8 +142,8 @@
 }
 
 .avatar-md {
-  width: 3rem;
-  height: 3rem;
+  width: 3rem;       /* ~48px */
+  height: 3rem;      /* ~48px */
   border-radius: 50%;
   object-fit: cover;
   margin-right: 0.75rem;
@@ -130,24 +156,29 @@
   color: #fff;
 }
 
-/* Checkbox "Delete post" */
+/*───────────────────────────────────────────────────────────────────────────────
+  Checkbox “Delete post”
+───────────────────────────────────────────────────────────────────────────────*/
 .delete-checkbox {
-  display: flex;
-  align-items: center;
   margin-bottom: 2rem;
-  color: #fff;
-  font-size: 1rem;
 
-  /* Stil pentru label */
-  label {
-    margin-left: 0.5rem;
+  /* Dacă ai ales soluția să pui <p-checkbox> + text într-un <label> */
+  label.inline-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
     user-select: none;
+    color: #fff;
+    font-size: 1rem;
   }
 }
 
-/* Buton Solve Report */
+/*───────────────────────────────────────────────────────────────────────────────
+  Buton Solve Report
+───────────────────────────────────────────────────────────────────────────────*/
 .solve-report-btn {
-  background-color: #007acc !important;  /* albastru aplicatie */
+  background-color: #007acc !important;  /* albastru aplicație */
   color: #fff !important;
   border: none;
   font-size: 1rem;
@@ -160,11 +191,4 @@
 
 .solve-report-btn:hover {
   background-color: #005fa3 !important;
-}
-
-/* Loading text / erori */
-.loading-text, .no-reports {
-  color: #888;
-  text-align: center;
-  margin-top: 2rem;
 }
