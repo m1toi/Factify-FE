@@ -11,6 +11,29 @@ export enum ReportReason {
   Other = 3
 }
 
+// DTO‐ul de răspuns pentru un report
+export interface ReportResponse {
+  reportId: number;
+  postId: number;
+  reason: ReportReason;
+  status: string;
+  createdAt: string;
+  reporterUserId: number;
+  reporterUsername: string;
+  // Postul în sine, cu structura PostResponseDto
+  post: {
+    postId: number;
+    question: string;
+    answer: string;
+    createdAt: string;
+    userName: string;
+    categoryName: string;
+    userId: number;
+    likesCount: number;
+    sharesCount: number;
+  };
+}
+
 export interface ReportRequest {
   postId: number;
   reason: ReportReason;
@@ -25,5 +48,15 @@ export class ReportService {
   /** Trimite un report la backend */
   submitReport(request: ReportRequest): Observable<any> {
     return this.http.post(this.apiUrl, request);
+  }
+
+  /** Primește toate rapoartele (role=Admin) */
+  getAllReports(): Observable<ReportResponse[]> {
+       return this.http.get<ReportResponse[]>(`${this.apiUrl}/pending`);
+  }
+
+  /** Soluționează un report (vom implementa funcționalitatea mai târziu) */
+  solveReport(reportId: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${reportId}/solve`, {});
   }
 }

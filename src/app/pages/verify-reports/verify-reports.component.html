@@ -1,14 +1,67 @@
 <!-- src/app/pages/verify-reports/verify-reports.component.html -->
-<div class="verify-container">
-  <h1>Verify Reports</h1>
-  <p>Aici veți vedea lista de postări raportate și veți putea soluționa rapoartele.</p>
-  <button
-    pButton
-    type="button"
-    class="p-button-rounded p-button-text back-btn"
-    (click)="goBack()"
-  >
-    <i class="pi pi-arrow-left"></i>
-    <span>Back to Home</span>
-  </button>
+<div class="verify-layout">
+  <!-- ▷ SIDEBAR (fix stânga) -->
+  <div class="sidebar-col">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <!-- ▷ CONȚINUT PRINCIPAL (scrollabil) -->
+  <div class="verify-content">
+    <!-- Titlul statitc -->
+    <div class="header">
+      <h1>Administrator</h1>
+    </div>
+
+    <!-- Dacă încărcăm rapoartele, afișăm un loading text -->
+    <div *ngIf="loading" class="loading-text">
+      Loading reports…
+    </div>
+
+    <!-- Dacă nicio raport nu e de afișat -->
+    <div *ngIf="!loading && reports.length === 0" class="no-reports">
+      No reports to display.
+    </div>
+
+    <!-- GRID‐UL DE RAPOARTE -->
+    <div *ngIf="!loading && reports.length > 0" class="reports-grid">
+      <div *ngFor="let r of reports" class="report-card">
+        <!-- 1) Afișăm cardul de postare -->
+        <app-post-card
+          [post]="r.post"
+          [size]="'profile'"
+          [flipped]="false"
+          [showLikeButton]="false"
+          [showShareButton]="false"
+        ></app-post-card>
+
+        <!-- 2) Zona de informații raport (motiv + buton) -->
+        <div class="report-info">
+          <div class="reason">
+            <span class="label">Reason:</span>
+            <span class="value">{{ reasonText(r.reason) }}</span>
+          </div>
+          <button
+            pButton
+            type="button"
+            class="solve-btn"
+            (click)="onSolve(r.reportId)"
+          >
+            Solve Report
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- (opțional) Butonul de „Back to Home” -->
+    <div class="back-btn-container">
+      <button
+        pButton
+        type="button"
+        class="back-btn"
+        (click)="goBack()"
+      >
+        Back to Home
+      </button>
+    </div>
+  </div>
 </div>

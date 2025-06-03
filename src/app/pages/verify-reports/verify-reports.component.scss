@@ -1,43 +1,124 @@
 /* src/app/pages/verify-reports/verify-reports.component.scss */
-.verify-container {
-  padding: 2rem;
-  color: #fff;
-  background-color: #000;
-  min-height: 100vh;
 
+.verify-layout {
+  display: flex;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+}
+
+/* Coloană fixă pentru sidebar */
+.sidebar-col {
+  flex-shrink: 0;
+  width: auto; /* lăsăm sidebar-ul să decidă */
+}
+
+/* Conținutul principal (câmp scrollabil) */
+.verify-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  overflow-y: auto;
+  margin-left: 220px; /* lățimea sidebar-ului */
+}
+
+/* HEADER STATIC: titlul „Administrator” */
+.header {
+  margin-bottom: 1rem;
   h1 {
     font-size: 2rem;
-    margin-bottom: 1rem;
+    font-weight: 600;
   }
+}
 
-  p {
-    font-size: 1rem;
-    margin-bottom: 2rem;
-    color: #ccc;
-  }
+/* TEXT DE LOADING */
+.loading-text {
+  color: #888;
+  text-align: center;
+  margin-top: 2rem;
+}
 
-  .back-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #fff;
-    background: #1c1c1c;
-    border: none;
-    border-radius: 0.5rem;
-    padding: 0.6rem 1rem;
-    transition: background-color 0.2s ease;
+/* TEXT CÂND NU SUNT RAPOARTE */
+.no-reports {
+  color: #777;
+  text-align: center;
+  margin-top: 2rem;
+}
 
-    &:hover {
-      background-color: #333;
-    }
+/* ─── GRID‐UL DE RAPOARTE ───────────────────────────────────────── */
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  /* Înălțime maximă minus header și back‐button */
+  /* Dacă vrei să fixezi înălțimea, poți ajusta cu calc(100vh - header - back). */
+}
 
-    i {
-      font-size: 1rem;
-    }
+/* FIECARE CARD DE RAPORT */
+.report-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #111;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
 
-    span {
-      font-size: 1rem;
+/* Zona de informații (motiv + buton) */
+.report-info {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  .reason {
+    text-align: center;
+    .label {
       font-weight: 500;
+      color: #ccc;
+      margin-right: 0.25rem;
     }
+    .value {
+      font-weight: 600;
+      color: #fff;
+    }
+  }
+
+  .solve-btn {
+    background-color: #007acc;      /* un albastru în ton cu restul aplicației */
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    &:hover {
+      background-color: #005fa3;
+    }
+  }
+}
+
+/* BUTONUL “Back to Home” (aliniat jos) */
+.back-btn-container {
+  margin-top: auto;
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.back-btn {
+  background-color: #444;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  &:hover {
+    background-color: #666;
   }
 }
