@@ -1,0 +1,170 @@
+/* src/app/pages/verify-reports/verify-reports.component.scss */
+
+/* Container‐ul general (nu-l schimbăm) */
+.verify-layout {
+  display: flex;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+}
+
+/* Coloană fixă pentru sidebar */
+.sidebar-col {
+  flex-shrink: 0;
+  width: auto; /* sidebar decide dimensiunea */
+}
+
+/* Conținutul principal (scrollabil) */
+.verify-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  overflow-y: auto;
+  margin-left: 220px; /* lățimea sidebar-ului */
+}
+
+/* Stil pentru scrollbar (clasa report-scroll) */
+.report-scroll {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #52525b #18181b;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #18181b;
+    border-radius: 9999px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #52525b;
+    border-radius: 9999px;
+  }
+}
+
+/* HEADER (titlu pagină) */
+.header {
+  margin-bottom: 1rem;
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #fff;
+  }
+}
+
+/* Întreg containerul detaliu (2 coloane) */
+.report-detail-container {
+  display: flex;
+  height: calc(100% - 4rem); /* ca să nu dea scroll peste header */
+}
+
+/* ─── COLOANA STÂNGĂ (post-area) ───────────────────────────────── */
+.post-col {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 1rem;
+}
+
+/* Wrapper pentru a prinde click‐ul pe card */
+.post-wrapper {
+  cursor: pointer;
+  width: 100%;
+  max-width: 500px; /* așa arată ca pe ForYou */
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ─── LINIE VERTICALĂ SEPARATOR ───────────────────────────────── */
+.separator {
+  width: 1px;
+  background-color: #333;
+  margin: 0 1rem;
+}
+
+/* ─── COLOANA DREAPTĂ (details-area) ─────────────────────────────────── */
+.details-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+}
+
+/* Titlu secțiune */
+.details-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+/* Text motiv */
+.reason-text {
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+  color: #ccc;
+}
+
+/* Informatii despre reporter */
+.reporter-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-md {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.75rem;
+  border: 2px solid #444;
+}
+
+.reporter-username {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Checkbox "Delete post" */
+.delete-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  color: #fff;
+  font-size: 1rem;
+
+  /* Stil pentru label */
+  label {
+    margin-left: 0.5rem;
+    user-select: none;
+  }
+}
+
+/* Buton Solve Report */
+.solve-report-btn {
+  background-color: #007acc !important;  /* albastru aplicatie */
+  color: #fff !important;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 0.5rem;
+  align-self: flex-start;
+  transition: background-color 0.2s ease;
+}
+
+.solve-report-btn:hover {
+  background-color: #005fa3 !important;
+}
+
+/* Loading text / erori */
+.loading-text, .no-reports {
+  color: #888;
+  text-align: center;
+  margin-top: 2rem;
+}

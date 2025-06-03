@@ -43,7 +43,7 @@ export class VerifyReportsComponent implements OnInit {
   private fetchReports(): void {
     this.loading = true;
     this.reportService
-      .getAllReports()
+      .fetchPendingReports()
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: (data) => {
@@ -61,16 +61,8 @@ export class VerifyReportsComponent implements OnInit {
   }
 
   onSolve(reportId: number): void {
-    // Deocamdată, doar trimitem PATCH-ul și eventual eliminăm entry-ul din listă
-    this.reportService.solveReport(reportId).subscribe({
-      next: () => {
-        // După ce s‐a soluționat, scoatem reportul din listă
-        this.reports = this.reports.filter((r) => r.reportId !== reportId);
-      },
-      error: (err) => {
-        console.error('Error solving report', err);
-      },
-    });
+    // Navigăm către /verify-reports/{reportId}
+    this.router.navigate(['/verify-reports', reportId]);
   }
 
   goBack(): void {

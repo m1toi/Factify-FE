@@ -1,0 +1,77 @@
+<!-- src/app/pages/verify-reports/verify-report-detail.component.html -->
+<div class="verify-layout">
+  <div class="sidebar-col">
+    <app-sidebar></app-sidebar>
+  </div>
+
+  <div class="verify-content report-scroll">
+    <div *ngIf="loading" class="loading-text">
+      Loading report details…
+    </div>
+    <div *ngIf="!loading && errorMessage" class="no-reports">
+      {{ errorMessage }}
+    </div>
+
+    <ng-container *ngIf="!loading && report">
+      <div class="header">
+        <h1>Report Details</h1>
+      </div>
+
+      <div class="report-detail-container">
+        <div class="post-col">
+          <div class="post-wrapper" (click)="toggleFlip()">
+            <app-post-card
+              [post]="report.post"
+              [size]="'forYou'"
+              [flipped]="flipped"
+              [showLikeButton]="false"
+              [showShareButton]="false"
+            ></app-post-card>
+          </div>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="details-col">
+          <h2 class="details-title">Reason</h2>
+          <p class="reason-text">{{ reasonText(report.reason) }}</p>
+
+          <div class="reporter-info">
+            <img
+              *ngIf="report.reporterProfilePicture; else noAvatar"
+              [src]="'/assets/avatars/' + report.reporterProfilePicture"
+              alt="avatar"
+              class="avatar-md"
+            />
+            <ng-template #noAvatar>
+              <img
+                src="/assets/avatars/placeholder1.png"
+                alt="placeholder"
+                class="avatar-md"
+              />
+            </ng-template>
+            <span class="reporter-username">{{ report.reporterUsername }}</span>
+          </div>
+
+          <div class="delete-checkbox" style="display: flex; align-items: center; gap: 0.5rem;">
+            <p-checkbox
+              [(ngModel)]="deletePost"
+              binary="true"
+              inputId="chkD"
+            ></p-checkbox>
+            <span>Delete post</span>
+          </div>
+
+          <button
+            pButton
+            type="button"
+            class="solve-report-btn"
+            (click)="solveReport()"
+          >
+            Solve Report
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

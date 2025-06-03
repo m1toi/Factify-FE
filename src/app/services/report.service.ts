@@ -11,23 +11,20 @@ export enum ReportReason {
   Other = 3
 }
 
-// DTO‐ul de răspuns pentru un report
+// DTO‐ul pe care îl primim de la GET /api/Reports/{id}
 export interface ReportResponse {
   reportId: number;
-  postId: number;
   reason: ReportReason;
-  status: string;
-  createdAt: string;
   reporterUserId: number;
   reporterUsername: string;
-  // Postul în sine, cu structura PostResponseDto
+  reporterProfilePicture?: string;
   post: {
     postId: number;
+    categoryName: string;
     question: string;
     answer: string;
-    createdAt: string;
-    userName: string;
-    categoryName: string;
+    createdAt: string;         // ISO string
+    userName: string;          // autorul postării
     userId: number;
     likesCount: number;
     sharesCount: number;
@@ -45,18 +42,27 @@ export class ReportService {
 
   constructor(private http: HttpClient) {}
 
-  /** Trimite un report la backend */
+  /** Trimite un raport noi */
   submitReport(request: ReportRequest): Observable<any> {
     return this.http.post(this.apiUrl, request);
   }
 
-  /** Primește toate rapoartele (role=Admin) */
-  getAllReports(): Observable<ReportResponse[]> {
-       return this.http.get<ReportResponse[]>(`${this.apiUrl}/pending`);
+  /** Ia toate rapoartele în așteptare (already există metoda getPendingReports în lista de rapoarte) */
+  fetchPendingReports(): Observable<ReportResponse[]> {
+    return this.http.get<ReportResponse[]>(`${this.apiUrl}/pending`);
   }
 
-  /** Soluționează un report (vom implementa funcționalitatea mai târziu) */
-  solveReport(reportId: number): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${reportId}/solve`, {});
+  /** Ia un raport după ID */
+  fetchReportById(reportId: number): Observable<ReportResponse> {
+    return this.http.get<ReportResponse>(`${this.apiUrl}/${reportId}`);
+  }
+
+  /** Rezolvă raportul:
+   *  PATCH /api/Reports/{id}/solve?deletePost={boolean}
+   */
+  solveReport(reportId: number, deletePost: boolean): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${reportId}/solve`, null, {
+      params: { deletePost: deletePost.toString() }
+    });
   }
 }
