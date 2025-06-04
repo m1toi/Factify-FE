@@ -1,8 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { NotificationService } from '../../services/notification.service';
 import { FriendshipService, FriendshipResponse } from '../../services/friendship.service';
+import {NotificationSignalRService} from '../../services/notification-signalr.service';
+import {AuthService} from '../../services/auth.service';
 
 export interface NotificationDto {
   notificationId: number;
@@ -25,7 +27,7 @@ export interface NotificationDto {
   templateUrl: './notifications-panel.component.html',
   styleUrls: ['./notifications-panel.component.scss']
 })
-export class NotificationsPanelComponent implements OnInit {
+export class NotificationsPanelComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter<void>();
 
   notifications: NotificationDto[] = [];
@@ -35,11 +37,30 @@ export class NotificationsPanelComponent implements OnInit {
 
   constructor(
     private notificationService: NotificationService,
-    private friendshipService: FriendshipService
+    private friendshipService: FriendshipService,
+    private notificationSignalR: NotificationSignalRService,
+    private authService: AuthService
+
   ) {}
 
   ngOnInit(): void {
     this.loadNotifications();
+
+    const token = this.authService.getToken();
+    if (token) {
+      this.notificationSignalR.startConnection(token);
+    } else {
+      console.warn('No token found: SignalR notificări nu poate porni.');
+    }
+
+    this.notificationSignalR.onReceiveNotification((notif: NotificationDto) => {
+      this.notifications.unshift(notif);
+      this.localActionMap[notif.notificationId] = null;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.notificationSignalR.stopConnection();
   }
 
   private loadNotifications(): void {
