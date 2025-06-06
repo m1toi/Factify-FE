@@ -19,6 +19,7 @@
       (like)="toggleLike(i)"
       (share)="sharePost(i)"
       (report)="openReportDialog(i)"
+      (notInterested)="onNotInterested(i)"
     ></app-post-card>
 
     <div *ngIf="loadingMore" class="col-span-full text-center text-gray-400 py-4">
@@ -56,4 +57,8 @@
 
 <div class="post-toast" *ngIf="toastVisible">
   <span class="checkmark-icon">✔</span> Post sent
+</div>
+
+<div class="post-toast" *ngIf="notInterestedToastVisible">
+  <span class="checkmark-icon">✔</span> Post removed from feed
 </div>

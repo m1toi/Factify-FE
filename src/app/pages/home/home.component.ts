@@ -47,6 +47,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   loadingMore = false;
   public defaultAvatar = 'assets/avatars/placeholder1.png';
   toastVisible = false;
+  notInterestedToastVisible = false;
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   private userId!: number;
@@ -234,6 +235,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, 2500);
   }
 
+  private showNotInterestedToast(): void {
+    this.notInterestedToastVisible = true;
+    setTimeout(() => {
+      this.notInterestedToastVisible = false;
+    }, 2500);
+  }
+
   scrollToPost(index: number): void {
     const container = this.scrollContainer.nativeElement as HTMLElement;
     const postElements = container.children;
@@ -294,5 +302,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   onSuccessDone(): void {
     this.successDialogVisible = false;
+  }
+  onNotInterested(index: number): void {
+    const post = this.posts[index];
+    this.interactionService.markNotInterested(post.postId).subscribe({
+      next: () => {
+        // Eliminăm postarea imediat din feed
+        this.posts.splice(index, 1);
+        this.flipped.splice(index, 1);
+        this.likedPosts.splice(index, 1);
+        this.showNotInterestedToast();
+      },
+      error: (err) => console.error('Failed to mark not interested:', err)
+    });
   }
 }

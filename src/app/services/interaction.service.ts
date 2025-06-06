@@ -20,4 +20,7 @@ export class InteractionService {
   sharePost(postId: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${postId}/interaction/share`, {});
   }
+  markNotInterested(postId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${postId}/interaction/not-interested`, {});
+  }
 }
