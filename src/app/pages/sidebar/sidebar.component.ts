@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonDirective } from 'primeng/button';
@@ -6,6 +6,8 @@ import { UserSearchComponent } from '../user-search/user-search.component';
 import {NotificationsPanelComponent} from '../notifications-panel/notifications-panel.component';
 import {AuthService} from '../../services/auth.service';
 import {jwtDecode} from 'jwt-decode';
+import { UserService, UserResponse } from '../../services/user.service';
+
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +16,11 @@ import {jwtDecode} from 'jwt-decode';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit{
+  currentUserId!: number;
+  profilePicture?: string | null = null;
+  defaultAvatar = '/assets/avatars/placeholder1.png';
+
   isSearchOpen = false;
   isNotificationsOpen = false;
 
@@ -35,7 +41,7 @@ export class SidebarComponent {
   // inițializăm imediat cu valoarea defaultCollapsed
   isCollapsed = this._defaultCollapsed;
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService, private userService: UserService) {
     const token = this.authService.getToken();
     if (token) {
       try {
@@ -46,6 +52,32 @@ export class SidebarComponent {
       } catch {
         this.isAdmin = false;
       }
+    }
+  }
+
+  ngOnInit(): void {
+    const token = this.authService.getToken();
+    if (token) {
+      // 1) decodezi ID-ul curent
+      const decoded: any = jwtDecode(token);
+      this.currentUserId = +decoded[
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
+        ];
+
+      // 2) ceri user-ul de pe server
+      this.userService.getById(this.currentUserId)
+        .subscribe({
+          next: (u: UserResponse) => {
+            this.profilePicture = u.profilePicture;
+            // opțional, și rolul admin
+            const roleClaim = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            this.isAdmin = roleClaim === 'Admin';
+          },
+          error: () => {
+            // fallback la avatar default
+            this.profilePicture = null;
+          }
+        });
     }
   }
 
@@ -86,5 +118,8 @@ export class SidebarComponent {
     this.isNotificationsOpen = false;
     // după închidere, determinăm dacă rămâne collapsed
     this.isCollapsed = this.isSearchOpen || this.defaultCollapsed;
+  }
+  goToProfile(): void {
+    this.router.navigate(['/profile', this.currentUserId]);
   }
 }

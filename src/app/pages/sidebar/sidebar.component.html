@@ -77,6 +77,25 @@
         <span>Verify Reports</span>
       </button>
     </li>
+    <li>
+      <button
+        pButton
+        class="p-button-rounded p-button-text sidebar-btn profile-btn"
+        (click)="goToProfile()"
+      >
+        <!-- bubble cu poza -->
+        <img
+          class="profile-img"
+          [src]="
+            profilePicture
+              ? '/assets/avatars/' + profilePicture
+              : defaultAvatar
+          "
+          alt="User avatar"
+        />
+        <span>Profile</span>
+      </button>
+    </li>
   </ul>
 
   <!-- wrapper-ul de search, mereu în DOM, doar clasa .open îl arată -->

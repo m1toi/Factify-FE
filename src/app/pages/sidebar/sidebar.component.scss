@@ -59,6 +59,17 @@
     &:hover { background-color: #333; }
     i { font-size: 1.2rem; }
     span { font-size: 1rem; font-weight: 500; }
+
+    &.profile-btn {
+      // asigură-te că imaginea nu “sare” din buton
+      padding: 0.5rem;
+    }
+  }
+  .profile-img {
+    width: 34px;         // dimensiune “bubble”
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
   }
 
   &.collapsed {
