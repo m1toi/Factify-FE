@@ -1,4 +1,20 @@
 <nav class="sidebar" [class.collapsed]="isCollapsed">
+  <div class="sidebar-logo" (click)="goToForYou()">
+    <!-- afișează full când nu-i collapsed -->
+    <img
+      *ngIf="!isCollapsed"
+      src="assets/avatars/factify_logo.png"
+      alt="Factify logo"
+      class="full-logo"
+    />
+    <!-- afișează doar icon când-i collapsed -->
+    <img
+      *ngIf="isCollapsed"
+      src="assets/avatars/factify_icon.png"
+      alt="Factify icon"
+      class="icon-logo"
+    />
+  </div>
   <ul>
     <li>
       <button

@@ -10,6 +10,31 @@
   z-index: 200;
   transition: width 0.3s ease;
 
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    cursor: pointer;
+
+    img {
+      display: block;
+    }
+
+    // full logo
+    .full-logo {
+      width: 140px;   // ajustabil
+      height: auto;
+      margin-right: 57px;
+    }
+
+    // doar icon
+    .icon-logo {
+      width: 40px;    // ajustabil
+      height: auto;
+    }
+  }
+
   ul {
     list-style: none;
     margin: 0; padding: 0;
