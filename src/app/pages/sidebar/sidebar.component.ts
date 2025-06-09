@@ -122,4 +122,7 @@ export class SidebarComponent implements OnInit{
   goToProfile(): void {
     this.router.navigate(['/profile', this.currentUserId]);
   }
+  logout(): void {
+    this.authService.logout();
+  }
 }

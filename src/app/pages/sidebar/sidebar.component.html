@@ -106,4 +106,17 @@
   <div class="notifications-wrapper" [class.open]="isNotificationsOpen">
     <app-notifications-panel (close)="onNotificationsClose()"></app-notifications-panel>
   </div>
+
+  <!-- ▶ Logout -->
+  <div class="logout-wrapper">
+    <button
+      pButton
+      type="button"
+      class="p-button-rounded p-button-text sidebar-btn logout-btn"
+      (click)="logout()"
+    >
+      <i class="pi pi-sign-out"></i>
+      <span>Logout</span>
+    </button>
+  </div>
 </nav>
