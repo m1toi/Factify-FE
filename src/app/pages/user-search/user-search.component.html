@@ -20,25 +20,50 @@
     ></i>
   </div>
 
-  <div *ngIf="results.length === 0" class="recent-label">
-    Recent
-  </div>
+  <!-- ─── Recente (când câmpul e gol) ─────────────────── -->
+  <ng-container *ngIf="!searchQuery">
+    <div class="recent-label">Recent</div>
+    <ul class="search-results">
+      <li
+        *ngFor="let user of recentResults"
+        class="search-result-item"
+        (click)="selectUser(user)"
+      >
+        <img
+          *ngIf="user.profilePicture"
+          [src]="'/assets/avatars/' + user.profilePicture"
+          class="avatar"
+        />
+        <span class="username">{{ user.username }}</span>
+        <i
+          class="pi pi-times remove-icon"
+          (click)="removeRecent(user, $event)"
+        ></i>
+      </li>
+      <li *ngIf="recentResults.length === 0" class="no-results">
+        No recent searches.
+      </li>
+    </ul>
+  </ng-container>
 
-  <ul class="search-results">
-    <li
-      *ngFor="let user of results"
-      class="search-result-item"
-      (click)="goToProfile(user.userId)"
-    >
-      <img
-        *ngIf="user.profilePicture"
-        [src]="'/assets/avatars/' + user.profilePicture"
-        class="avatar"
-      />
-      <span class="username">{{ user.username }}</span>
-    </li>
-    <li *ngIf="results.length === 0" class="no-results">
-      No recent searches.
-    </li>
-  </ul>
+  <!-- ─── Rezultate de search (când tastezi) ─────────── -->
+  <ng-container *ngIf="searchQuery">
+    <ul class="search-results">
+      <li
+        *ngFor="let user of results"
+        class="search-result-item"
+        (click)="selectUser(user)"
+      >
+        <img
+          *ngIf="user.profilePicture"
+          [src]="'/assets/avatars/' + user.profilePicture"
+          class="avatar"
+        />
+        <span class="username">{{ user.username }}</span>
+      </li>
+      <li *ngIf="results.length === 0" class="no-results">
+        No users found.
+      </li>
+    </ul>
+  </ng-container>
 </div>

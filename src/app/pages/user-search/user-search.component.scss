@@ -95,9 +95,30 @@
       padding: 0.5rem 0;
       cursor: pointer;
       border-bottom: 1px solid #1e1e1e;
+      overflow: hidden;
+      border-radius: 0.75rem;
+      width: 100%;
+      box-sizing: border-box;
+
+      .remove-icon {
+        margin-left: auto;
+        font-size: 0.9rem;
+        color: #888;
+        cursor: pointer;
+        // ascunde doar când mouse-ul nu e peste item
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
 
       &:hover {
         background-color: #1a1a1a;
+        border-radius: 0.75rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+
+        .remove-icon {
+          opacity: 1;
+        }
       }
 
       .avatar {
