@@ -64,6 +64,20 @@
       // asigură-te că imaginea nu “sare” din buton
       padding: 0.5rem;
     }
+    &.active {
+      color: #007acc !important;
+      i {
+        color: #007acc !important;
+      }
+      span {
+        font-weight: bold;
+        color: #007acc !important;
+      }
+      background-color: transparent;
+      &:hover {
+        background-color: #333;
+      }
+    }
   }
   .profile-img {
     width: 34px;         // dimensiune “bubble”

@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import { ButtonDirective } from 'primeng/button';
 import { UserSearchComponent } from '../user-search/user-search.component';
 import {NotificationsPanelComponent} from '../notifications-panel/notifications-panel.component';
@@ -9,6 +9,7 @@ import {jwtDecode} from 'jwt-decode';
 import { UserService, UserResponse } from '../../services/user.service';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
+import {filter} from 'rxjs/operators';
 
 
 @Component({
@@ -33,6 +34,8 @@ export class SidebarComponent implements OnInit{
   // stocăm intern valoarea defaultCollapsed
   private _defaultCollapsed = false;
   isAdmin = false;
+
+  activeRoute = '';
 
   // setter care se execută înainte de primul render
   @Input()
@@ -63,6 +66,13 @@ export class SidebarComponent implements OnInit{
         this.isAdmin = false;
       }
     }
+
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e: NavigationEnd) => {
+        this.activeRoute = e.urlAfterRedirects;
+      });
+
   }
 
   ngOnInit(): void {
@@ -89,6 +99,8 @@ export class SidebarComponent implements OnInit{
           }
         });
     }
+
+    this.activeRoute = this.router.url;
   }
 
   goToForYou(): void {
