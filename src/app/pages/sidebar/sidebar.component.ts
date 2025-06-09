@@ -7,12 +7,18 @@ import {NotificationsPanelComponent} from '../notifications-panel/notifications-
 import {AuthService} from '../../services/auth.service';
 import {jwtDecode} from 'jwt-decode';
 import { UserService, UserResponse } from '../../services/user.service';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ConfirmationService} from 'primeng/api';
 
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, ButtonDirective, UserSearchComponent, NotificationsPanelComponent],
+  imports: [CommonModule, ButtonDirective, UserSearchComponent, NotificationsPanelComponent,
+    ConfirmDialogModule,   ],
+  providers: [
+    ConfirmationService
+  ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
@@ -41,7 +47,11 @@ export class SidebarComponent implements OnInit{
   // inițializăm imediat cu valoarea defaultCollapsed
   isCollapsed = this._defaultCollapsed;
 
-  constructor(private router: Router, private authService: AuthService, private userService: UserService) {
+  constructor(private router: Router,
+              private authService: AuthService,
+              private userService: UserService,
+              private confirmationService: ConfirmationService
+              ) {
     const token = this.authService.getToken();
     if (token) {
       try {
@@ -123,6 +133,15 @@ export class SidebarComponent implements OnInit{
     this.router.navigate(['/profile', this.currentUserId]);
   }
   logout(): void {
-    this.authService.logout();
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to log out?',
+      accept: () => {
+        // doar după confirm
+        this.authService.logout();
+      },
+      reject: () => {
+        // nu faci nimic la reject
+      }
+    });
   }
 }
