@@ -3,9 +3,17 @@
 
   <div class="profile-card">
     <button class="profile-bubble" (click)="goToProfile()">
-      <img [src]="defaultAvatar" />
+      <img
+        [src]="
+        profilePicture
+          ? '/assets/avatars/' + profilePicture
+          : defaultAvatar
+      "
+        alt="Your avatar"
+      />
     </button>
   </div>
+
 
   <div class="feed-scroll-container flex flex-col items-center" #scrollContainer>
     <app-post-card

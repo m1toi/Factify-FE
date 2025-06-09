@@ -22,6 +22,7 @@ import { MessageService } from '../../services/message.service';
 import { Conversation } from '../../models/conversation.model';
 import { ReportDialogComponent } from '../report-dialog/report-dialog.component';
 import { ReportSuccessDialogComponent } from '../report-success-dialog/report-success-dialog.component';
+import {UserResponse, UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -48,6 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public defaultAvatar = 'assets/avatars/placeholder1.png';
   toastVisible = false;
   notInterestedToastVisible = false;
+  public profilePicture?: string | null = null;
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   private userId!: number;
@@ -66,7 +68,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private interactionService: InteractionService,
     private router: Router,
     private convService: ConversationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -76,6 +79,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.userId = parseInt(
         decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
       );
+      this.userService.getById(this.userId).subscribe({
+        next: (u: UserResponse) => {
+          this.profilePicture = u.profilePicture;    // string sau null
+        },
+        error: () => {
+          this.profilePicture = null;                // în caz de eroare
+        }
+      });
 
       this.loadInitialPosts();
       this.convService.getMyConversations().subscribe((convs) => {
