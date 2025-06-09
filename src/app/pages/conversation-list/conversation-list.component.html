@@ -32,7 +32,7 @@
           </span>
         </div>
 
-        <div class="bottom">
+        <div class="bottom" *ngIf="conv.lastMessageSentAt">
           <span class="last-message">
             <!-- 1) dacă există un text de mesaj, îl afișăm normal -->
             <ng-container *ngIf="conv.lastMessage; else postTpl">
