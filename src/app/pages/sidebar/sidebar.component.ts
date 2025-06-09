@@ -115,6 +115,9 @@ export class SidebarComponent implements OnInit{
 
   toggleSearch(): void {
     this.isSearchOpen = !this.isSearchOpen;
+    if (this.isSearchOpen) {
+      this.isNotificationsOpen = false;
+    }
     // collapsed dacă e deschis search sau dacă defaultCollapsed e true
     this.isCollapsed = this.isSearchOpen || this.defaultCollapsed;
   }
