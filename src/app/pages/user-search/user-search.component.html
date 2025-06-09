@@ -30,10 +30,15 @@
         (click)="selectUser(user)"
       >
         <img
-          *ngIf="user.profilePicture"
-          [src]="'/assets/avatars/' + user.profilePicture"
           class="avatar"
+          [src]="
+          user.profilePicture
+            ? '/assets/avatars/' + user.profilePicture
+            : defaultAvatar
+        "
+          alt="avatar {{ user.username }}"
         />
+
         <span class="username">{{ user.username }}</span>
         <i
           class="pi pi-times remove-icon"
@@ -55,9 +60,13 @@
         (click)="selectUser(user)"
       >
         <img
-          *ngIf="user.profilePicture"
-          [src]="'/assets/avatars/' + user.profilePicture"
           class="avatar"
+          [src]="
+          user.profilePicture
+            ? '/assets/avatars/' + user.profilePicture
+            : defaultAvatar
+        "
+          alt="avatar {{ user.username }}"
         />
         <span class="username">{{ user.username }}</span>
       </li>

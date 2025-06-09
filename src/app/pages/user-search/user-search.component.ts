@@ -23,6 +23,8 @@ export class UserSearchComponent {
   recentResults: UserSearchResult[] = [];
   maxRecent = 10;
 
+  defaultAvatar = '/assets/avatars/placeholder1.png';
+
   constructor(private userService: UserService,
               private router: Router
   ) {
