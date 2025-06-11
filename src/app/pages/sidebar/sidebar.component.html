@@ -77,6 +77,8 @@
         pButton
         class="p-button-rounded p-button-text sidebar-btn"
         (click)="goToAdminVerify()"
+        [ngClass]="{ 'active': activeRoute.startsWith('/verify-reports') && !isSearchOpen && !isNotificationsOpen }"
+
       >
         <i class="pi pi-exclamation-triangle"></i>
         <span>Verify Reports</span>
