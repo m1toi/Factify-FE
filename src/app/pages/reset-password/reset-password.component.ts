@@ -18,6 +18,8 @@ export class ResetPasswordComponent implements OnInit {
   token = '';
   submitted = false;
   message = '';
+  resetSuccessful = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -44,7 +46,12 @@ export class ResetPasswordComponent implements OnInit {
     if (this.form.invalid || !this.token) return;
     this.userService.resetPassword(this.token, this.form.value.newPassword!)
       .subscribe({
-        next: res => this.message = res.message,
+        next: res => {
+          this.message = res.message;
+          this.form.reset();
+          this.submitted = false;
+          this.resetSuccessful = true; // ← marchează succesul
+        },
         error: err => this.message = err.error?.error || 'Reset failed.'
       });
   }
