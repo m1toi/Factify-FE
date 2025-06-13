@@ -17,6 +17,7 @@ export class ForgotPasswordComponent {
   form: FormGroup;     // doar declarăm câmpul, fără inițializare aici
   submitted = false;
   message = '';
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -28,10 +29,23 @@ export class ForgotPasswordComponent {
   onSubmit() {
     this.submitted = true;
     if (this.form.invalid) return;
+
+    this.loading = true;
+    this.message = '';
+
     this.userService.forgotPassword(this.form.value.email!)
       .subscribe({
-        next: res => this.message = res.message,
-        error: err => this.message = err.error?.error || 'A apărut o eroare.'
+        next: res => {
+          this.message = res.message;
+          this.loading = false;
+          this.form.reset();
+          this.submitted = false;
+        },
+        error: err => {
+          this.message = err.error?.error || 'A apărut o eroare.';
+          this.loading = false;
+        }
       });
   }
+
 }
