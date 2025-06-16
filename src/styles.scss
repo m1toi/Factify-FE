@@ -79,7 +79,7 @@ html, body {
   }
 
   .p-select-filter-icon {
-    color: #fff !important; /* 👈 search icon is white */
+    color: #fff !important; /* search icon is white */
   }
 
   /* List options */
@@ -109,7 +109,7 @@ html, body {
 
   /* No Results Found */
   .p-select-empty-message {
-    color: #fff !important;         /* 👈 no results text is white */
+    color: #fff !important;
     background: #2a2a2a !important;
     padding: 0.75rem;
   }
@@ -122,6 +122,6 @@ html, body {
 }
 
 .category-panel .p-select-filter-container .p-icon {
-  color: #fff !important; /* ← this targets the SVG search icon */
+  color: #fff !important;
   fill: #fff !important;
 }
