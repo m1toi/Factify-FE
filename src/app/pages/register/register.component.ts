@@ -71,7 +71,7 @@ export class RegisterComponent {
             this.errorMessage = 'Could not create account. Try a different email';
           }
         } else {
-          this.errorMessage = 'A apărut o eroare. Încearcă din nou.';
+          this.errorMessage = 'Server error. Please try again later.';
         }
         setTimeout(() => (this.invalidAttempt = false), 500);
       },
