@@ -26,6 +26,10 @@
       <span pButtonLabel>Log In</span>
     </button>
 
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
     <div class="create-account">
       <span>Don't have an account? <a [routerLink]="['/register']">Create Account</a></span>
     </div>

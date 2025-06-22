@@ -5,6 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import {Router, RouterModule} from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -23,12 +24,19 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 export class RegisterComponent {
   registerForm: FormGroup;
   invalidAttempt = false;
+  errorMessage = '';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
+    });
+
+    this.registerForm.valueChanges.subscribe(() => {
+      if (this.errorMessage) {
+        this.errorMessage = '';
+      }
     });
   }
 
@@ -39,6 +47,7 @@ export class RegisterComponent {
       return;
     }
 
+    this.errorMessage = '';
     const registerData = {
       name: this.registerForm.value.username,
       email: this.registerForm.value.email,
@@ -49,9 +58,21 @@ export class RegisterComponent {
       next: () => {
         this.router.navigate(['/login']);
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Registration failed:', err);
         this.invalidAttempt = true;
+        // setăm mesajul pe baza codului de status şi, eventual, a textului din err.error
+        if (err.status === 409) {
+          const serverMsg = err.error?.error ?? '';
+          if (serverMsg.toLowerCase().includes('username')) {
+            this.errorMessage = 'Username already exists. Please choose another one.';
+          } else {
+            // nu divulgăm dacă email-ul există
+            this.errorMessage = 'Could not create account. Try a different email';
+          }
+        } else {
+          this.errorMessage = 'A apărut o eroare. Încearcă din nou.';
+        }
         setTimeout(() => (this.invalidAttempt = false), 500);
       },
     });

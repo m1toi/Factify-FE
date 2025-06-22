@@ -12,6 +12,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +31,7 @@ import {
 export class LoginComponent {
   loginForm: FormGroup;
   invalidAttempt = false;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -41,6 +43,12 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+
+    this.loginForm.valueChanges.subscribe(() => {
+      if (this.errorMessage) {
+        this.errorMessage = '';
+      }
+    });
   }
 
   onLogin() {
@@ -50,6 +58,7 @@ export class LoginComponent {
       return;
     }
 
+    this.errorMessage = '';
     const loginData = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password
@@ -67,9 +76,16 @@ export class LoginComponent {
           error: () => this.router.navigate(['/home']) // fallback
         });
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Login error:', err);
         this.invalidAttempt = true;
+        // setăm mesajul în funcție de status
+        if (err.status === 404 || err.status === 400) {
+          // fie user inexistent, fie parolă incorectă
+          this.errorMessage = 'Invalid email or password';
+        } else {
+          this.errorMessage = 'Server error. Please try again later.';
+        }
         setTimeout(() => (this.invalidAttempt = false), 500);
       }
     });

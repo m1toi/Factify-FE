@@ -49,6 +49,10 @@
       <span pButtonLabel>Sign Up</span>
     </button>
 
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
     <div class="login-link">
       <span>Already have an account? <a [routerLink]="['/login']">Log In</a></span>
     </div>
