@@ -67,17 +67,17 @@ export class UserSearchComponent {
     if (this.recentResults.length > this.maxRecent) {
       this.recentResults.length = this.maxRecent;
     }
-    localStorage.setItem('recentSearches', JSON.stringify(this.recentResults));
+    sessionStorage.setItem('recentSearches', JSON.stringify(this.recentResults));
   }
 
   removeRecent(user: UserSearchResult, ev: MouseEvent) {
     ev.stopPropagation();
     this.recentResults = this.recentResults.filter(u => u.userId !== user.userId);
-    localStorage.setItem('recentSearches', JSON.stringify(this.recentResults));
+    sessionStorage.setItem('recentSearches', JSON.stringify(this.recentResults));
   }
 
   private loadRecent() {
-    const saved = localStorage.getItem('recentSearches');
+    const saved = sessionStorage.getItem('recentSearches');
     this.recentResults = saved ? JSON.parse(saved) : [];
   }
 }
