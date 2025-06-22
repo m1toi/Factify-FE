@@ -41,4 +41,11 @@ export class NotificationSignalRService {
       this.hubConnection.stop().catch(err => console.error(err));
     }
   }
+
+  public onFriendRequestCancelled(handler: (friendshipId: number) => void): void {
+    this.hubConnection.on('FriendRequestCancelled', (fid: number) => {
+      handler(fid);
+    });
+  }
+
 }

@@ -1,6 +1,6 @@
 // src/app/pages/profile/profile.component.ts
 import {
-  Component,
+  Component, OnDestroy,
   OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -25,6 +25,7 @@ import { UserService, UserResponse, UpdateUserDto } from '../../services/user.se
 import { FriendshipService, FriendshipResponse } from '../../services/friendship.service';
 import { switchMap, tap } from 'rxjs/operators';
 import { Post } from '../../models/post.model';
+import {NotificationSignalRService} from '../../services/notification-signalr.service';
 
 enum FriendshipStatus {
   NotFriends,
@@ -50,7 +51,7 @@ enum FriendshipStatus {
   styleUrls: ['./profile.component.scss'],
   providers: [ConfirmationService]
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   // ■ profile & edit
   user?: UserResponse;
   isOwnProfile = false;
@@ -83,7 +84,8 @@ export class ProfileComponent implements OnInit {
     private userService: UserService,
     private friendshipService: FriendshipService,
     private confirmation: ConfirmationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private notificationSignalR: NotificationSignalRService
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +96,15 @@ export class ProfileComponent implements OnInit {
       this.currentUserId = +decoded[
         'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'
         ];
+      this.notificationSignalR.startConnection(token);
+      this.notificationSignalR.onFriendRequestCancelled((fid: number) => {
+        // dacă tocmai eu (A) aveam o cerere outgoing cu acest fid
+        if (this.currentFriendshipId === fid
+          && this.friendStatus === FriendshipStatus.PendingOutgoing) {
+          this.friendStatus = FriendshipStatus.NotFriends;
+          this.currentFriendshipId = undefined;
+        }
+      });
     }
 
     // 2) subscribe to :id changes
@@ -345,5 +356,10 @@ export class ProfileComponent implements OnInit {
         this.showEditDialog = true;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    // 4) oprești conexiunea ca să nu rămână alive
+    this.notificationSignalR.stopConnection();
   }
 }

@@ -57,6 +57,14 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
       this.notifications.unshift(notif);
       this.localActionMap[notif.notificationId] = null;
     });
+
+    this.notificationSignalR.onFriendRequestCancelled((fid: number) => {
+      // 1) scoatem notificarea cu referenceId = fid
+      this.notifications = this.notifications.filter(n => n.referenceId !== fid);
+      // 2) şi curăţăm map-ul local
+      delete this.localActionMap[fid];
+    });
+
   }
 
   ngOnDestroy(): void {
@@ -97,7 +105,19 @@ export class NotificationsPanelComponent implements OnInit, OnDestroy {
           error: (err) => console.error('Eroare la markAsRead:', err)
         });
       },
-      error: (err) => console.error('Eroare la acceptFriendRequest:', err)
+      error: err => {
+        if (err.status === 404) {
+          //  – cererea a fost anulată de expeditor între timp
+          // 1) scoatem notificarea din listă
+          this.notifications = this.notifications.filter(n => n.notificationId !== notif.notificationId);
+          // 2) curățăm map-ul ca să nu mai păstreze vreun flag
+          delete this.localActionMap[notif.notificationId];
+          // 3) eventual arătăm un toast sau un mic mesaj
+          console.warn('This friend request no longer exists.');
+        } else {
+          console.error('Eroare la acceptFriendRequest:', err);
+        }
+      }
     });
   }
 
