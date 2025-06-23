@@ -44,8 +44,37 @@
       </div>
 
       <div class="flip-card-back">
-        <div class="answer-text">{{ post.answer }}</div>
+        <!-- RĂSPUNS -->
+        <div class="answer-text text-center px-6 py-4">
+          {{ post.answer }}
+        </div>
+
+        <!-- REPLICA FRONT DETAIL pe spate -->
+        <div class="back-details w-full px-4 pb-4 pointer-events-none">
+          <hr class="border-zinc-600 mb-3" />
+
+          <div class="flex justify-between items-center text-white text-sm">
+            <div class="flex items-center gap-6">
+              <div class="flex items-center gap-2">
+                <i class="pi pi-heart"></i>
+                {{ post.likesCount }}
+              </div>
+              <div class="flex items-center gap-2">
+                <i class="pi pi-send"></i>
+                {{ post.sharesCount }}
+              </div>
+            </div>
+            <div>{{ post.createdAt | date: 'longDate' }}</div>
+          </div>
+
+          <div class="mt-3 flex justify-center">
+      <span class="bg-zinc-800 text-white text-xs px-3 py-1 rounded-full">
+        {{ post.userName }}
+      </span>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
