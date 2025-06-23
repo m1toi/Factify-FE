@@ -35,11 +35,25 @@
       placeholder="Select Category">
     </p-select>
 
-    <button
-      pButton
-      type="submit"
-      label="Submit"
-      [disabled]="postForm.invalid"
-    ></button>
+
+    <div class="form-actions" [ngClass]="{ 'single': !isAdmin }">
+      <!-- buton vizibil doar admin -->
+      <button
+        *ngIf="isAdmin"
+        pButton
+        type="submit"
+        label="Create Category"
+        (click)="goToCreateCategory()"
+      ></button>
+
+      <!-- butonul de submit -->
+      <button
+        pButton
+        type="submit"
+        label="Submit"
+        [disabled]="postForm.invalid"
+      ></button>
+    </div>
+
   </form>
 </div>

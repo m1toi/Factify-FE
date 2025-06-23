@@ -11,6 +11,8 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import {Select} from 'primeng/select';
 import {SidebarComponent} from '../sidebar/sidebar.component';
+import { AuthService } from '../../services/auth.service';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-create-post',
@@ -31,12 +33,14 @@ import {SidebarComponent} from '../sidebar/sidebar.component';
 export class CreatePostComponent implements OnInit {
   postForm!: FormGroup;
   categories: any[] = [];
+  isAdmin = false;
 
   constructor(
     private fb: FormBuilder,
     private postService: PostService,
     private categoryService: CategoryService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -49,6 +53,13 @@ export class CreatePostComponent implements OnInit {
     this.categoryService.getAllCategories().subscribe(categories => {
       this.categories = categories;
     });
+
+    const token = this.authService.getToken();
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      const role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      this.isAdmin = role === 'Admin';
+    }
   }
 
   submitPost() {
@@ -58,5 +69,9 @@ export class CreatePostComponent implements OnInit {
         error: err => console.error('Post creation failed:', err),
       });
     }
+  }
+
+  goToCreateCategory() {
+    this.router.navigate(['/create-category']);
   }
 }

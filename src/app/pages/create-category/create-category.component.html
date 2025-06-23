@@ -1,0 +1,41 @@
+<div class="create-post-container">
+  <app-sidebar></app-sidebar>
+
+  <h2>Create new category</h2>
+
+  <form [formGroup]="categoryForm" (ngSubmit)="submitCategory()">
+    <label for="name">Category Name</label>
+    <input
+      id="name"
+      pInputText
+      formControlName="name"
+      placeholder="Enter category name"
+    />
+    <small
+      *ngIf="categoryForm.get('name')?.invalid && categoryForm.get('name')?.touched"
+      class="text-red-500"
+    >
+      Name is required
+    </small>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div class="form-actions">
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        class="p-button-secondary"
+        (click)="cancel()"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Create"
+        [disabled]="categoryForm.invalid"
+      ></button>
+    </div>
+  </form>
+</div>

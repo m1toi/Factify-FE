@@ -1,0 +1,119 @@
+/* src/app/pages/create-category/create-category.component.scss */
+
+/* Container full-screen centrat */
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #000;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Card-ul central */
+.create-post-container {
+  background: #1e1e1e;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .5);
+}
+
+/* Titlu */
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+/* Label-uri */
+label {
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: .5rem;
+  display: block;
+}
+
+/* Input-uri */
+input,
+textarea,
+p-select,
+.category-select { /* dacă folosești p-select în alte proiecte */
+  width: 100%;
+  padding: .75rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-radius: .5rem;
+  background: #2a2a2a;
+  color: #fff;
+  font-size: 1rem;
+}
+
+/* Mesaje de eroare */
+.text-red-500 {
+  color: #f87171;
+}
+.error-message {
+  color: #f87171;
+  text-align: center;
+  margin-bottom: .5rem;
+  font-size: 0.9rem;
+}
+
+/* Acțiuni (buton Cancel + Create) */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+
+  button {
+    width: 48%;
+  }
+}
+
+/* Buton secundar (Cancel) */
+.p-button-secondary {
+  background: #ccc;
+  color: #000;
+  border: none;
+  padding: .75rem;
+  border-radius: .5rem;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 4px 0 #aaa;
+  transition: all .2s ease-in-out;
+
+  &:hover {
+    background: #bbb;
+  }
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #aaa;
+  }
+}
+
+/* Buton primar (Create) */
+button[type='submit'] {
+  background: #0099ff;
+  color: #fff;
+  border: 0;
+  border-radius: .5rem;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: .75rem;
+  box-shadow: 0 4px 0 #007acc, 0 6px 12px rgba(0, 0, 0, .4);
+  transition: all .2s ease-in-out;
+
+  &:hover {
+    background: #008ae6;
+  }
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #007acc, 0 3px 6px rgba(0, 0, 0, .3);
+  }
+}

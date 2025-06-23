@@ -69,6 +69,13 @@ export const routes: Routes = [
       import('./pages/reset-password/reset-password.component')
         .then(m => m.ResetPasswordComponent)
   },
+  {
+    path: 'create-category',
+    loadComponent: () =>
+      import('./pages/create-category/create-category.component')
+        .then(m => m.CreateCategoryComponent),
+    canActivate: [AuthGuard, AdminGuard]
+  },
 
   { path: '**', redirectTo: 'login' }
 ];

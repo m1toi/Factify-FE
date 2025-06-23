@@ -74,3 +74,22 @@ button[type='submit'] {
     box-shadow: 0 4px 0 #007acc, 0 3px 6px rgba(0, 0, 0, .3);
   }
 }
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+
+  button {
+    /* când sunt două butoane, împart 48% / 48% */
+    width: 48%;
+  }
+
+  &.single {
+    /* când nu ești admin */
+    button {
+      /* doar butonul <submit> rămâne în DOM (celălalt e *ngIf) */
+      width: 100%;
+    }
+  }
+}
