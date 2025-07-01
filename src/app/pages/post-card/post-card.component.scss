@@ -85,6 +85,32 @@
   .flip-card-back {
     transform: rotateY(180deg);
   }
+<<<<<<< Updated upstream
+=======
+  .flip-card-back {
+    // facem layout vertical și spațiu între răspuns și detalii
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;   // pentru poziționarea absolută a back-details
+    padding: 3rem;        // păstrează padding-ul global
+  }
+
+
+  .flip-card-back .back-details {
+    position: absolute;   // fix jos, full width
+    bottom: 1rem;
+    left: 0;
+    width: 100%;
+    padding: 0 1rem;
+    pointer-events: none;
+
+    hr {
+      margin-bottom: .75rem;
+    }
+  }
+>>>>>>> Stashed changes
 
   .interaction-buttons {
     margin-left: 1rem;
