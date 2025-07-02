@@ -101,27 +101,34 @@ Users with an "Admin" role have access to a special "Verify Reports" panel. Here
 
 ## ⚙️ Installation & Setup
 
-To run this project locally, follow these steps.
+Factify is built with a separate backend and frontend. To run the application locally, you will need to have both servers running.
+
+**This repository contains the Angular frontend.** The backend server has its own repository and setup instructions.
 
 ### Prerequisites
 
--   [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
--   [Node.js and npm](https://nodejs.org/en)
--   [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+-   [Node.js and npm](https://nodejs.org/en) (for the frontend)
+-   A running instance of the [Factify Backend API](https://github.com/m1toi/Factify-BE) (see step 1)
 
-### 1. Backend Setup
+### Step 1: Set Up the Backend Server
+
+The backend is required for the frontend to function. It handles all business logic, database interactions, and user authentication.
+
+1.  Go to the backend repository: **[Factify Backend Repository](https://github.com/m1toi/Factify-BE)**.
+2.  Follow the setup and installation instructions provided in its `README.md` file.
+3.  Once running, the backend API should be accessible, typically at `https://localhost:7001`.
+
+### Step 2: Set Up the Frontend Application (This Repository)
+
+Once the backend server is running, you can set up and start the Angular frontend.
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/your-username/factify.git
-cd factify/Backend/
+# 1. Clone this repository
+git clone https://github.com/m1toi/Factify-FE.git  # <-- Update with your frontend repo name if different
+cd Factify-FE/
 
-# 2. Update the database connection string in `appsettings.json`
-# "DefaultConnection": "Server=YOUR_SERVER_NAME;Database=FactifyDB;Trusted_Connection=True;TrustServerCertificate=True;"
+# 2. Install the necessary npm packages
+npm install
 
-# 3. Restore dependencies and apply migrations
-dotnet restore
-dotnet ef database update
-
-# 4. Run the backend server
-dotnet run
+# 3. Start the Angular development server
+ng serve
