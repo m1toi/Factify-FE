@@ -116,7 +116,7 @@ The backend is required for the frontend to function. It handles all business lo
 
 1.  Go to the backend repository: **[Factify Backend Repository](https://github.com/m1toi/Factify-BE)**.
 2.  Follow the setup and installation instructions provided in its `README.md` file.
-3.  Once running, the backend API should be accessible, typically at `https://localhost:7001`.
+3.  Once running, the backend API should be accessible, typically at `https://localhost:7091`.
 
 ### Step 2: Set Up the Frontend Application (This Repository)
 
