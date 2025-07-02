@@ -124,7 +124,7 @@ Once the backend server is running, you can set up and start the Angular fronten
 
 ```bash
 # 1. Clone this repository
-git clone https://github.com/m1toi/Factify-FE.git  # <-- Update with your frontend repo name if different
+git clone https://github.com/m1toi/Factify-FE.git  
 cd Factify-FE/
 
 # 2. Install the necessary npm packages
