@@ -1,10 +1,8 @@
 # Factify - Social Media Learning Platform
 
-![Factify Feed](readme_images/home.gif)
-
 **Factify** transforms time spent on social media into an interactive and personalized learning experience. Designed as an educational alternative to traditional platforms, Factify blends the dynamics of a social network with structured, question-and-answer content, encouraging curiosity and personal growth.
 
-## ✨ Key Features
+##  Key Features
 
 -   **Personalized "For You" Feed**: An intelligent algorithm delivers educational posts based on your interests and past interactions.
 -   **Interactive Content**: Posts are presented as "flip cards," initially showing a question and revealing the answer with a single click.
@@ -16,7 +14,7 @@
 
 ---
 
-## 🚀 How to Use Factify
+##  How to Use Factify
 
 The platform is designed to be intuitive and familiar to any social media user. Here’s how you can navigate the key functionalities:
 
@@ -26,7 +24,7 @@ To access Factify, you can create a new account or log in if you already have on
 
 | Register Page                               | Login Page                               |
 | ------------------------------------------- | ---------------------------------------- |
-| ![Register Page](docs/images/register.png) | ![Login Page](docs/images/login.png) |
+| ![Register Page](readme_images/register_page.png) | ![Login Page](readme_images/login_page.png) |
 
 ### 2. The Main Feed
 
@@ -35,7 +33,7 @@ The feed is the heart of the application, where you'll discover new content cura
 -   **Browse**: Scroll vertically to move from one post to the next.
 -   **Reveal the Answer**: Click anywhere on a post's card to "flip" it and see the answer. The fluid animation makes learning more engaging.
 
-![Flip Card Interaction Demo](docs/images/flip-card-demo.gif)
+![Factify Feed](readme_images/home.gif)
 
 ### 3. Interacting with Posts
 
@@ -44,8 +42,9 @@ Each post includes a set of interaction buttons on the side:
 -   ❤️ **Like**: Show your appreciation for a post. This helps the algorithm learn what content you enjoy.
 -   ➤ **Share**: Share an interesting post with your friends directly within the app's chat.
 -   🏳️ **Report**: If you find a post to be inappropriate, spam, or in the wrong category, you can report it for review.
+-   🚫**Mark as not interesting**: If you don't like a certain post, you can remove it from your feed ensuring you will see less of those posts.    
 
-![Post Interaction Buttons](docs/images/post-interactions.png)
+![Post Interaction Buttons](readme_images/interactions.gif)
 
 ### 4. Creating a Post
 
@@ -55,13 +54,13 @@ Contribute to the Factify community by creating your own educational content.
 -   Fill in the question, the answer, and select the appropriate category.
 -   Click "Submit," and your post will become available to other users.
 
-![Create Post Form](docs/images/create-post.png)
+![Create Post Form](readme_images/createpost.png)
 
 ### 5. Searching for Users
 
 Find and connect with other users through the search functionality in the sidebar. You can search by username and view their profiles.
 
-![Search Menu](docs/images/search-menu.png)
+![Search Menu](readme_images/search1.png)
 
 ### 6. User Profile
 
@@ -70,14 +69,14 @@ Find and connect with other users through the search functionality in the sideba
 
 | Your Profile Page                               | Edit Profile Menu                               |
 | ----------------------------------------------- | ----------------------------------------------- |
-| ![User Profile Page](docs/images/profile-page.png) | ![Edit Profile Menu](docs/images/edit-profile.png) |
+| ![User Profile Page](readme_images/user.png) | ![Edit Profile Menu](readme_images/useredit.png) |
 
 ### 7. Chat & Notifications
 
 -   **Notifications**: Receive real-time notifications for events like new friend requests. You can accept or deny requests directly from the notifications panel.
 -   **Chat**: Once you are friends with another user, a private conversation is automatically created. You can exchange text messages, emojis, and even share posts from the feed directly into the chat.
 
-![Chat Page](docs/images/chat-page.png)
+![Chat Page](readme_images/chat.png)
 
 ### 8. Admin Panel
 
@@ -86,7 +85,7 @@ Users with an "Admin" role have access to a special "Verify Reports" panel. Here
 -   Review the reported post and the reason for the report.
 -   Decide to either permanently delete the post or dismiss the report.
 
-![Admin Reports Page](docs/images/admin-reports.png)
+![Admin Reports Page](readme_images/admin.png)
 
 ---
 
