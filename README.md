@@ -92,7 +92,7 @@ Users with an "Admin" role have access to a special "Verify Reports" panel. Here
 ## 🛠️ Tech Stack
 
 -   **Frontend**: Angular 19, RxJS, PrimeNG, SCSS
--   **Backend**: ASP.NET Core 8, C#, Entity Framework Core
+-   **Backend**: ASP.NET Core 9, C#, Entity Framework Core
 -   **Real-Time Communication**: SignalR
 -   **Database**: Microsoft SQL Server
 -   **Authentication**: JWT (JSON Web Tokens)
@@ -105,7 +105,7 @@ To run this project locally, follow these steps.
 
 ### Prerequisites
 
--   [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+-   [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 -   [Node.js and npm](https://nodejs.org/en)
 -   [Microsoft SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 
