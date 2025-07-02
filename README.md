@@ -1,6 +1,6 @@
 # Factify - Social Media Learning Platform
 
-![Factify Feed](docs/images/feed-page.png)
+![Factify Feed](readme_images/home.gif)
 
 **Factify** transforms time spent on social media into an interactive and personalized learning experience. Designed as an educational alternative to traditional platforms, Factify blends the dynamics of a social network with structured, question-and-answer content, encouraging curiosity and personal growth.
 
