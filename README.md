@@ -89,7 +89,7 @@ Users with an "Admin" role have access to a special "Verify Reports" panel. Here
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 -   **Frontend**: Angular 19, RxJS, PrimeNG, SCSS
 -   **Backend**: ASP.NET Core 9, C#, Entity Framework Core
@@ -99,7 +99,7 @@ Users with an "Admin" role have access to a special "Verify Reports" panel. Here
 
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 Factify is built with a separate backend and frontend. To run the application locally, you will need to have both servers running.
 
